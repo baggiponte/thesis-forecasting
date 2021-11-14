@@ -221,85 +221,6 @@ The tie\sphinxhyphen{}breaker {[}between Wolfram and Jupyter, as well as proprie
 Jupyter Notebooks are being developed since 2001 and they are ever more popular. Perhaps they might even replace the scientific paper (Somers, 2018); what’s sure is that they are ever more present. Indeed, Romer is not the only Nobel prize using open source software: Thomas Sargent, currently 78, uses Julia for his scientific research and launched a website, \sphinxhref{https://quantecon.org/}{QuantEcon} built with Jupyter Books, to teach computational economics in Python and Julia.
 
 
-\section{References}
-\label{\detokenize{01-introduction:references}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \chapter{Bike Sharing and BikeMi: A Literature Review}
 \label{\detokenize{02-bikesharing_and_bikemi:bike-sharing-and-bikemi-a-literature-review}}\label{\detokenize{02-bikesharing_and_bikemi::doc}}
 
@@ -409,91 +330,6 @@ The authors remove all records before the service working hours, as they might i
 
 \sphinxAtStartPar
 Through spatial analysis, the researchers confirm that traffic flows from the periphery to the city centre in the mornings and back in the evenings, with greater use in the proximity of train stations. These patterns are also captured by cluster analysis. Looking at the weather, the usage starts to decline “dramatically” only around the 20mm threshold. Also Croci and Rossi (Croci \& Rossi, 2014) find that their results are robust to “confounding factors such as weather conditions”. Their research establishes that “the presence of metro and train stations, universities, museums, cinema and restricted traffic areas in correspondence of bike sharing stations significantly increase use. On the other hand the presence of tram and bus stops and theatres does not and has an opposite influence” (Croci \& Rossi, 2014). Lastly, Cappozzo and their coauthors work on scrapped BikeMi data to classify stations to determine “the future \sphinxstyleemphasis{full}, \sphinxstyleemphasis{empty} or \sphinxstyleemphasis{not problematic}” state of each station (Cappozzo et al., n.d.).
-
-
-\section{References}
-\label{\detokenize{02-bikesharing_and_bikemi:references}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 \chapter{BikeMi Data}
@@ -1017,23 +853,6 @@ This leaves us with the following stations, which we store as a \sphinxcode{\sph
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
-\section{References}
-\label{\detokenize{03-data_ingestion_and_spatial_operations:references}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \chapter{BikeMi Stalls \sphinxstyleemphasis{k}\sphinxhyphen{}Means Clustering}
 \label{\detokenize{04-stations_kmeans:bikemi-stalls-k-means-clustering}}\label{\detokenize{04-stations_kmeans::doc}}
 
@@ -1374,50 +1193,6 @@ After choosing the value for \(K\), stall data is aggregated to compute the coor
 
 \chapter{Time Series Analysis}
 \label{\detokenize{05-time_series_analysis:time-series-analysis}}\label{\detokenize{05-time_series_analysis::doc}}
-\begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{c+c1}{\PYGZsh{} Base libraries}
-\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
-
-\PYG{c+c1}{\PYGZsh{} Data visualisations}
-\PYG{k+kn}{import} \PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
-\PYG{k+kn}{import} \PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{gridspec} \PYG{k}{as} \PYG{n+nn}{gridspec}
-\PYG{k+kn}{import} \PYG{n+nn}{seaborn} \PYG{k}{as} \PYG{n+nn}{sns}
-
-\PYG{c+c1}{\PYGZsh{} connect to db}
-\PYG{k+kn}{import} \PYG{n+nn}{psycopg2}
-
-\PYG{c+c1}{\PYGZsh{} path manipulation}
-\PYG{k+kn}{from} \PYG{n+nn}{pathlib} \PYG{k+kn}{import} \PYG{n}{Path}
-
-\PYG{c+c1}{\PYGZsh{} type hints for functions}
-\PYG{k+kn}{from} \PYG{n+nn}{typing} \PYG{k+kn}{import} \PYG{n}{Optional}
-
-\PYG{c+c1}{\PYGZsh{} to use pandas dtypes in matplotlib plots}
-\PYG{k+kn}{from} \PYG{n+nn}{pandas}\PYG{n+nn}{.}\PYG{n+nn}{plotting} \PYG{k+kn}{import} \PYG{n}{register\PYGZus{}matplotlib\PYGZus{}converters}
-
-\PYG{n}{register\PYGZus{}matplotlib\PYGZus{}converters}\PYG{p}{(}\PYG{p}{)}
-
-\PYG{c+c1}{\PYGZsh{} set settings for seaborn}
-\PYG{n}{sns}\PYG{o}{.}\PYG{n}{set\PYGZus{}style}\PYG{p}{(}\PYG{n}{style}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{whitegrid}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{rc}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{grid.color}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{.9}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
-\PYG{n}{sns}\PYG{o}{.}\PYG{n}{set\PYGZus{}palette}\PYG{p}{(}\PYG{n}{palette}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{deep}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\PYG{n}{sns\PYGZus{}c} \PYG{o}{=} \PYG{n}{sns}\PYG{o}{.}\PYG{n}{color\PYGZus{}palette}\PYG{p}{(}\PYG{n}{palette}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{deep}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-
-\PYG{c+c1}{\PYGZsh{} customise matplotlib and sns plot dimensions}
-\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{figure.figsize}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{]}
-\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{figure.dpi}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{100}
-\PYG{n}{title\PYGZus{}font} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{fontname}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{DejaVu Sans Mono}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}
-
-\PYG{c+c1}{\PYGZsh{} create paths}
-\PYG{n}{milan\PYGZus{}data} \PYG{o}{=} \PYG{n}{Path}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{../data/milan}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-
-\PYG{c+c1}{\PYGZsh{} establish connection with the database}
-\PYG{n}{conn} \PYG{o}{=} \PYG{n}{psycopg2}\PYG{o}{.}\PYG{n}{connect}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{dbname=bikemi user=luca}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
-\end{sphinxuseclass}
 \sphinxAtStartPar
 The cluster table is uploaded to the local database using a Bash script that calls PostgreSQL’s \sphinxcode{\sphinxupquote{psql}} under the hood. Then, this table is \sphinxcode{\sphinxupquote{JOIN}}\sphinxhyphen{}ed with the \sphinxcode{\sphinxupquote{MATERIALIZED VIEW}} with hourly rentals to create a new \sphinxcode{\sphinxupquote{MATERIALIZED VIEW}}, that aggregates the individual station time series to the Traffic Analysis Zone level.
 
@@ -1425,29 +1200,7 @@ The cluster table is uploaded to the local database using a Bash script that cal
 The resulting data is an instance of the so\sphinxhyphen{}called “long” or panel data format, with 18632 rows for each of the 46 time series. The number is actually smaller it would be if we had three years of hourly observations, because as the service is not active between midnight and 7 a.m.: in other words, these series have ‘holes’.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}hourly\PYGZus{}data}\PYG{p}{(}\PYG{n}{connection}\PYG{p}{,} \PYG{n}{wide}\PYG{p}{:} \PYG{n+nb}{bool} \PYG{o}{=} \PYG{k+kc}{False}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
-    \PYG{n}{query}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
-\PYG{l+s+s2}{        SELECT}
-\PYG{l+s+s2}{            h.data\PYGZus{}partenza,}
-\PYG{l+s+s2}{            h.cluster,}
-\PYG{l+s+s2}{            h.noleggi\PYGZus{}per\PYGZus{}ora}
-\PYG{l+s+s2}{        FROM bikemi\PYGZus{}rentals.clusters\PYGZus{}hourly\PYGZus{}rentals h;}
-\PYG{l+s+s2}{    }\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
-
-    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{wide}\PYG{p}{:}
-        \PYG{k}{return} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}sql}\PYG{p}{(}\PYG{n}{query}\PYG{p}{,} \PYG{n}{connection}\PYG{p}{)}
-    \PYG{k}{return} \PYG{p}{(}
-        \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}sql}\PYG{p}{(}\PYG{n}{query}\PYG{p}{,} \PYG{n}{connection}\PYG{p}{)}
-            \PYG{o}{.}\PYG{n}{pivot}\PYG{p}{(}\PYG{n}{index}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{data\PYGZus{}partenza}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{columns}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{cluster}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{values}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{noleggi\PYGZus{}per\PYGZus{}ora}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-    \PYG{p}{)}
-
-
-\PYG{n}{get\PYGZus{}hourly\PYGZus{}data}\PYG{p}{(}\PYG{n}{conn}\PYG{p}{,} \PYG{n}{wide}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{p}{:}\PYG{l+m+mi}{5}\PYG{p}{]}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 cluster              0   1   2   3   4
@@ -1461,30 +1214,12 @@ data\PYGZus{}partenza
 
 \end{sphinxuseclass}
 \end{sphinxuseclass}
+\end{sphinxuseclass}
 \sphinxAtStartPar
 The cluster labels are just a range of integers, which the overall interpretability. The issue is quickly solved by creating a small function that assigns a new identifier to the cluster, simply by merging the cluster label with the neighbourhood it is located in.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}clusters}\PYG{p}{(}\PYG{n}{connection}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
-    \PYG{n}{query}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
-\PYG{l+s+s2}{        SELECT DISTINCT}
-\PYG{l+s+s2}{            c.cluster,}
-\PYG{l+s+s2}{            c.cluster\PYGZus{}nil}
-\PYG{l+s+s2}{        FROM bikemi\PYGZus{}rentals.bikemi\PYGZus{}clustered\PYGZus{}stalls c}
-\PYG{l+s+s2}{        ORDER BY c.cluster}
-\PYG{l+s+s2}{    }\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
-
-    \PYG{k}{return} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}sql}\PYG{p}{(}\PYG{n}{query}\PYG{p}{,} \PYG{n}{connection}\PYG{p}{)}\PYG{o}{.}\PYG{n}{set\PYGZus{}index}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{cluster}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-
-
-\PYG{n}{clusters}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame} \PYG{o}{=} \PYG{n}{get\PYGZus{}clusters}\PYG{p}{(}\PYG{n}{conn}\PYG{p}{)}
-
-\PYG{n}{clusters}\PYG{o}{.}\PYG{n}{head}\PYG{p}{(}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
                         cluster\PYGZus{}nil
@@ -1498,59 +1233,9 @@ cluster
 
 \end{sphinxuseclass}
 \end{sphinxuseclass}
-\begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def} \PYG{n+nf}{rename\PYGZus{}clusters}\PYG{p}{(}
-        \PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,}
-        \PYG{n}{clusters\PYGZus{}data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,}
-        \PYG{n}{names\PYGZus{}col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
-        \PYG{n}{cluster\PYGZus{}col}\PYG{p}{:} \PYG{n}{Optional}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{]} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
-        \PYG{n}{suffix}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{id}\PYG{l+s+s2}{\PYGZdq{}}
-\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
-    \PYG{n}{df}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame} \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{p}{)}
-
-    \PYG{k}{def} \PYG{n+nf}{new\PYGZus{}cluster\PYGZus{}names}\PYG{p}{(}
-            \PYG{n}{\PYGZus{}clusters\PYGZus{}data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,}
-            \PYG{n}{\PYGZus{}names\PYGZus{}col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
-            \PYG{n}{\PYGZus{}clusters\PYGZus{}col}\PYG{p}{:} \PYG{n}{Optional}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{]} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
-            \PYG{n}{\PYGZus{}suffix}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{id}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
-    \PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n+nb}{list}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{]}\PYG{p}{:}
-        \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{\PYGZus{}clusters\PYGZus{}col}\PYG{p}{:}
-            \PYG{k}{return} \PYG{p}{(}
-                \PYG{n}{\PYGZus{}clusters\PYGZus{}data}\PYG{p}{[}\PYG{n}{\PYGZus{}names\PYGZus{}col}\PYG{p}{]}
-                    \PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{str}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-                    \PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{p}{)}
-                    \PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{cat}\PYG{p}{(}\PYG{n}{\PYGZus{}clusters\PYGZus{}data}\PYG{o}{.}\PYG{n}{index}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{n+nb}{str}\PYG{p}{)}\PYG{p}{,} \PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ \PYGZhy{} }\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-            \PYG{p}{)}
-
-        \PYG{k}{return} \PYG{p}{(}
-            \PYG{n}{\PYGZus{}clusters\PYGZus{}data}\PYG{p}{[}\PYG{n}{\PYGZus{}names\PYGZus{}col}\PYG{p}{]}
-                \PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{str}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-                \PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{p}{)}
-                \PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{cat}\PYG{p}{(}\PYG{n}{\PYGZus{}clusters\PYGZus{}data}\PYG{p}{[}\PYG{n}{\PYGZus{}clusters\PYGZus{}col}\PYG{p}{]}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{n+nb}{str}\PYG{p}{)}\PYG{p}{,} \PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ \PYGZhy{} }\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-                \PYG{o}{.}\PYG{n}{to\PYGZus{}list}\PYG{p}{(}\PYG{p}{)}
-        \PYG{p}{)}
-
-    \PYG{n}{df}\PYG{o}{.}\PYG{n}{columns} \PYG{o}{=} \PYG{n}{new\PYGZus{}cluster\PYGZus{}names}\PYG{p}{(}\PYG{n}{clusters\PYGZus{}data}\PYG{p}{,} \PYG{n}{names\PYGZus{}col}\PYG{p}{,} \PYG{n}{cluster\PYGZus{}col}\PYG{p}{,} \PYG{n}{suffix}\PYG{p}{)}
-
-    \PYG{k}{return} \PYG{n}{df}
-
-
-\PYG{k}{def} \PYG{n+nf}{sort\PYGZus{}cols}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
-    \PYG{k}{return} \PYG{n}{data}\PYG{o}{.}\PYG{n}{filter}\PYG{p}{(}\PYG{n}{data}\PYG{o}{.}\PYG{n}{columns}\PYG{o}{.}\PYG{n}{sort\PYGZus{}values}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}
-
-
-\PYG{n}{hourly\PYGZus{}rentals}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame} \PYG{o}{=} \PYG{p}{(}
-    \PYG{n}{get\PYGZus{}hourly\PYGZus{}data}\PYG{p}{(}\PYG{n}{conn}\PYG{p}{,} \PYG{n}{wide}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
-        \PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{rename\PYGZus{}clusters}\PYG{p}{,} \PYG{n}{clusters}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{cluster\PYGZus{}nil}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-        \PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{sort\PYGZus{}cols}\PYG{p}{)}
-\PYG{p}{)}
-
-\PYG{n}{hourly\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{p}{:}\PYG{l+m+mi}{3}\PYG{p}{]}
-\end{sphinxVerbatim}
-
 \end{sphinxuseclass}
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 cluster\PYGZus{}nil          Brera \PYGZhy{} 25  Brera \PYGZhy{} 26  Brera \PYGZhy{} 43
@@ -1564,6 +1249,7 @@ data\PYGZus{}partenza
 
 \end{sphinxuseclass}
 \end{sphinxuseclass}
+\end{sphinxuseclass}
 
 \section{Time Series Analysis}
 \label{\detokenize{05-time_series_analysis:id1}}
@@ -1574,33 +1260,7 @@ Visualising high\sphinxhyphen{}dimensionality datasets can be quite a challenge,
 We choose to visualise data throughout the month of October 2016, as the demand is generally higher in autumn, and this should highlight different seasonality patterns better. October 1st, 2016 starts as a Saturday and it is immediate to see that peak hours are around lunchtime. During weekdays, the distribution seems bimodal, with a smaller peak in the mornings.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}series}\PYG{p}{(}\PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,} \PYG{n}{series}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
-    \PYG{n}{fig} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{tight\PYGZus{}layout}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
-    \PYG{n}{fig}\PYG{o}{.}\PYG{n}{suptitle}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Traffic Analysis Zone }\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{series}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-    \PYG{n}{gs} \PYG{o}{=} \PYG{n}{gridspec}\PYG{o}{.}\PYG{n}{GridSpec}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)}
-
-    \PYG{n}{main\PYGZus{}ax} \PYG{o}{=} \PYG{n}{fig}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{n}{gs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{p}{:}\PYG{p}{]}\PYG{p}{)}
-    \PYG{n}{main\PYGZus{}ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{data}\PYG{o}{.}\PYG{n}{loc}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}10\PYGZhy{}01}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}11\PYGZhy{}01}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{series}\PYG{p}{]}\PYG{p}{)}
-    \PYG{n}{main\PYGZus{}ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016/10/01 \PYGZhy{} 2016/11/01}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-
-    \PYG{n}{left\PYGZus{}ax} \PYG{o}{=} \PYG{n}{fig}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{n}{gs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
-    \PYG{n}{left\PYGZus{}ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{data}\PYG{o}{.}\PYG{n}{loc}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}10\PYGZhy{}01}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}10\PYGZhy{}07}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{series}\PYG{p}{]}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}
-    \PYG{n}{left\PYGZus{}ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016/10/01 \PYGZhy{} 2016/10/07}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-
-    \PYG{n}{right\PYGZus{}ax} \PYG{o}{=} \PYG{n}{fig}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{n}{gs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}
-    \PYG{n}{right\PYGZus{}ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{data}\PYG{o}{.}\PYG{n}{loc}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}10\PYGZhy{}01 07:00}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}10\PYGZhy{}02 00:00}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{series}\PYG{p}{]}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{p}{)}
-    \PYG{n}{right\PYGZus{}ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{10/01 7 a.m. \PYGZhy{} midnight}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-
-    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
-
-
-\PYG{n}{hourly\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{plot\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\PYG{n}{hourly\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{plot\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 43}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_8_0}.png}
 
@@ -1608,63 +1268,23 @@ We choose to visualise data throughout the month of October 2016, as the demand 
 
 \end{sphinxuseclass}
 \end{sphinxuseclass}
+\end{sphinxuseclass}
 \sphinxAtStartPar
 Data in \sphinxcode{\sphinxupquote{Brera}} TAZs is quite similar: this is because all stations in Brera are all above the average, when ranking the clusters by absolute number of rentals across the observed time period:
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}nil}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{Series}\PYG{p}{:}
-    \PYG{n}{tmp} \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{index}\PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{extract}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{(.*)(}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{s\PYGZhy{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{s}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{d*)\PYGZdl{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{expand}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
-
-    \PYG{n}{tmp}\PYG{o}{.}\PYG{n}{index} \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{index}
-
-    \PYG{k}{return} \PYG{n}{tmp}
-
-
-\PYG{n}{taz\PYGZus{}rankings} \PYG{o}{=} \PYG{p}{(}
-    \PYG{n}{hourly\PYGZus{}rentals}
-        \PYG{o}{.}\PYG{n}{apply}\PYG{p}{(}\PYG{n+nb}{sum}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
-        \PYG{o}{.}\PYG{n}{sort\PYGZus{}values}\PYG{p}{(}\PYG{n}{ascending}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{)}
-        \PYG{o}{.}\PYG{n}{rename}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{total\PYGZus{}rentals}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-        \PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{)}
-        \PYG{o}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{nil}\PYG{o}{=}\PYG{k}{lambda} \PYG{n}{df}\PYG{p}{:} \PYG{n}{df}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{get\PYGZus{}nil}\PYG{p}{)}\PYG{p}{,}
-                \PYG{n}{total\PYGZus{}rentals}\PYG{o}{=}\PYG{k}{lambda} \PYG{n}{df}\PYG{p}{:} \PYG{n}{df}\PYG{o}{.}\PYG{n}{total\PYGZus{}rentals} \PYG{o}{/} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{df}\PYG{o}{.}\PYG{n}{total\PYGZus{}rentals}\PYG{p}{)}
-                \PYG{p}{)}
-\PYG{p}{)}
-
-
-\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}absolute\PYGZus{}ranking}\PYG{p}{(}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
-    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}\PYG{p}{)}
-
-    \PYG{n}{taz\PYGZus{}rankings}\PYG{o}{.}\PYG{n}{plot}\PYG{o}{.}\PYG{n}{barh}\PYG{p}{(}\PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
-                           \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{,}
-                           \PYG{n}{legend}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
-                           \PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Traffic Analysis Zones, Ranked by Relative Number of Rentals}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{invert\PYGZus{}yaxis}\PYG{p}{(}\PYG{p}{)}
-    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
-
-
-\PYG{n}{plot\PYGZus{}absolute\PYGZus{}ranking}\PYG{p}{(}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_10_0}.png}
 
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 Some different patterns can be seen in, for example, in the NIL \sphinxcode{\sphinxupquote{Porta Ticinese \sphinxhyphen{} Conca Del Naviglio}} the two TAZ \sphinxcode{\sphinxupquote{20}} and \sphinxcode{\sphinxupquote{31}}, or between \sphinxcode{\sphinxupquote{Stazione Centrale \sphinxhyphen{} Ponte Seveso}} number \sphinxcode{\sphinxupquote{18}} and \sphinxcode{\sphinxupquote{37}}. The first Traffic Analysis Zone in these areas is always in the top of the ladder, while the second is closer to the tail, and as such the demand in the two clusters behaves differently: in number \sphinxcode{\sphinxupquote{20}}, during weekdays the two modes appear to be much closer to each other, while in \sphinxcode{\sphinxupquote{31}} it is not unusual for the morning peak to be greater.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{n}{hourly\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{plot\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Porta Ticinese \PYGZhy{} Conca Del Naviglio \PYGZhy{} 20}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\PYG{n}{hourly\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{plot\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Porta Ticinese \PYGZhy{} Conca Del Naviglio \PYGZhy{} 31}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_12_0}.png}
 
@@ -1672,23 +1292,24 @@ Some different patterns can be seen in, for example, in the NIL \sphinxcode{\sph
 
 \end{sphinxuseclass}
 \end{sphinxuseclass}
+\end{sphinxuseclass}
 \sphinxAtStartPar
-This heterogeneity is what Chen and his coauthors, mentioned in the past chapter, refer to as \sphinxstyleemphasis{opportunistic contextual factors}. From these figures we can also clearly identify the \sphinxstyleemphasis{common contextual factors}: between the 13th and 15th of October, the demand decreases significantly across every station. This was due because of heavier rain than usual being expected for the day \sphinxhyphen{} between 20mm and 30mm.
+This heterogeneity is what Chen and his coauthors (Chen et al., 2016) refer to as \sphinxstyleemphasis{opportunistic contextual factors}. From these figures we can also clearly identify the \sphinxstyleemphasis{common contextual factors}: between the 13th and 15th of October, the demand decreases significantly across every station. This was due because of heavier rain than usual being expected for the day \sphinxhyphen{} between 20mm and 30mm.
 
 
 \section{Last Aggregations and Time Series Decomposition}
 \label{\detokenize{05-time_series_analysis:last-aggregations-and-time-series-decomposition}}
 \sphinxAtStartPar
-Before proceeding, however, data is further aggregated at daily level. Daily forecasts can be of lesser usefulness for bike\sphinxhyphen{}sharing services (BSS) managers, especially to those who implement dynamic rebalancing, i.e. redistribute bikes during the day. Daily forecasts are still employed in the literature (Low dimensionality paper), while smaller and mixed time\sphinxhyphen{}intervals are more frequent especially in deep\sphinxhyphen{}learing approaches: either hourly (“A deep learning approach on short\sphinxhyphen{}term spatiotemporal distribution forecasting of dockless bike\sphinxhyphen{}sharing system”) or even in 10, 15, 20 and 30 minutes intervals (“The station\sphinxhyphen{}free sharing bike demand forecasting with a deep learning approach and large\sphinxhyphen{}scale datasets”). Sometimes, even daily and hourly forecasts are developed (“Forecasting Bike Sharing Demand Using Fuzzy Inference Mechanism”).
+Before proceeding, however, data is further aggregated at daily level. Daily forecasts can be of lesser usefulness for bike\sphinxhyphen{}sharing services (BSS) managers, especially to those who implement dynamic rebalancing, i.e. redistribute bikes during the day. Daily forecasts are still employed in the literature (Cantelmo et al., 2020), while smaller and mixed time\sphinxhyphen{}intervals are more frequent especially in deep\sphinxhyphen{}learing approaches: either hourly (Ai et al., 2019) or even in 10, 15, 20 and 30 minutes intervals (Xu et al., 2018). Sometimes, even daily and hourly forecasts are developed (Salaken et al., 2015).
 
 \sphinxAtStartPar
-In this last paper, the authors employ a fuzzy inference mechanism to forecast demand, with a dataset with two years worth of observations. The authors find that a fuzzy inference mechanism can outperform a long short\sphinxhyphen{}term memory neural network (LSTM NN) “without performing any optimization on either FLS {[}Fuzzy Logic System{]} parameters or neural network parameters”, but admit that a better tuned LSTM might still be better. More importantly, however, the authors note that “one out of every six samples is taken into consideration for hourly forecast to reduce the forecasting time”.
+In this last paper, the authors employ a fuzzy inference mechanism to forecast demand, with a dataset with two years worth of observations. The authors find that a fuzzy inference mechanism can outperform a long short\sphinxhyphen{}term memory neural network (LSTM NN) “without performing any optimization on either FLS {[}Fuzzy Logic System{]} parameters or neural network parameters”, but admit that a better tuned LSTM might still be better. More importantly, however, the authors note that “one out of every six samples is taken into consideration for hourly forecast to reduce the forecasting time” (Salaken et al., 2015).
 
 \sphinxAtStartPar
-“Analysis and Prediction of Bikesharing Traffic Flow – Citi Bike” develop a forecasting model for CitiBike, New York’s BSS, using hourly data, and conclude that “complex seasonalities should be taken into account in traditional time series models”. Hourly data allows to capture three types of seasonalities: yearly, weekly, and daily. However, the available data is only a year\sphinxhyphen{}long and, therefore, “only weekly, and daily seasonality are considered”.
+Hamand and his coauthors (Hamad et al., 2021) develop a forecasting model for CitiBike, New York’s BSS, using hourly data, and conclude that “complex seasonalities should be taken into account in traditional time series models”. Hourly data allows to capture three types of seasonalities: yearly, weekly, and daily. However, the available data is only a year\sphinxhyphen{}long and, therefore, “only weekly, and daily seasonality are considered”.
 
 \sphinxAtStartPar
-The choice to further aggregate the data at the daily level stems from these considerations, and more. First, more fine\sphinxhyphen{}grained predictions are usually dealt with deep\sphinxhyphen{}learning models. In other cases, like with (autore sopra) hourly forecasts are associated with shorter time intervals, while we want to exploit yearly seasonalities fully. Statistical models like seasonal ARIMA (SARIMA) do not perform well with long seasonality and “cannot deal with multiple seasonality as well” and, for this reason, shorter time windows are used to compute the forecast with hourly intervals. Choosing a hourly forecasting horizon would likely imply to sample data from one year only, in order to shorten the duration of model fitting. Finally, and perhaps more importantly, the rest of the literature often employs external weather data, especially rain measurements. Since we do not possess external data, we rely on the yearly seasonalities to convey the weather signal, which might not be carried by shorter forecasting windows.
+The choice to further aggregate the data at the daily level stems from these considerations, and more. First, more fine\sphinxhyphen{}grained predictions are usually dealt with deep\sphinxhyphen{}learning models. In other cases, like that of Hamand et al., hourly forecasts are associated with shorter time intervals, while we want to exploit yearly seasonalities fully. Statistical models like seasonal ARIMA (SARIMA) do not perform well with long seasonality and “cannot deal with multiple seasonality as well” (Hamad et al., 2021) and, for this reason, shorter time windows are used to compute the forecast with hourly intervals. Choosing a hourly forecasting horizon would likely imply to sample data from one year only, in order to shorten the duration of model fitting. Finally, and perhaps more importantly, the rest of the literature often employs external weather data, especially rain measurements (An et al., 2019) (Heinen et al., 2011) (Thomas et al., 2013). Since we do not possess external data, we rely on the yearly seasonalities to convey the weather signal, which might not be carried by shorter forecasting windows.
 
 
 \subsection{Time Aggregation Implementation}
@@ -1714,37 +1335,14 @@ This last aggregation is once again performed on the local database, since the q
 And then read the final data into memory.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def} \PYG{n+nf}{retrieve\PYGZus{}daily\PYGZus{}data}\PYG{p}{(}\PYG{n}{connection}\PYG{p}{,} \PYG{n}{wide}\PYG{p}{:} \PYG{n+nb}{bool} \PYG{o}{=} \PYG{k+kc}{False}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
-    \PYG{n}{query} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
-\PYG{l+s+s2}{        SELECT}
-\PYG{l+s+s2}{            cdr.data\PYGZus{}partenza,}
-\PYG{l+s+s2}{            cdr.cluster,}
-\PYG{l+s+s2}{            cdr.noleggi\PYGZus{}giornalieri}
-\PYG{l+s+s2}{        FROM bikemi\PYGZus{}rentals.clusters\PYGZus{}daily\PYGZus{}rentals cdr}
-\PYG{l+s+s2}{    }\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
-
-    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{wide}\PYG{p}{:}
-        \PYG{k}{return} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}sql}\PYG{p}{(}\PYG{n}{query}\PYG{p}{,} \PYG{n}{connection}\PYG{p}{)}\PYG{o}{.}\PYG{n}{rename}\PYG{p}{(}\PYG{n}{index}\PYG{o}{=}\PYG{n+nb}{str}\PYG{o}{.}\PYG{n}{title}\PYG{p}{)}
-    \PYG{k}{return} \PYG{p}{(}
-        \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}sql}\PYG{p}{(}\PYG{n}{query}\PYG{p}{,} \PYG{n}{connection}\PYG{p}{)}
-            \PYG{o}{.}\PYG{n}{pivot}\PYG{p}{(}\PYG{n}{index}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{data\PYGZus{}partenza}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{columns}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{cluster}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{values}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{noleggi\PYGZus{}giornalieri}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-            \PYG{o}{.}\PYG{n}{rename}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{n+nb}{str}\PYG{o}{.}\PYG{n}{title}\PYG{p}{)}
-            \PYG{o}{.}\PYG{n}{asfreq}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{D}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-    \PYG{p}{)}
-
-
-\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame} \PYG{o}{=} \PYG{n}{retrieve\PYGZus{}daily\PYGZus{}data}\PYG{p}{(}\PYG{n}{conn}\PYG{p}{,} \PYG{n}{wide}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
-\end{sphinxVerbatim}
-
+\begin{sphinxuseclass}{tag_hide-input}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
 \section{Seasonal Decomposition}
 \label{\detokenize{05-time_series_analysis:seasonal-decomposition}}
 \sphinxAtStartPar
-Python library \sphinxcode{\sphinxupquote{statsmodels}} is the choice to perform seasonal decompositions. Simply put, seasonal decomposition assumes that a time\sphinxhyphen{}series is made up of components: a trend (and cycle) \(T\), the seasonality \(S\) and the remainder \(R\) HYNDMAN. A trend is a long\sphinxhyphen{}term increase or decrease in the data. Seasonalities are cyclical variations of the data that occur with fixed and known period, while cycles do not exhibit a clear frequency (such as, for example, the economic cycle).
+Python library \sphinxcode{\sphinxupquote{statsmodels}} is the choice to perform seasonal decompositions (Seabold \& Perktold, 2010). Simply put, seasonal decomposition assumes that a time\sphinxhyphen{}series is made up of components: a trend (and cycle) \(T\), the seasonality \(S\) and the remainder \(R\) (Hyndman \& Athanasopoulos, 2021). A trend is a long\sphinxhyphen{}term increase or decrease in the data. Seasonalities are cyclical variations of the data that occur with fixed and known period, while cycles do not exhibit a clear frequency (such as, for example, the economic cycle).
 
 \sphinxAtStartPar
 As a starter, the base function \sphinxcode{\sphinxupquote{seasonal\_decompose}} implements additive and multiplicative decompositions. The models behind these two strategies are quite simple: \(y_t = S_t + T_t + R_t\) for the additive model and \(y_t = S_t \times T_t \times R_t\). The multiplicative specification is preferred when the magnitude of seasonal fluctuations varies around the level of the time series. Also, it is worth noting that the two equations are convertible: \(y_t = S_t \times T_t \times R_t\) is equivalent to \(logy_t = logS_t + logT_t + logR_t\).
@@ -1753,7 +1351,7 @@ As a starter, the base function \sphinxcode{\sphinxupquote{seasonal\_decompose}}
 The algorithm that performs the decomposition is quite simple: first, a moving\sphinxhyphen{}average is fit using a time window that is twice the size of the periodicity of the series. For example, monthly data will have a window \(m\) of 12 observations. i.e. twelve months. This will be our estimated trend\sphinxhyphen{}cycle component \(\hat{T}_t\), which is then subtracted from the observed data. The seasonal component \(\hat{S}_t\) is computed as the average of the de\sphinxhyphen{}trended data for that season: for example, with monthly periodicity an average is computed for each month using the values of each month. The residuals \(\hat{R}_t\) are obtained subtracting the seasonal component from the de\sphinxhyphen{}trended series. This applies to additive models; for multiplicative specifications, every subtraction is replaced with a division.
 
 \sphinxAtStartPar
-These techniques are quite rudimentary, so much so that \sphinxcode{\sphinxupquote{statsmodels}} recommends applying more sophisticated techniques. As an example, classical decomposition (which dates back to the 1920s) is unable to capture variation in the seasonal cycle, which is assumed to be the same from year to year.  Nonetheless, they represent a good starting point to identify patterns in the time series, and the building block for more advanced strategies. As we are dealing with daily data, there will be two main seasonalities we want to identify: yearly and weekly patterns.
+These techniques are quite rudimentary, so much so that \sphinxcode{\sphinxupquote{statsmodels}} recommends applying more sophisticated techniques. As an example, classical decomposition (which dates back to the 1920s) is unable to capture variation in the seasonal cycle, which is assumed to be the same from year to year. Nonetheless, they represent a good starting point to identify patterns in the time series, and the building block for more advanced strategies. As we are dealing with daily data, there will be two main seasonalities we want to identify: yearly and weekly patterns.
 
 \sphinxAtStartPar
 The first thing that comes up is that the seasonal pattern is quite tight: this is because weekly seasonalities are fit in a span of two years. The \sphinxcode{\sphinxupquote{seasonal\_decompose}} function requires at least two “complete cycles” of data, i.e. two years should be enough for our purposes. The function by default uses the same periodicity as the time\sphinxhyphen{}index of the \sphinxcode{\sphinxupquote{pandas.DataFrame}} passed as data argument: in this case, daily. We would also override it to display only higher order seasonalities, for example by setting a week\sphinxhyphen{}long period. The trend can also be estimated with a least\sphinxhyphen{}squares regression using an input number of data points.
@@ -1834,25 +1432,21 @@ It is also worth noting the scales: seasonalities scales are very much in the ne
 As an exercise, we can change the \sphinxcode{\sphinxupquote{period}} of the data 30 days, as an exercise. This returns a much different seasonal pattern, which, however, is even less informative: the range of values is up to ten time smaller than the residuals. This also returns a much smoother linear trend, where the dips are less pronounced.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{n}{daily\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{decompose\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{period}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_18_0}.png}
 
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
 \subsection{Advanced Decomposition}
 \label{\detokenize{05-time_series_analysis:advanced-decomposition}}
 \sphinxAtStartPar
-To investigate these patterns we can exploit more advanced decompostion patterns. Official tools are often developed by official bureaus, as seasonal decomposition is especially needed when dealing with monthly or quarterly data. Inside the European Union, the \sphinxhref{https://ec.europa.eu/eurostat/cros/content/software-jdemetra\_en}{official recommendation} is the JDemetra+ software library. The US Census Bureau implemented the X\sphinxhyphen{}11 category of models, which also allow the seasonal component to vary over time and are robust to outliers and missing values. These models, however, are not suited for daily and weekly data points (HYNDMAN).
+To investigate these patterns we can exploit more advanced decompostion patterns. Official tools are often developed by official bureaus, as seasonal decomposition is especially needed when dealing with monthly or quarterly data. Inside the European Union, the \sphinxhref{https://ec.europa.eu/eurostat/cros/content/software-jdemetra\_en}{official recommendation} is the JDemetra+ software library. The US Census Bureau implemented the X\sphinxhyphen{}11 category of models, which also allow the seasonal component to vary over time and are robust to outliers and missing values. These models, however, are not suited for daily and weekly data points (Hyndman \& Athanasopoulos, 2021).
 
 \sphinxAtStartPar
-For this reason, another technique is frequently used: STL decomposition, or Seasonal Trend decomposition using LOESS, proposed by Cleveland and his coauthors (Cleveland). LOESS is an acronym that unpacks to Locally Estimated Scatterplot Smoothing (or Savitzky\sphinxhyphen{}Golay filter), that indicates a non\sphinxhyphen{}parametric regression that is locally fitted. Simply put, the LOESS fits multiple, even polynomial regressions, “in a moving fashion analogous to how a moving average is computed for a time series” (Locally Weighted Regression: An Approach to Regression Analysis by Local Fitting). \sphinxcode{\sphinxupquote{statsmodels}} implements the STL decomposition directly from the fortran library developed by Cleveland, and has a plethora of arguments to tweak. These can be split into three categories.
+For this reason, another technique is frequently used: STL decomposition, or Seasonal Trend decomposition using LOESS, proposed by Cleveland and his coauthors (Cleveland \& Devlin, 1988). LOESS is an acronym that unpacks to Locally Estimated Scatterplot Smoothing (or Savitzky\sphinxhyphen{}Golay filter), that indicates a non\sphinxhyphen{}parametric regression that is locally fitted. Simply put, the LOESS fits multiple, even polynomial regressions, “in a moving fashion analogous to how a moving average is computed for a time series” (Cleveland \& Devlin, 1988). \sphinxcode{\sphinxupquote{statsmodels}} implements the STL decomposition directly from the fortran library developed by Cleveland, and has a plethora of arguments to tweak. These can be split into three categories.
 
 \sphinxAtStartPar
 The main parameters are the following:
@@ -1892,18 +1486,11 @@ Lastly, there are the interpolation step parameters. Basically, they reduce the 
 The function also has a \sphinxcode{\sphinxupquote{robustbool}} flag, indicating whether to use a weighted version that is robust to some forms of outliers.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k+kn}{from} \PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{tsa}\PYG{n+nn}{.}\PYG{n+nn}{seasonal} \PYG{k+kn}{import} \PYG{n}{STL}
-
-\PYG{n}{stl\PYGZus{}7} \PYG{o}{=} \PYG{n}{STL}\PYG{p}{(}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{n}{period}\PYG{o}{=}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{seasonal}\PYG{o}{=}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{trend}\PYG{o}{=}\PYG{l+m+mi}{31}\PYG{p}{,} \PYG{n}{seasonal\PYGZus{}deg}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{p}{)}
-\PYG{n}{build\PYGZus{}plots}\PYG{p}{(}\PYG{n}{stl\PYGZus{}7}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{STL: Seasonal = 7, Trend = 31}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{sns\PYGZus{}c}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_20_0}.png}
 
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
@@ -1921,32 +1508,7 @@ Time series data is unique as the data points are not \(i.i.d.\) distributed. In
 However, the autocorrelation between to points at \(k\) lags of distance might simply be due both points being connected by the same “chain” of intermediate values \(y_{t-1}\) to \(y_{t-(k+1)}\), rather than because of any new information contained in  \(y_k\)  that could be used to forecast \(y_t\). This problem is solved via the PACF, which \sphinxhyphen{} simply put \sphinxhyphen{} estimates an autoregressive models (i.e., a linear regression fit only on the lags) and returns the coefficient of the \(k\)th component.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k+kn}{from} \PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{graphics}\PYG{n+nn}{.}\PYG{n+nn}{tsaplots} \PYG{k+kn}{import} \PYG{n}{plot\PYGZus{}acf}\PYG{p}{,} \PYG{n}{plot\PYGZus{}pacf}
-
-\PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{constrained\PYGZus{}layout}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
-\PYG{n}{plot\PYGZus{}acf}\PYG{p}{(}
-    \PYG{n}{x}\PYG{o}{=}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,}
-    \PYG{n}{lags}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{,}
-    \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,}
-    \PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Autocorrelation Function}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
-    \PYG{n}{zero}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,}
-\PYG{p}{)}
-\PYG{n}{plot\PYGZus{}pacf}\PYG{p}{(}
-    \PYG{n}{x}\PYG{o}{=}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,}
-    \PYG{n}{lags}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{,}
-    \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,}
-    \PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Partial Autocorrelation Function}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
-    \PYG{n}{method}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ywm}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
-    \PYG{n}{zero}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,}
-\PYG{p}{)}
-
-\PYG{n}{plt}\PYG{o}{.}\PYG{n}{suptitle}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{BikeMi Daily Rentals in TAZ }\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{Bikemi \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{o}{*}\PYG{o}{*}\PYG{n}{title\PYGZus{}font}\PYG{p}{)}
-\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 []
@@ -1954,6 +1516,7 @@ However, the autocorrelation between to points at \(k\) lags of distance might s
 
 \noindent\sphinxincludegraphics{{05-time_series_analysis_22_1}.png}
 
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
@@ -1969,70 +1532,18 @@ Differencing is the last step in our time series analysis. Given that the time s
 As the name suggests, these processes have first and second\sphinxhyphen{}order moments that are fixed in time; the same applies to auto\sphinxhyphen{}correlation, that should only depend on the length of the lag \(k\), i.e. should be the same across any two time points at distance \(k\). These two properties do not imply each other, unless when the underlying process is Gaussian. Our data does not seem unequivocably normal:
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}hist}\PYG{p}{(}
-        \PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,}
-        \PYG{n}{col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
-        \PYG{n}{bins}\PYG{p}{:} \PYG{n}{Optional}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{]} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
-        \PYG{n}{kde}\PYG{p}{:} \PYG{n+nb}{bool} \PYG{o}{=} \PYG{k+kc}{True}\PYG{p}{,}
-        \PYG{n}{log}\PYG{p}{:} \PYG{n+nb}{bool} \PYG{o}{=} \PYG{k+kc}{False}
-\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
-    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}
-
-    \PYG{k}{if} \PYG{n}{log}\PYG{p}{:}
-        \PYG{n}{series} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{)}
-    \PYG{k}{else}\PYG{p}{:}
-        \PYG{n}{series} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]}
-
-    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{bins}\PYG{p}{:}
-        \PYG{n}{bins} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{series}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{10}\PYG{p}{)}
-
-    \PYG{n}{series}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}
-        \PYG{n}{sns}\PYG{o}{.}\PYG{n}{histplot}\PYG{p}{,}
-        \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{,}
-        \PYG{n}{kde}\PYG{o}{=}\PYG{n}{kde}\PYG{p}{,}
-        \PYG{n}{bins}\PYG{o}{=}\PYG{n}{bins}
-    \PYG{p}{)}
-
-    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}
-        \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
-        \PYG{n}{ylabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
-        \PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Forecasting Demand Distribution in }\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{col}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{:}\PYG{l+s+s2}{\PYGZdq{}}
-    \PYG{p}{)}
-
-    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
-
-
-\PYG{n}{daily\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{plot\PYGZus{}hist}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{bins}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_25_0}.png}
 
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 To transform a non\sphinxhyphen{}stationary series into a (weakly) stationary one, the principal tool is taking differences, i.e. subtracting from every \(y_t\) the \(k\)\sphinxhyphen{}th lagged value. Usually, however, the differences that are preferred are the ones that are interpretable: first differences represent the change between two observations, and the seasonal differences represent the increase from one seasonal period to the other (in this case, between two weeks).
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}differences}\PYG{p}{(}\PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,} \PYG{n}{col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,} \PYG{n}{lag}\PYG{p}{:} \PYG{n+nb}{int}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{n}{sns}\PYG{o}{.}\PYG{n}{color\PYGZus{}palette}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{deep}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
-    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}
-
-    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{lag}\PYG{p}{)}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{n}{color}\PYG{p}{)}
-    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{BikeMi Daily Rentals, }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{col}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{, Differencing Order: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{lag}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-
-    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
-
-
-\PYG{n}{plot\PYGZus{}differences}\PYG{p}{(}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
-\PYG{n}{plot\PYGZus{}differences}\PYG{p}{(}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_27_0}.png}
 
@@ -2040,29 +1551,16 @@ To transform a non\sphinxhyphen{}stationary series into a (weakly) stationary on
 
 \end{sphinxuseclass}
 \end{sphinxuseclass}
+\end{sphinxuseclass}
 \sphinxAtStartPar
-First differencing returns seemingly stationary data, but the seasonal component is not removed. On the contrary, the seasonal differences are less noisy. Still, the two datasets display high variance, with a change as great as 400 observations. We can also difference the series twice; this, however, might not be recommendable if the series is already stationary after one round of differencing: “applying more differences than required will induce false dynamics or autocorrelations that do not really exist in the time series” \sphinxstylestrong{hyndman}. At first glance, double differences seem to return a series that is more convincingly stationary.
+First differencing returns seemingly stationary data, but the seasonal component is not removed. On the contrary, the seasonal differences are less noisy. Still, the two datasets display high variance, with a change as great as 400 observations. We can also difference the series twice; this, however, might not be recommendable if the series is already stationary after one round of differencing: “applying more differences than required will induce false dynamics or autocorrelations that do not really exist in the time series” (Hyndman \& Athanasopoulos, 2021). At first glance, double differences seem to return a series that is more convincingly stationary.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{cell_input}
-\begin{sphinxVerbatim}[commandchars=\\\{\}]
-\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}double\PYGZus{}differences}\PYG{p}{(}\PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,} \PYG{n}{col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,} \PYG{n}{lag}\PYG{p}{:} \PYG{n+nb}{list}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{]} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{]}\PYG{p}{,}
-                            \PYG{n}{color}\PYG{o}{=}\PYG{n}{sns}\PYG{o}{.}\PYG{n}{color\PYGZus{}palette}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{deep}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
-    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}
-
-    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{lag}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{lag}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{n}{color}\PYG{p}{)}
-    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{BikeMi Daily Rentals, }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{col}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{, Differencing Order: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{lag}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
-
-    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
-
-
-\PYG{n}{plot\PYGZus{}double\PYGZus{}differences}\PYG{p}{(}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{p}{[}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}\PYG{p}{)}
-\end{sphinxVerbatim}
-
-\end{sphinxuseclass}
+\begin{sphinxuseclass}{tag_hide-input}
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_29_0}.png}
 
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -2072,23 +1570,18 @@ First differencing returns seemingly stationary data, but the seasonal component
 Stationarity can be assessed more objectively using a particular category of statistical tests named \sphinxstyleemphasis{unit root tests}. Simply put,
 
 \sphinxAtStartPar
-One of the most popular unit root tests is the \sphinxstyleemphasis{Kwiatkowski\sphinxhyphen{}Phillips\sphinxhyphen{}Schmidt\sphinxhyphen{}Shin (KPSS) test}. With the authors’ words, the null hypothesis is that “an observable series is stationary around a deterministic trend”, against the alternative that “the series is difference\sphinxhyphen{}stationary”, i.e. requires differencing. In other words, the test’s null hypothesis is that the process is level or trend stationary (i.e., does not exhibit a trend) and if we reject the null hypothesis (for \(p\) values smaller than \(0.05\)) differencing is required.
+One of the most popular unit root tests is the \sphinxstyleemphasis{Kwiatkowski\sphinxhyphen{}Phillips\sphinxhyphen{}Schmidt\sphinxhyphen{}Shin (KPSS) test} (Kwiatkowski et al., 1992). With the authors’ words, the null hypothesis is that “an observable series is stationary around a deterministic trend”, against the alternative that “the series is difference\sphinxhyphen{}stationary”, i.e. requires differencing. In other words, the test’s null hypothesis is that the process is level or trend stationary (i.e., does not exhibit a trend) and if we reject the null hypothesis (for \(p\) values smaller than \(0.05\)) differencing is required.
 
 \sphinxAtStartPar
-Another test is the (Augmented) Dickey\sphinxhyphen{}Fuller or ADF test. While the KPSS test’s null hypothesis is that the series is already stationary, the ADF test assumes the opposite, i.e. the series is not stationary because it has a unit root. If we reject the null, we assume the time series to be stationary. Both tests suggest that data from \sphinxcode{\sphinxupquote{Brera \sphinxhyphen{} 25}} is compatible with the hypothesis that the series is stationary, by taking either first order differences, seasonal differences (and the combination of both). For this reason, we shall stick to seasonal differences.
+Another test is the (Augmented) Dickey\sphinxhyphen{}Fuller or ADF test (Dickey \& Fuller, 2012). While the KPSS test’s null hypothesis is that the series is already stationary, the ADF test assumes the opposite, i.e. the series is not stationary because it has a unit root. If we reject the null, we assume the time series to be stationary. Both tests suggest that data from \sphinxcode{\sphinxupquote{Brera \sphinxhyphen{} 25}} is compatible with the hypothesis that the series is stationary, by taking either first order differences, seasonal differences (and the combination of both). For this reason, we shall stick to seasonal differences.
 
 \begin{sphinxuseclass}{cell}
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k+kn}{from} \PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{tsa}\PYG{n+nn}{.}\PYG{n+nn}{stattools} \PYG{k+kn}{import} \PYG{n}{adfuller}\PYG{p}{,} \PYG{n}{kpss}
-\PYG{k+kn}{import} \PYG{n+nn}{warnings}
-\PYG{k+kn}{from} \PYG{n+nn}{rich}\PYG{n+nn}{.}\PYG{n+nn}{console} \PYG{k+kn}{import} \PYG{n}{Console}
 
-\PYG{n}{console} \PYG{o}{=} \PYG{n}{Console}\PYG{p}{(}\PYG{p}{)}
 
 \PYG{k}{def} \PYG{n+nf}{stationarity\PYGZus{}test}\PYG{p}{(}\PYG{n}{lagged\PYGZus{}series}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
-
-
     \PYG{k}{with} \PYG{n}{warnings}\PYG{o}{.}\PYG{n}{catch\PYGZus{}warnings}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
         \PYG{n}{warnings}\PYG{o}{.}\PYG{n}{filterwarnings}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ignore}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
 
@@ -2105,11 +1598,12 @@ Another test is the (Augmented) Dickey\sphinxhyphen{}Fuller or ADF test. While t
         \PYG{p}{)}
 
         \PYG{n}{console}\PYG{o}{.}\PYG{n}{print}\PYG{p}{(}
-        \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ADF test statistic: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{adfuller\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ ADF p\PYGZhy{}value: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{adfuller\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3\PYGZpc{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
-        \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is no unit root \PYGZhy{} the series *is* stationary}\PYG{l+s+s1}{\PYGZsq{}} \PYG{k}{if} \PYG{n}{adfuller\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZlt{}} \PYG{l+m+mf}{0.05} \PYG{k}{else} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is a unit root \PYGZhy{} the series *is not* stationary}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
-        \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{KPSS test statistic: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{kpss\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ KPSS p\PYGZhy{}value: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{kpss\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3\PYGZpc{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
-        \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is a unit root \PYGZhy{} the series *is not* stationary}\PYG{l+s+s1}{\PYGZsq{}} \PYG{k}{if} \PYG{n}{kpss\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZlt{}} \PYG{l+m+mf}{0.05} \PYG{k}{else} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is no unit root \PYGZhy{} the series *is* stationary}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}
+            \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ADF test statistic: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{adfuller\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ ADF p\PYGZhy{}value: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{adfuller\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3\PYGZpc{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
+            \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is no unit root \PYGZhy{} the series *is* stationary}\PYG{l+s+s1}{\PYGZsq{}} \PYG{k}{if} \PYG{n}{adfuller\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZlt{}} \PYG{l+m+mf}{0.05} \PYG{k}{else} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is a unit root \PYGZhy{} the series *is not* stationary}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
+            \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{KPSS test statistic: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{kpss\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ KPSS p\PYGZhy{}value: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{kpss\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3\PYGZpc{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
+            \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is a unit root \PYGZhy{} the series *is not* stationary}\PYG{l+s+s1}{\PYGZsq{}} \PYG{k}{if} \PYG{n}{kpss\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZlt{}} \PYG{l+m+mf}{0.05} \PYG{k}{else} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is no unit root \PYGZhy{} the series *is* stationary}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}
         \PYG{p}{)}
+
 
 \PYG{n}{console}\PYG{o}{.}\PYG{n}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{First Order Differences (Lag: 1)}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
 \PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{stationarity\PYGZus{}test}\PYG{p}{)}
@@ -2159,6 +1653,339 @@ there is no unit root \PYGZhy{} the series *is* stationary
 
 \end{sphinxuseclass}
 \end{sphinxuseclass}
+
+\chapter{References}
+\label{\detokenize{references:references}}\label{\detokenize{references::doc}}
+
+\section{Chapter 1}
+\label{\detokenize{references:chapter-1}}
+\sphinxAtStartPar
+Bahmanyar, A., Estebsari, A., \& Ernst, D. (2020). The impact of different COVID\sphinxhyphen{}19 containment measures on electricity consumption in Europe. Energy Research \& Social Science, 68, 101683. https://doi.org/10.1016/j.erss.2020.101683
+
+\sphinxAtStartPar
+Bergantino, A. S., Intini, M., \& Tangari, L. (2021). Influencing factors for potential bike\sphinxhyphen{}sharing users: an empirical analysis during the COVID\sphinxhyphen{}19 pandemic. Research in Transportation Economics, 86, 101028. https://doi.org/10.1016/j.retrec.2020.101028
+
+\sphinxAtStartPar
+Bordagaray, M., dell’Olio, L., Fonzone, A., \& Ibeas, Á. (2016). Capturing the conditions that introduce systematic variation in bike\sphinxhyphen{}sharing travel behavior using data mining techniques. Transportation Research Part C: Emerging Technologies, 71, 231–248. https://doi.org/10.1016/j.trc.2016.07.009
+
+\sphinxAtStartPar
+Cantelmo, G., Kucharski, R., \& Antoniou, C. (2020). Low\sphinxhyphen{}Dimensional Model for Bike\sphinxhyphen{}Sharing Demand Forecasting that Explicitly Accounts for Weather Data. Transportation Research Record, 2674(8), 132–144. https://doi.org/10.1177/0361198120932160
+
+\sphinxAtStartPar
+Che aria respiriamo. (2021, September 28). Il Post. https://www.ilpost.it/2021/09/28/qualita\sphinxhyphen{}aria\sphinxhyphen{}inquinanti\sphinxhyphen{}oms/
+
+\sphinxAtStartPar
+Dall’andamento degli obiettivi di sviluppo sostenibile alla mobilità. (2021, September 8). https://www.istat.it/it/archivio/260839
+
+\sphinxAtStartPar
+Eren, E., \& Uz, V. E. (2020). A review on bike\sphinxhyphen{}sharing: The factors affecting bike\sphinxhyphen{}sharing demand. Sustainable Cities and Society, 54, 101882. https://doi.org/10.1016/j.scs.2019.101882
+
+\sphinxAtStartPar
+European city air quality viewer — European Environment Agency. (2021, June 17). {[}Dashboard (Tableau){]}. https://www.eea.europa.eu/themes/air/urban\sphinxhyphen{}air\sphinxhyphen{}quality/european\sphinxhyphen{}city\sphinxhyphen{}air\sphinxhyphen{}quality\sphinxhyphen{}viewer
+
+\sphinxAtStartPar
+Executable Books Community. (2020). Jupyter Book (v0.10) {[}Computer software{]}. Zenodo. https://doi.org/10.5281/ZENODO.2561065
+
+\sphinxAtStartPar
+Fricker, C., \& Gast, N. (2016). Incentives and redistribution in homogeneous bike\sphinxhyphen{}sharing systems with stations of finite capacity. EURO Journal on Transportation and Logistics, 5(3), 261–291. https://doi.org/10.1007/s13676\sphinxhyphen{}014\sphinxhyphen{}0053\sphinxhyphen{}5
+
+\sphinxAtStartPar
+Ghosh, S., Koh, J. Y., \& Jaillet, P. (2019). Improving Customer Satisfaction in Bike Sharing Systems through Dynamic Repositioning. MIT Web Domain. https://dspace.mit.edu/handle/1721.1/128925
+
+\sphinxAtStartPar
+Gli spostamenti per motivi di studio o lavoro nel 2019 secondo il Censimento permanente della popolazione. (2021, May 13). https://www.istat.it/it/archivio/257621
+
+\sphinxAtStartPar
+Gualtieri, G., Brilli, L., Carotenuto, F., Vagnoli, C., Zaldei, A., \& Gioli, B. (2020). Quantifying road traffic impact on air quality in urban areas: A Covid19\sphinxhyphen{}induced lockdown analysis in Italy. Environmental Pollution, 267, 115682. https://doi.org/10.1016/j.envpol.2020.115682
+
+\sphinxAtStartPar
+Hamad, S. Y. Y., Ma, T., \& Antoniou, C. (2021). Analysis and Prediction of Bikesharing Traffic Flow – Citi Bike, New York. 2021 7th International Conference on Models and Technologies for Intelligent Transportation Systems (MT\sphinxhyphen{}ITS), 1–8. https://doi.org/10.1109/MT\sphinxhyphen{}ITS49943.2021.9529290
+
+\sphinxAtStartPar
+Härmand, K. (2021). Digitalisation before and after the Covid\sphinxhyphen{}19 crisis. ERA Forum, 22(1), 39–50. https://doi.org/10.1007/s12027\sphinxhyphen{}021\sphinxhyphen{}00656\sphinxhyphen{}8
+
+\sphinxAtStartPar
+Italy \sphinxhyphen{} Air pollution country fact sheet — European Environment Agency. (2020, November 23). {[}Dashboard (Tableau){]}. https://www.eea.europa.eu/themes/air/country\sphinxhyphen{}fact\sphinxhyphen{}sheets/2020\sphinxhyphen{}country\sphinxhyphen{}fact\sphinxhyphen{}sheets/italy
+
+\sphinxAtStartPar
+Jephcote, C., Hansell, A. L., Adams, K., \& Gulliver, J. (2021). Changes in air quality during COVID\sphinxhyphen{}19 ‘lockdown’ in the United Kingdom. Environmental Pollution, 272, 116011. https://doi.org/10.1016/j.envpol.2020.116011
+
+\sphinxAtStartPar
+Ke, J., Zheng, H., Yang, H., \& Chen, X. (Michael). (2017). Short\sphinxhyphen{}term forecasting of passenger demand under on\sphinxhyphen{}demand ride services: A spatio\sphinxhyphen{}temporal deep learning approach. Transportation Research Part C: Emerging Technologies, 85, 591–608. https://doi.org/10.1016/j.trc.2017.10.016
+
+\sphinxAtStartPar
+Lian, X., Huang, J., Huang, R., Liu, C., Wang, L., \& Zhang, T. (2020). Impact of city lockdown on the air quality of COVID\sphinxhyphen{}19\sphinxhyphen{}hit of Wuhan city. Science of The Total Environment, 742, 140556. https://doi.org/10.1016/j.scitotenv.2020.140556
+
+\sphinxAtStartPar
+Milano ha un’occasione storica. (2017, April 9). Il Post. http://www.ilpost.it/2017/04/09/scali\sphinxhyphen{}ferroviari\sphinxhyphen{}milano/
+
+\sphinxAtStartPar
+Pal, A., \& Zhang, Y. (2017). Free\sphinxhyphen{}floating bike sharing: Solving real\sphinxhyphen{}life large\sphinxhyphen{}scale static rebalancing problems. Transportation Research Part C: Emerging Technologies, 80, 92–116. https://doi.org/10.1016/j.trc.2017.03.016
+
+\sphinxAtStartPar
+Pandoc \sphinxhyphen{} About pandoc. (n.d.). Retrieved October 23, 2021, from https://pandoc.org/
+
+\sphinxAtStartPar
+Perkel, J. M. (2018). Why Jupyter is data scientists’ computational notebook of choice. Nature, 563(7729), 145–146. https://doi.org/10.1038/d41586\sphinxhyphen{}018\sphinxhyphen{}07196\sphinxhyphen{}1
+
+\sphinxAtStartPar
+Romer, P. (2018, April 13). Jupyter, Mathematica, and the Future of the Research Paper. Paul Romer. https://paulromer.net/jupyter\sphinxhyphen{}mathematica\sphinxhyphen{}and\sphinxhyphen{}the\sphinxhyphen{}future\sphinxhyphen{}of\sphinxhyphen{}the\sphinxhyphen{}research\sphinxhyphen{}paper/index.html
+
+\sphinxAtStartPar
+Singh, R. P., \& Chauhan, A. (2020). Impact of lockdown on air quality in India during COVID\sphinxhyphen{}19 pandemic. Air Quality, Atmosphere \& Health, 13(8), 921–928. https://doi.org/10.1007/s11869\sphinxhyphen{}020\sphinxhyphen{}00863\sphinxhyphen{}1
+
+\sphinxAtStartPar
+Somers, J. (2018, April 5). The Scientific Paper Is Obsolete. The Atlantic. https://www.theatlantic.com/science/archive/2018/04/the\sphinxhyphen{}scientific\sphinxhyphen{}paper\sphinxhyphen{}is\sphinxhyphen{}obsolete/556676/
+
+\sphinxAtStartPar
+Spostamenti quotidiani e nuove forme di mobilità. (2019, February 4). https://www.istat.it/it/archivio/224469
+
+\sphinxAtStartPar
+Standards \sphinxhyphen{} Air Quality \sphinxhyphen{} Environment \sphinxhyphen{} European Commission. (n.d.). Retrieved October 10, 2021, from https://ec.europa.eu/environment/air/quality/standards.htm
+
+\sphinxAtStartPar
+The 17 Goals. (n.d.). Retrieved October 10, 2021, from https://sdgs.un.org/goals
+
+\sphinxAtStartPar
+Tian, Y., Zhang, X., Yang, B., Wang, J., \& An, S. (2021). An individual\sphinxhyphen{}based spatio\sphinxhyphen{}temporal travel demand mining method and its application in improving rebalancing for free\sphinxhyphen{}floating bike\sphinxhyphen{}sharing system. Advanced Engineering Informatics, 50, 101365. https://doi.org/10.1016/j.aei.2021.101365
+
+\sphinxAtStartPar
+Truant, E., Broccardo, L., \& Dana, L.\sphinxhyphen{}P. (2021). Digitalisation boosts company performance: an overview of Italian listed companies. Technological Forecasting and Social Change, 173, 121173. https://doi.org/10.1016/j.techfore.2021.121173
+
+\sphinxAtStartPar
+Un po’ di cose notevoli dentro il PNRR. (2021, April 27). Il Post. http://www.ilpost.it/2021/04/27/pnrr\sphinxhyphen{}cosa\sphinxhyphen{}ce\sphinxhyphen{}dentro/
+
+\sphinxAtStartPar
+Xu, C., Ji, J., \& Liu, P. (2018). The station\sphinxhyphen{}free sharing bike demand forecasting with a deep learning approach and large\sphinxhyphen{}scale datasets. Transportation Research Part C: Emerging Technologies, 95, 47–60. https://doi.org/10.1016/j.trc.2018.07.013
+
+\sphinxAtStartPar
+Zotero | Your personal research assistant. (n.d.). Retrieved October 24, 2021, from https://www.zotero.org/start
+
+
+\section{Chapter 2}
+\label{\detokenize{references:chapter-2}}
+\sphinxAtStartPar
+Airbnb urges housing reform in Berlin after court overturns permit rejection. (2017, September 8). Tech Crunch. https://techcrunch.com/2017/09/08/airbnb\sphinxhyphen{}urges\sphinxhyphen{}housing\sphinxhyphen{}reform\sphinxhyphen{}in\sphinxhyphen{}berlin\sphinxhyphen{}after\sphinxhyphen{}court\sphinxhyphen{}overturns\sphinxhyphen{}permit\sphinxhyphen{}rejection/
+
+\sphinxAtStartPar
+Bike Sharing \sphinxhyphen{} Comune di Milano. (2021, August 5). https://www.comune.milano.it/servizi/bike\sphinxhyphen{}sharing
+
+\sphinxAtStartPar
+Cappozzo, A., Greselin, F., \& Manzi, G. (n.d.). Predicting and improving smart mobility: a robust model\sphinxhyphen{}based approach to the BikeMi BSS. 6.
+
+\sphinxAtStartPar
+Croci, E., \& Rossi, D. (2014). Optimizing the Position of Bike Sharing Stations. The Milan Case. (SSRN Scholarly Paper ID 2461179). Social Science Research Network. https://doi.org/10.2139/ssrn.2461179
+
+\sphinxAtStartPar
+DeMaio, P. (2009). Bike\sphinxhyphen{}sharing: History, Impacts, Models of Provision, and Future. Journal of Public Transportation, 12(4). https://doi.org/http://doi.org/10.5038/2375\sphinxhyphen{}0901.12.4.3
+
+\sphinxAtStartPar
+Fishman, E. (2015). Bikeshare: A Review of Recent Literature. Transport Reviews. https://www.tandfonline.com/doi/abs/10.1080/01441647.2015.1033036
+
+\sphinxAtStartPar
+Goggin, B., \& Taylor, K. (2019, May 10). 49 of the biggest scandals in Uber’s history. Business Insider. https://www.businessinsider.com/uber\sphinxhyphen{}company\sphinxhyphen{}scandals\sphinxhyphen{}and\sphinxhyphen{}controversies\sphinxhyphen{}2017\sphinxhyphen{}11
+
+\sphinxAtStartPar
+In Cina vivere senza WeChat è complicato. (2018, June 30). Il Post. http://www.ilpost.it/2018/06/30/cina\sphinxhyphen{}wechat/
+
+\sphinxAtStartPar
+Jackson, A. (2021, September 19). The Story of Uber. Investopedia. https://www.investopedia.com/articles/personal\sphinxhyphen{}finance/111015/story\sphinxhyphen{}uber.asp
+
+\sphinxAtStartPar
+La crisi della sharing economy. (2020, May 3). Il Post. http://www.ilpost.it/2020/05/03/sharing\sphinxhyphen{}economy\sphinxhyphen{}crisi\sphinxhyphen{}coronavirus/
+
+\sphinxAtStartPar
+La nuova sentenza europea sugli affitti brevi. (2020, September 23). Il Post. http://www.ilpost.it/2020/09/23/airbnb\sphinxhyphen{}affitti\sphinxhyphen{}brevi\sphinxhyphen{}sentenza\sphinxhyphen{}corte\sphinxhyphen{}giustizia\sphinxhyphen{}europea/
+
+\sphinxAtStartPar
+La quotazione in borsa di Airbnb è stata un successo. (2020, December 10). Il Post. http://www.ilpost.it/2020/12/10/airbnb\sphinxhyphen{}quotazione\sphinxhyphen{}azioni/
+
+\sphinxAtStartPar
+Laa, B., \& Leth, U. (2020). Survey of E\sphinxhyphen{}scooter users in Vienna: Who they are and how they ride. Journal of Transport Geography, 89, 102874. https://doi.org/10.1016/j.jtrangeo.2020.102874
+
+\sphinxAtStartPar
+Le città europee contro gli affitti brevi. (2021, April 21). Il Post. http://www.ilpost.it/2021/04/21/citta\sphinxhyphen{}europee\sphinxhyphen{}affitti\sphinxhyphen{}breve\sphinxhyphen{}termine/
+
+\sphinxAtStartPar
+Ma, Y., Lan, J., Thornton, T., Mangalagiu, D., \& Zhu, D. (2018). Challenges of collaborative governance in the sharing economy: The case of free\sphinxhyphen{}floating bike sharing in Shanghai. Journal of Cleaner Production, 197, 356–365. https://doi.org/10.1016/j.jclepro.2018.06.213
+
+\sphinxAtStartPar
+Magnani, A. (2017, November 27). La guerra del bike\sphinxhyphen{}sharing: così le bici cinesi low cost «invadono» il mercato italiano. Il Sole 24 ORE. https://www.ilsole24ore.com/art/la\sphinxhyphen{}guerra\sphinxhyphen{}bike\sphinxhyphen{}sharing\sphinxhyphen{}cosi\sphinxhyphen{}bici\sphinxhyphen{}cinesi\sphinxhyphen{}low\sphinxhyphen{}cost\sphinxhyphen{}invadono\sphinxhyphen{}mercato\sphinxhyphen{}italiano\sphinxhyphen{}AEfgqkID
+
+\sphinxAtStartPar
+Mitra, R., \& Hess, P. M. (2021). Who are the potential users of shared e\sphinxhyphen{}scooters? An examination of socio\sphinxhyphen{}demographic, attitudinal and environmental factors. Travel Behaviour and Society, 23, 100–107. https://doi.org/10.1016/j.tbs.2020.12.004
+
+\sphinxAtStartPar
+Monopattini in Sharing \sphinxhyphen{} Comune di Milano. (2021, July 7). https://www.comune.milano.it/servizi/monopattini\sphinxhyphen{}in\sphinxhyphen{}sharing
+
+\sphinxAtStartPar
+Moreau, H., de Jamblinne de Meux, L., Zeller, V., D’Ans, P., Ruwet, C., \& Achten, W. M. J. (2020). Dockless E\sphinxhyphen{}Scooter: A Green Solution for Mobility? Comparative Case Study between Dockless E\sphinxhyphen{}Scooters, Displaced Transport, and Personal E\sphinxhyphen{}Scooters. Sustainability, 12(5), 1803. https://doi.org/10.3390/su12051803
+
+\sphinxAtStartPar
+Nel primo giorno di quotazione in borsa, le azioni di Uber hanno perso il 7,6 per cento. (2019, May 11). Il Post. http://www.ilpost.it/2019/05/11/uber\sphinxhyphen{}azioni/
+
+\sphinxAtStartPar
+Nikiforiadis, A., Paschalidis, E., Stamatiadis, N., Raptopoulou, A., Kostareli, A., \& Basbas, S. (2021). Analysis of attitudes and engagement of shared e\sphinxhyphen{}scooter users. Transportation Research Part D: Transport and Environment, 94, 102790. https://doi.org/10.1016/j.trd.2021.102790
+
+\sphinxAtStartPar
+Parkes, S. D., Marsden, G., Shaheen, S. A., \& Cohen, A. P. (2013). Understanding the diffusion of public bikesharing systems: evidence from Europe and North America. Journal of Transport Geography, 31, 94–103. https://doi.org/10.1016/j.jtrangeo.2013.06.003
+
+\sphinxAtStartPar
+P.Sol. (2017, July 25). Bike sharing senza parcheggi: chi è il colosso cinese che sbarca in Italia. Il Sole 24 ORE. https://www.ilsole24ore.com/art/bike\sphinxhyphen{}sharing\sphinxhyphen{}senza\sphinxhyphen{}parcheggi\sphinxhyphen{}chi\sphinxhyphen{}e\sphinxhyphen{}colosso\sphinxhyphen{}cinese\sphinxhyphen{}che\sphinxhyphen{}sbarca\sphinxhyphen{}italia\sphinxhyphen{}AEjzmr2B
+
+\sphinxAtStartPar
+Reck, D. J., \& Axhausen, K. W. (2021). Who uses shared micro\sphinxhyphen{}mobility services? Empirical evidence from Zurich, Switzerland. Transportation Research Part D: Transport and Environment, 94, 102803. https://doi.org/10.1016/j.trd.2021.102803
+
+\sphinxAtStartPar
+Reck, D. J., Haitao, H., Guidon, S., \& Axhausen, K. W. (2021). Explaining shared micromobility usage, competition and mode choice by modelling empirical data from Zurich, Switzerland. Transportation Research Part C: Emerging Technologies, 124, 102947. https://doi.org/10.1016/j.trc.2020.102947
+
+\sphinxAtStartPar
+Saibene, G., \& Manzi, G. (2015). Bike Usage in Public Bike\sphinxhyphen{}Sharing: An Analysis of the “BikeMi” System in Milan. 21. https://air.unimi.it/handle/2434/515293
+
+\sphinxAtStartPar
+Salvioli, L. (2018, December 19). Ofo vicina al fallimento, Mobike verso la vendita in Europa. Il Sole 24 ORE. https://www.ilsole24ore.com/art/ofo\sphinxhyphen{}vicina\sphinxhyphen{}fallimento\sphinxhyphen{}mobike\sphinxhyphen{}la\sphinxhyphen{}vendita\sphinxhyphen{}europa\sphinxhyphen{}AEEdWb2G
+
+\sphinxAtStartPar
+Sanders, R. L., Branion\sphinxhyphen{}Calles, M., \& Nelson, T. A. (2020). To scoot or not to scoot: Findings from a recent survey about the benefits and barriers of using E\sphinxhyphen{}scooters for riders and non\sphinxhyphen{}riders. Transportation Research Part A: Policy and Practice, 139, 217–227. https://doi.org/10.1016/j.tra.2020.07.009
+
+\sphinxAtStartPar
+Schmidt, C. (2018). Active Travel for All? The Surge in Public Bike\sphinxhyphen{}Sharing Programs. Environmental Health Perspectives, 126(8), 082001. https://doi.org/10.1289/EHP3754
+
+\sphinxAtStartPar
+Seattle ha imposto una paga minima per gli autisti di Uber e Lyft. (2020, September 30). Il Post. http://www.ilpost.it/2020/09/30/seattle\sphinxhyphen{}paga\sphinxhyphen{}minima\sphinxhyphen{}autisti\sphinxhyphen{}uber/
+
+\sphinxAtStartPar
+Secondo la procura di Milano, Uber Eats, Glovo, Deliveroo e Just Eat devono regolarizzare 60mila rider con contratti di collaborazione. (2021, February 24). Il Post. http://www.ilpost.it/2021/02/24/procura\sphinxhyphen{}uber\sphinxhyphen{}eats\sphinxhyphen{}glovo\sphinxhyphen{}deliveroo\sphinxhyphen{}just\sphinxhyphen{}eat\sphinxhyphen{}regolarizzare\sphinxhyphen{}rider/
+
+\sphinxAtStartPar
+Soldavini, P. (2019, November 8). Il bike sharing europeo di Mobike diventa italiano (ed elettrico). Il Sole 24 ORE. https://www.ilsole24ore.com/art/bike\sphinxhyphen{}sharing\sphinxhyphen{}italiana\sphinxhyphen{}idri\sphinxhyphen{}bk\sphinxhyphen{}rileva\sphinxhyphen{}attivita\sphinxhyphen{}ue\sphinxhyphen{}mobike\sphinxhyphen{}ACJxRbx
+
+\sphinxAtStartPar
+Sorrentino, M., Manzi, G., \& Virili, F. (2019). Public and private dimensions in the identity\sphinxhyphen{}mission nexus: the BikeMi case. https://doi.org/10.15167/1824\sphinxhyphen{}3576/IPEJM2019.1.1191
+
+\sphinxAtStartPar
+Stone, B. (2017, January 26). The \$99 Billion Idea: How Uber and Airbnb Won. Bloomberg Businessweek. https://www.bloomberg.com/features/2017\sphinxhyphen{}uber\sphinxhyphen{}airbnb\sphinxhyphen{}99\sphinxhyphen{}billion\sphinxhyphen{}idea/
+
+\sphinxAtStartPar
+Toro, J. F., Carrion, D., Brovelli, M. A., \& Percoco, M. (2020). BikeMi Bike\sphinxhyphen{}Sharing Service Exploratory Analysis on Mobility Patterns. The International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences, XLIII\sphinxhyphen{}B4\sphinxhyphen{}2020, 197–203. https://doi.org/10.5194/isprs\sphinxhyphen{}archives\sphinxhyphen{}XLIII\sphinxhyphen{}B4\sphinxhyphen{}2020\sphinxhyphen{}197\sphinxhyphen{}2020
+
+\sphinxAtStartPar
+Tuncer, S., Laurier, E., Brown, B., \& Licoppe, C. (2020). Notes on the practices and appearances of e\sphinxhyphen{}scooter users in public space. Journal of Transport Geography, 85, 102702. https://doi.org/10.1016/j.jtrangeo.2020.102702
+
+\sphinxAtStartPar
+Uber Italia è accusata di sfruttamento dei rider ed è stata commissariata. (2020, May 29). Il Post. http://www.ilpost.it/2020/05/29/uber\sphinxhyphen{}commissariamento\sphinxhyphen{}rider\sphinxhyphen{}sfruttamento\sphinxhyphen{}caporalato/
+
+\sphinxAtStartPar
+Who we are \sphinxhyphen{} BikeMi. (n.d.). Retrieved October 26, 2021, from https://bikemi.com/en/who\sphinxhyphen{}we\sphinxhyphen{}are
+
+\sphinxAtStartPar
+Yang, H., Huo, J., Bao, Y., Li, X., Yang, L., \& Cherry, C. R. (2021). Impact of e\sphinxhyphen{}scooter sharing on bike sharing in Chicago. Transportation Research Part A: Policy and Practice, 154, 23–36. https://doi.org/10.1016/j.tra.2021.09.012
+
+\sphinxAtStartPar
+Zhu, R., Zhang, X., Kondor, D., Santi, P., \& Ratti, C. (2020). Understanding spatio\sphinxhyphen{}temporal heterogeneity of bike\sphinxhyphen{}sharing and scooter\sphinxhyphen{}sharing mobility. Computers, Environment and Urban Systems, 81, 101483. https://doi.org/10.1016/j.compenvurbsys.2020.101483
+
+
+\section{Chapter 3}
+\label{\detokenize{references:chapter-3}}
+\sphinxAtStartPar
+Gawk \sphinxhyphen{} GNU Project \sphinxhyphen{} Free Software Foundation (FSF). (n.d.). Retrieved October 23, 2021, from https://www.gnu.org/software/gawk/
+
+\sphinxAtStartPar
+Perkel, J. M. (2019). Julia: come for the syntax, stay for the speed. Nature, 572(7767), 141–142. https://doi.org/10.1038/d41586\sphinxhyphen{}019\sphinxhyphen{}02310\sphinxhyphen{}3
+
+\sphinxAtStartPar
+Perkel, J. M. (2020). Why scientists are turning to Rust. Nature, 588(7836), 185–186. https://doi.org/10.1038/d41586\sphinxhyphen{}020\sphinxhyphen{}03382\sphinxhyphen{}2
+
+\sphinxAtStartPar
+Saibene, G., \& Manzi, G. (2015). Bike Usage in Public Bike\sphinxhyphen{}Sharing: An Analysis of the “BikeMi” System in Milan. 21. https://air.unimi.it/handle/2434/515293
+
+
+\section{Chapter 4}
+\label{\detokenize{references:chapter-4}}
+\sphinxAtStartPar
+Ali, M., Alqahtani, A., Jones, M. W., \& Xie, X. (2019). Clustering and Classification for Time Series Data in Visual Analytics: A Survey. IEEE Access, 7, 181314–181338. https://doi.org/10.1109/ACCESS.2019.2958551
+
+\sphinxAtStartPar
+Brenning, A. (2012). Spatial cross\sphinxhyphen{}validation and bootstrap for the assessment of prediction rules in remote sensing: The R package sperrorest. 2012 IEEE International Geoscience and Remote Sensing Symposium, 5372–5375. https://doi.org/10.1109/IGARSS.2012.6352393
+
+\sphinxAtStartPar
+Cantelmo, G., Kucharski, R., \& Antoniou, C. (2020). Low\sphinxhyphen{}Dimensional Model for Bike\sphinxhyphen{}Sharing Demand Forecasting that Explicitly Accounts for Weather Data. Transportation Research Record, 2674(8), 132–144. https://doi.org/10.1177/0361198120932160
+
+\sphinxAtStartPar
+Chen, L., Zhang, D., Wang, L., Yang, D., Ma, X., Li, S., Wu, Z., Pan, G., Nguyen, T.\sphinxhyphen{}M.\sphinxhyphen{}T., \& Jakubowicz, J. (2016). Dynamic cluster\sphinxhyphen{}based over\sphinxhyphen{}demand prediction in bike sharing systems. Proceedings of the 2016 ACM International Joint Conference on Pervasive and Ubiquitous Computing, 841–852. https://doi.org/10.1145/2971648.2971652
+
+\sphinxAtStartPar
+Clustering. (n.d.). Scikit\sphinxhyphen{}Learn. Retrieved November 8, 2021, from https://scikit\sphinxhyphen{}learn/stable/modules/clustering.html
+
+\sphinxAtStartPar
+Gower, J. C. (1971). A General Coefficient of Similarity and Some of Its Properties. Biometrics, 27(4), 857–871. https://doi.org/10.2307/2528823
+
+\sphinxAtStartPar
+Huang, Z. (1998). Extensions to the k\sphinxhyphen{}Means Algorithm for Clustering Large Data Sets with Categorical Values. Data Mining and Knowledge Discovery, 2(3), 283–304. https://doi.org/10.1023/A:1009769707641
+
+\sphinxAtStartPar
+Li, Y., Zhu, Z., \& Guo, X. (2019). Operating Characteristics of Dockless Bike\sphinxhyphen{}Sharing Systems near Metro Stations: Case Study in Nanjing City, China. Sustainability, 11(8), 2256. https://doi.org/10.3390/su11082256
+
+\sphinxAtStartPar
+Ma, Y., Lan, J., Thornton, T., Mangalagiu, D., \& Zhu, D. (2018). Challenges of collaborative governance in the sharing economy: The case of free\sphinxhyphen{}floating bike sharing in Shanghai. Journal of Cleaner Production, 197, 356–365. https://doi.org/10.1016/j.jclepro.2018.06.213
+
+\sphinxAtStartPar
+Roberts, D. R., Bahn, V., Ciuti, S., Boyce, M. S., Elith, J., Guillera\sphinxhyphen{}Arroita, G., Hauenstein, S., Lahoz\sphinxhyphen{}Monfort, J. J., Schröder, B., Thuiller, W., Warton, D. I., Wintle, B. A., Hartig, F., \& Dormann, C. F. (2017). Cross\sphinxhyphen{}validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. Ecography, 40(8), 913–929. https://doi.org/10.1111/ecog.02881
+
+\sphinxAtStartPar
+Sohil, F., Sohali, M. U., \& Shabbir, J. (2021). An introduction to statistical learning with applications in R: by Gareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani, New York, Springer Science and Business Media, 2013, \$41.98, eISBN: 978\sphinxhyphen{}1\sphinxhyphen{}4614\sphinxhyphen{}7137\sphinxhyphen{}7. Statistical Theory and Related Fields, 1–1. https://doi.org/10.1080/24754269.2021.1980261
+
+
+\section{Chapter 5}
+\label{\detokenize{references:chapter-5}}
+\sphinxAtStartPar
+Ai, Y., Li, Z., Gan, M., Zhang, Y., Yu, D., Chen, W., \& Ju, Y. (2019). A deep learning approach on short\sphinxhyphen{}term spatiotemporal distribution forecasting of dockless bike\sphinxhyphen{}sharing system. Neural Computing and Applications, 31(5), 1665–1677. https://doi.org/10.1007/s00521\sphinxhyphen{}018\sphinxhyphen{}3470\sphinxhyphen{}9
+
+\sphinxAtStartPar
+An, R., Zahnow, R., Pojani, D., \& Corcoran, J. (2019). Weather and cycling in New York: The case of Citibike. Journal of Transport Geography, 77, 97–112. https://doi.org/10.1016/j.jtrangeo.2019.04.016
+
+\sphinxAtStartPar
+Cantelmo, G., Kucharski, R., \& Antoniou, C. (2020). Low\sphinxhyphen{}Dimensional Model for Bike\sphinxhyphen{}Sharing Demand Forecasting that Explicitly Accounts for Weather Data. Transportation Research Record, 2674(8), 132–144. https://doi.org/10.1177/0361198120932160
+
+\sphinxAtStartPar
+Chen, L., Zhang, D., Wang, L., Yang, D., Ma, X., Li, S., Wu, Z., Pan, G., Nguyen, T.\sphinxhyphen{}M.\sphinxhyphen{}T., \& Jakubowicz, J. (2016). Dynamic cluster\sphinxhyphen{}based over\sphinxhyphen{}demand prediction in bike sharing systems. Proceedings of the 2016 ACM International Joint Conference on Pervasive and Ubiquitous Computing, 841–852. https://doi.org/10.1145/2971648.2971652
+
+\sphinxAtStartPar
+Cleveland, W. S., \& Devlin, S. J. (1988). Locally Weighted Regression: An Approach to Regression Analysis by Local Fitting. Journal of the American Statistical Association, 83(403), 596–610. https://doi.org/10.1080/01621459.1988.10478639
+
+\sphinxAtStartPar
+Dickey, D. A., \& Fuller, W. A. (2012). Distribution of the Estimators for Autoregressive Time Series with a Unit Root. Journal of the American Statistical Association. https://www.tandfonline.com/doi/abs/10.1080/01621459.1979.10482531
+
+\sphinxAtStartPar
+Hamad, S. Y. Y., Ma, T., \& Antoniou, C. (2021). Analysis and Prediction of Bikesharing Traffic Flow – Citi Bike, New York. 2021 7th International Conference on Models and Technologies for Intelligent Transportation Systems (MT\sphinxhyphen{}ITS), 1–8. https://doi.org/10.1109/MT\sphinxhyphen{}ITS49943.2021.9529290
+
+\sphinxAtStartPar
+Heinen, E., Maat, K., \& van Wee, B. (2011). Day\sphinxhyphen{}to\sphinxhyphen{}Day Choice to Commute or Not by Bicycle. Transportation Research Record, 2230(1), 9–18. https://doi.org/10.3141/2230\sphinxhyphen{}02
+
+\sphinxAtStartPar
+Hyndman, R., \& Athanasopoulos, G. (2021). Forecasting: Principles and Practice. https://research.monash.edu/en/publications/forecasting\sphinxhyphen{}principles\sphinxhyphen{}and\sphinxhyphen{}practice\sphinxhyphen{}3
+
+\sphinxAtStartPar
+Kwiatkowski, D., Phillips, P. C. B., Schmidt, P., \& Shin, Y. (1992). Testing the null hypothesis of stationarity against the alternative of a unit root: How sure are we that economic time series have a unit root? Journal of Econometrics, 54(1), 159–178. https://doi.org/10.1016/0304\sphinxhyphen{}4076(92)90104\sphinxhyphen{}Y
+
+\sphinxAtStartPar
+Salaken, S. M., Hosen, M. A., Khosravi, A., \& Nahavandi, S. (2015). Forecasting Bike Sharing Demand Using Fuzzy Inference Mechanism. In S. Arik, T. Huang, W. K. Lai, \& Q. Liu (Eds.), Neural Information Processing (pp. 567–574). Springer International Publishing. https://doi.org/10.1007/978\sphinxhyphen{}3\sphinxhyphen{}319\sphinxhyphen{}26555\sphinxhyphen{}1\_64
+
+\sphinxAtStartPar
+Seabold, S., \& Perktold, J. (2010). statsmodels: Econometric and statistical modeling with python. 9th Python in Science Conference.
+
+\sphinxAtStartPar
+Thomas, T., Jaarsma, R., \& Tutert, B. (2013). Exploring temporal fluctuations of daily cycling demand on Dutch cycle paths: the influence of weather on cycling. Transportation, 40(1), 1–22. https://doi.org/10.1007/s11116\sphinxhyphen{}012\sphinxhyphen{}9398\sphinxhyphen{}5
+
+\sphinxAtStartPar
+Xu, C., Ji, J., \& Liu, P. (2018). The station\sphinxhyphen{}free sharing bike demand forecasting with a deep learning approach and large\sphinxhyphen{}scale datasets. Transportation Research Part C: Emerging Technologies, 95, 47–60. https://doi.org/10.1016/j.trc.2018.07.013
+
+
+\section{Chapter 6}
+\label{\detokenize{references:chapter-6}}
+
+\section{Chapter 7}
+\label{\detokenize{references:chapter-7}}
 
 
 

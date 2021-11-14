@@ -6,10 +6,14 @@
 # In[1]:
 
 
-# Base libraries
-import pandas as pd
+# suppress one small warning
+import warnings
 
-# Data visualisations
+# base libraries
+import pandas as pd
+import numpy as np
+
+# data visualisations
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import seaborn as sns
@@ -17,16 +21,16 @@ import seaborn as sns
 # connect to db
 import psycopg2
 
-# path manipulation
-from pathlib import Path
-
 # type hints for functions
 from typing import Optional
 
 # to use pandas dtypes in matplotlib plots
 from pandas.plotting import register_matplotlib_converters
 
+from rich.console import Console
+
 register_matplotlib_converters()
+console = Console()
 
 # set settings for seaborn
 sns.set_style(style="whitegrid", rc={"grid.color": ".9"})
@@ -37,9 +41,6 @@ sns_c = sns.color_palette(palette="deep")
 plt.rcParams["figure.figsize"] = [12, 6]
 plt.rcParams["figure.dpi"] = 100
 title_font = {"fontname": "DejaVu Sans Mono"}
-
-# create paths
-milan_data = Path("../data/milan")
 
 # establish connection with the database
 conn = psycopg2.connect("dbname=bikemi user=luca")
@@ -227,17 +228,17 @@ hourly_rentals.pipe(plot_series, "Porta Ticinese - Conca Del Naviglio - 20")
 hourly_rentals.pipe(plot_series, "Porta Ticinese - Conca Del Naviglio - 31")
 
 
-# This heterogeneity is what Chen and his coauthors, mentioned in the past chapter, refer to as *opportunistic contextual factors*. From these figures we can also clearly identify the *common contextual factors*: between the 13th and 15th of October, the demand decreases significantly across every station. This was due because of heavier rain than usual being expected for the day - between 20mm and 30mm.
+# This heterogeneity is what Chen and his coauthors <cite id="mpg0p">(Chen et al., 2016)</cite> refer to as *opportunistic contextual factors*. From these figures we can also clearly identify the *common contextual factors*: between the 13th and 15th of October, the demand decreases significantly across every station. This was due because of heavier rain than usual being expected for the day - between 20mm and 30mm.
 # 
 # ## Last Aggregations and Time Series Decomposition
 # 
-# Before proceeding, however, data is further aggregated at daily level. Daily forecasts can be of lesser usefulness for bike-sharing services (BSS) managers, especially to those who implement dynamic rebalancing, i.e. redistribute bikes during the day. Daily forecasts are still employed in the literature (Low dimensionality paper), while smaller and mixed time-intervals are more frequent especially in deep-learing approaches: either hourly ("A deep learning approach on short-term spatiotemporal distribution forecasting of dockless bike-sharing system") or even in 10, 15, 20 and 30 minutes intervals ("The station-free sharing bike demand forecasting with a deep learning approach and large-scale datasets"). Sometimes, even daily and hourly forecasts are developed ("Forecasting Bike Sharing Demand Using Fuzzy Inference Mechanism").
+# Before proceeding, however, data is further aggregated at daily level. Daily forecasts can be of lesser usefulness for bike-sharing services (BSS) managers, especially to those who implement dynamic rebalancing, i.e. redistribute bikes during the day. Daily forecasts are still employed in the literature <cite id="lhreq">(Cantelmo et al., 2020)</cite>, while smaller and mixed time-intervals are more frequent especially in deep-learing approaches: either hourly <cite id="xygcf">(Ai et al., 2019)</cite> or even in 10, 15, 20 and 30 minutes intervals <cite id="n2fvn">(Xu et al., 2018)</cite>. Sometimes, even daily and hourly forecasts are developed <cite id="8bjge">(Salaken et al., 2015)</cite>.
 # 
-# In this last paper, the authors employ a fuzzy inference mechanism to forecast demand, with a dataset with two years worth of observations. The authors find that a fuzzy inference mechanism can outperform a long short-term memory neural network (LSTM NN) "without performing any optimization on either FLS [Fuzzy Logic System] parameters or neural network parameters", but admit that a better tuned LSTM might still be better. More importantly, however, the authors note that "one out of every six samples is taken into consideration for hourly forecast to reduce the forecasting time".
+# In this last paper, the authors employ a fuzzy inference mechanism to forecast demand, with a dataset with two years worth of observations. The authors find that a fuzzy inference mechanism can outperform a long short-term memory neural network (LSTM NN) "without performing any optimization on either FLS [Fuzzy Logic System] parameters or neural network parameters", but admit that a better tuned LSTM might still be better. More importantly, however, the authors note that "one out of every six samples is taken into consideration for hourly forecast to reduce the forecasting time" <cite id="yid5b">(Salaken et al., 2015)</cite>.
 # 
-# "Analysis and Prediction of Bikesharing Traffic Flow – Citi Bike" develop a forecasting model for CitiBike, New York's BSS, using hourly data, and conclude that "complex seasonalities should be taken into account in traditional time series models". Hourly data allows to capture three types of seasonalities: yearly, weekly, and daily. However, the available data is only a year-long and, therefore, "only weekly, and daily seasonality are considered".
+# Hamand and his coauthors <cite id="dop97">(Hamad et al., 2021)</cite> develop a forecasting model for CitiBike, New York's BSS, using hourly data, and conclude that "complex seasonalities should be taken into account in traditional time series models". Hourly data allows to capture three types of seasonalities: yearly, weekly, and daily. However, the available data is only a year-long and, therefore, "only weekly, and daily seasonality are considered".
 # 
-# The choice to further aggregate the data at the daily level stems from these considerations, and more. First, more fine-grained predictions are usually dealt with deep-learning models. In other cases, like with (autore sopra) hourly forecasts are associated with shorter time intervals, while we want to exploit yearly seasonalities fully. Statistical models like seasonal ARIMA (SARIMA) do not perform well with long seasonality and "cannot deal with multiple seasonality as well" and, for this reason, shorter time windows are used to compute the forecast with hourly intervals. Choosing a hourly forecasting horizon would likely imply to sample data from one year only, in order to shorten the duration of model fitting. Finally, and perhaps more importantly, the rest of the literature often employs external weather data, especially rain measurements. Since we do not possess external data, we rely on the yearly seasonalities to convey the weather signal, which might not be carried by shorter forecasting windows.
+# The choice to further aggregate the data at the daily level stems from these considerations, and more. First, more fine-grained predictions are usually dealt with deep-learning models. In other cases, like that of Hamand et al., hourly forecasts are associated with shorter time intervals, while we want to exploit yearly seasonalities fully. Statistical models like seasonal ARIMA (SARIMA) do not perform well with long seasonality and "cannot deal with multiple seasonality as well" <cite id="lta8j">(Hamad et al., 2021)</cite> and, for this reason, shorter time windows are used to compute the forecast with hourly intervals. Choosing a hourly forecasting horizon would likely imply to sample data from one year only, in order to shorten the duration of model fitting. Finally, and perhaps more importantly, the rest of the literature often employs external weather data, especially rain measurements <cite id="9r4ua">(An et al., 2019)</cite> <cite id="470kq">(Heinen et al., 2011)</cite> <cite id="pok2i">(Thomas et al., 2013)</cite>. Since we do not possess external data, we rely on the yearly seasonalities to convey the weather signal, which might not be carried by shorter forecasting windows.
 # 
 # ### Time Aggregation Implementation
 # 
@@ -286,13 +287,13 @@ daily_rentals: pd.DataFrame = retrieve_daily_data(conn, wide=True)
 
 # ## Seasonal Decomposition
 # 
-# Python library `statsmodels` is the choice to perform seasonal decompositions. Simply put, seasonal decomposition assumes that a time-series is made up of components: a trend (and cycle) $T$, the seasonality $S$ and the remainder $R$ HYNDMAN. A trend is a long-term increase or decrease in the data. Seasonalities are cyclical variations of the data that occur with fixed and known period, while cycles do not exhibit a clear frequency (such as, for example, the economic cycle).
+# Python library `statsmodels` is the choice to perform seasonal decompositions <cite id="1vo8j">(Seabold &#38; Perktold, 2010)</cite>. Simply put, seasonal decomposition assumes that a time-series is made up of components: a trend (and cycle) $T$, the seasonality $S$ and the remainder $R$ <cite id="ecnzm">(Hyndman &#38; Athanasopoulos, 2021)</cite>. A trend is a long-term increase or decrease in the data. Seasonalities are cyclical variations of the data that occur with fixed and known period, while cycles do not exhibit a clear frequency (such as, for example, the economic cycle).
 # 
 # As a starter, the base function `seasonal_decompose` implements additive and multiplicative decompositions. The models behind these two strategies are quite simple: $y_t = S_t + T_t + R_t$ for the additive model and $y_t = S_t \times T_t \times R_t$. The multiplicative specification is preferred when the magnitude of seasonal fluctuations varies around the level of the time series. Also, it is worth noting that the two equations are convertible: $y_t = S_t \times T_t \times R_t$ is equivalent to $logy_t = logS_t + logT_t + logR_t$.
 # 
 # The algorithm that performs the decomposition is quite simple: first, a moving-average is fit using a time window that is twice the size of the periodicity of the series. For example, monthly data will have a window $m$ of 12 observations. i.e. twelve months. This will be our estimated trend-cycle component $\hat{T}_t$, which is then subtracted from the observed data. The seasonal component $\hat{S}_t$ is computed as the average of the de-trended data for that season: for example, with monthly periodicity an average is computed for each month using the values of each month. The residuals $\hat{R}_t$ are obtained subtracting the seasonal component from the de-trended series. This applies to additive models; for multiplicative specifications, every subtraction is replaced with a division.
 # 
-# These techniques are quite rudimentary, so much so that `statsmodels` recommends applying more sophisticated techniques. As an example, classical decomposition (which dates back to the 1920s) is unable to capture variation in the seasonal cycle, which is assumed to be the same from year to year.  Nonetheless, they represent a good starting point to identify patterns in the time series, and the building block for more advanced strategies. As we are dealing with daily data, there will be two main seasonalities we want to identify: yearly and weekly patterns.
+# These techniques are quite rudimentary, so much so that `statsmodels` recommends applying more sophisticated techniques. As an example, classical decomposition (which dates back to the 1920s) is unable to capture variation in the seasonal cycle, which is assumed to be the same from year to year. Nonetheless, they represent a good starting point to identify patterns in the time series, and the building block for more advanced strategies. As we are dealing with daily data, there will be two main seasonalities we want to identify: yearly and weekly patterns.
 # 
 # The first thing that comes up is that the seasonal pattern is quite tight: this is because weekly seasonalities are fit in a span of two years. The `seasonal_decompose` function requires at least two "complete cycles" of data, i.e. two years should be enough for our purposes. The function by default uses the same periodicity as the time-index of the `pandas.DataFrame` passed as data argument: in this case, daily. We would also override it to display only higher order seasonalities, for example by setting a week-long period. The trend can also be estimated with a least-squares regression using an input number of data points.
 
@@ -369,9 +370,9 @@ daily_rentals.pipe(decompose_series, "Brera - 25", period=30)
 
 # ### Advanced Decomposition
 # 
-# To investigate these patterns we can exploit more advanced decompostion patterns. Official tools are often developed by official bureaus, as seasonal decomposition is especially needed when dealing with monthly or quarterly data. Inside the European Union, the [official recommendation](https://ec.europa.eu/eurostat/cros/content/software-jdemetra_en) is the JDemetra+ software library. The US Census Bureau implemented the X-11 category of models, which also allow the seasonal component to vary over time and are robust to outliers and missing values. These models, however, are not suited for daily and weekly data points (HYNDMAN).
+# To investigate these patterns we can exploit more advanced decompostion patterns. Official tools are often developed by official bureaus, as seasonal decomposition is especially needed when dealing with monthly or quarterly data. Inside the European Union, the [official recommendation](https://ec.europa.eu/eurostat/cros/content/software-jdemetra_en) is the JDemetra+ software library. The US Census Bureau implemented the X-11 category of models, which also allow the seasonal component to vary over time and are robust to outliers and missing values. These models, however, are not suited for daily and weekly data points <cite id="9w2x6">(Hyndman &#38; Athanasopoulos, 2021)</cite>.
 # 
-# For this reason, another technique is frequently used: STL decomposition, or Seasonal Trend decomposition using LOESS, proposed by Cleveland and his coauthors (Cleveland). LOESS is an acronym that unpacks to Locally Estimated Scatterplot Smoothing (or Savitzky-Golay filter), that indicates a non-parametric regression that is locally fitted. Simply put, the LOESS fits multiple, even polynomial regressions, "in a moving fashion analogous to how a moving average is computed for a time series" (Locally Weighted Regression: An Approach to Regression Analysis by Local Fitting). `statsmodels` implements the STL decomposition directly from the fortran library developed by Cleveland, and has a plethora of arguments to tweak. These can be split into three categories.
+# For this reason, another technique is frequently used: STL decomposition, or Seasonal Trend decomposition using LOESS, proposed by Cleveland and his coauthors <cite id="8uj4a">(Cleveland &#38; Devlin, 1988)</cite>. LOESS is an acronym that unpacks to Locally Estimated Scatterplot Smoothing (or Savitzky-Golay filter), that indicates a non-parametric regression that is locally fitted. Simply put, the LOESS fits multiple, even polynomial regressions, "in a moving fashion analogous to how a moving average is computed for a time series" <cite id="7m1hc">(Cleveland &#38; Devlin, 1988)</cite>. `statsmodels` implements the STL decomposition directly from the fortran library developed by Cleveland, and has a plethora of arguments to tweak. These can be split into three categories.
 # 
 # The main parameters are the following:
 # 
@@ -499,13 +500,15 @@ plot_differences(daily_rentals, "Brera - 25", 1, color=sns_c[0])
 plot_differences(daily_rentals, "Brera - 25", 7, color=sns_c[1])
 
 
-# First differencing returns seemingly stationary data, but the seasonal component is not removed. On the contrary, the seasonal differences are less noisy. Still, the two datasets display high variance, with a change as great as 400 observations. We can also difference the series twice; this, however, might not be recommendable if the series is already stationary after one round of differencing: "applying more differences than required will induce false dynamics or autocorrelations that do not really exist in the time series" **hyndman**. At first glance, double differences seem to return a series that is more convincingly stationary.
+# First differencing returns seemingly stationary data, but the seasonal component is not removed. On the contrary, the seasonal differences are less noisy. Still, the two datasets display high variance, with a change as great as 400 observations. We can also difference the series twice; this, however, might not be recommendable if the series is already stationary after one round of differencing: "applying more differences than required will induce false dynamics or autocorrelations that do not really exist in the time series" <cite id="ixn54">(Hyndman &#38; Athanasopoulos, 2021)</cite>. At first glance, double differences seem to return a series that is more convincingly stationary.
 
 # In[15]:
 
 
-def plot_double_differences(data: pd.DataFrame, col: str, lag: list[int] = [1, 7],
+def plot_double_differences(data: pd.DataFrame, col: str, lag=None,
                             color=sns.color_palette("deep")[0]) -> None:
+    if lag is None:
+        lag = [1, 7]
     fig, ax = plt.subplots(figsize=(12, 4))
 
     ax.plot(data[col].diff(lag[0]).diff(lag[1]), c=color)
@@ -514,29 +517,24 @@ def plot_double_differences(data: pd.DataFrame, col: str, lag: list[int] = [1, 7
     plt.show()
 
 
-plot_double_differences(daily_rentals, "Brera - 25", [7, 1], color=sns_c[3])
+plot_double_differences(daily_rentals, "Brera - 25", color=sns_c[3])
 
 
 # ### Testing for Stationarity
 # 
 # Stationarity can be assessed more objectively using a particular category of statistical tests named *unit root tests*. Simply put,
 # 
-# One of the most popular unit root tests is the *Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test*. With the authors' words, the null hypothesis is that "an observable series is stationary around a deterministic trend", against the alternative that "the series is difference-stationary", i.e. requires differencing. In other words, the test's null hypothesis is that the process is level or trend stationary (i.e., does not exhibit a trend) and if we reject the null hypothesis (for $p$ values smaller than $0.05$) differencing is required.
+# One of the most popular unit root tests is the *Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test* <cite id="upeh9">(Kwiatkowski et al., 1992)</cite>. With the authors' words, the null hypothesis is that "an observable series is stationary around a deterministic trend", against the alternative that "the series is difference-stationary", i.e. requires differencing. In other words, the test's null hypothesis is that the process is level or trend stationary (i.e., does not exhibit a trend) and if we reject the null hypothesis (for $p$ values smaller than $0.05$) differencing is required.
 # 
-# Another test is the (Augmented) Dickey-Fuller or ADF test. While the KPSS test's null hypothesis is that the series is already stationary, the ADF test assumes the opposite, i.e. the series is not stationary because it has a unit root. If we reject the null, we assume the time series to be stationary. Both tests suggest that data from `Brera - 25` is compatible with the hypothesis that the series is stationary, by taking either first order differences, seasonal differences (and the combination of both). For this reason, we shall stick to seasonal differences.
+# Another test is the (Augmented) Dickey-Fuller or ADF test <cite id="mrcq5">(Dickey &#38; Fuller, 2012)</cite>. While the KPSS test's null hypothesis is that the series is already stationary, the ADF test assumes the opposite, i.e. the series is not stationary because it has a unit root. If we reject the null, we assume the time series to be stationary. Both tests suggest that data from `Brera - 25` is compatible with the hypothesis that the series is stationary, by taking either first order differences, seasonal differences (and the combination of both). For this reason, we shall stick to seasonal differences.
 
 # In[16]:
 
 
 from statsmodels.tsa.stattools import adfuller, kpss
-import warnings
-from rich.console import Console
 
-console = Console()
 
 def stationarity_test(lagged_series) -> None:
-
-
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore")
 
@@ -553,11 +551,12 @@ def stationarity_test(lagged_series) -> None:
         )
 
         console.print(
-        f"ADF test statistic: {adfuller_results[0]:.3} ADF p-value: {adfuller_results[1]:.3%}:\n"
-        f"{'there is no unit root - the series *is* stationary' if adfuller_results[1] < 0.05 else 'there is a unit root - the series *is not* stationary'}\n\n"
-        f"KPSS test statistic: {kpss_results[0]:.3} KPSS p-value: {kpss_results[1]:.3%}:\n"
-        f"{'there is a unit root - the series *is not* stationary' if kpss_results[1] < 0.05 else 'there is no unit root - the series *is* stationary'}"
+            f"ADF test statistic: {adfuller_results[0]:.3} ADF p-value: {adfuller_results[1]:.3%}:\n"
+            f"{'there is no unit root - the series *is* stationary' if adfuller_results[1] < 0.05 else 'there is a unit root - the series *is not* stationary'}\n\n"
+            f"KPSS test statistic: {kpss_results[0]:.3} KPSS p-value: {kpss_results[1]:.3%}:\n"
+            f"{'there is a unit root - the series *is not* stationary' if kpss_results[1] < 0.05 else 'there is no unit root - the series *is* stationary'}"
         )
+
 
 console.print("First Order Differences (Lag: 1)")
 daily_rentals["Brera - 25"].diff(1).pipe(stationarity_test)

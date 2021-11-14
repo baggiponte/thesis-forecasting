@@ -715,20 +715,3 @@ selected_stalls.pipe(unpack_geometry).to_csv(milan_data / "bikemi-selected_stall
 
 conn.close()
 
-
-# ## References
-
-# <!-- BIBLIOGRAPHY START -->
-# <div class="csl-bib-body">
-#   <div class="csl-entry"><i>Gawk - GNU Project - Free Software Foundation (FSF)</i>. (n.d.). Retrieved October 23, 2021, from https://www.gnu.org/software/gawk/</div>
-# 
-#   <div class="csl-entry">Perkel, J. M. (2019). Julia: come for the syntax, stay for the speed. <i>Nature</i>, <i>572</i>(7767), 141–142. https://doi.org/10.1038/d41586-019-02310-3</div>
-# 
-#   <div class="csl-entry">Perkel, J. M. (2020). Why scientists are turning to Rust. <i>Nature</i>, <i>588</i>(7836), 185–186. https://doi.org/10.1038/d41586-020-03382-2</div>
-# 
-#   <div class="csl-entry">Saibene, G., &#38; Manzi, G. (2015). <i>Bike Usage in Public Bike-Sharing: An Analysis of the “BikeMi” System in Milan</i>. 21. https://air.unimi.it/handle/2434/515293</div>
-# 
-#   <div class="csl-entry">Toro, J. F., Carrion, D., Brovelli, M. A., &#38; Percoco, M. (2020). BikeMi Bike-Sharing Service Exploratory Analysis on Mobility Patterns. <i>The International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences</i>, <i>XLIII-B4-2020</i>, 197–203. https://doi.org/10.5194/isprs-archives-XLIII-B4-2020-197-2020</div>
-# 
-# </div>
-# <!-- BIBLIOGRAPHY END -->
