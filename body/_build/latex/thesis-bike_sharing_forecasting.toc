@@ -27,3 +27,12 @@
 \contentsline {subsection}{\numberline {4.1.2}Alternative Approaches to \sphinxstyleemphasis {k}\sphinxhyphen {}Means Clustering}{30}{subsection.4.1.2}%
 \contentsline {section}{\numberline {4.2}\sphinxstyleemphasis {k}\sphinxhyphen {}Means Clustering Evaluation Metrics}{30}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Fitting \sphinxstyleemphasis {k}\sphinxhyphen {}Means on BikeMi Stalls Geographic Data}{31}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Time Series Analysis}{41}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Time Series Analysis}{44}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Last Aggregations and Time Series Decomposition}{48}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Time Aggregation Implementation}{48}{subsection.5.2.1}%
+\contentsline {section}{\numberline {5.3}Seasonal Decomposition}{49}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Advanced Decomposition}{52}{subsection.5.3.1}%
+\contentsline {section}{\numberline {5.4}Correlation Analysis}{54}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Differencing}{55}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}Testing for Stationarity}{58}{subsection.5.5.1}%

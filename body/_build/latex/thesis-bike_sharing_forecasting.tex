@@ -84,7 +84,7 @@
         
 
 \title{A Comparison of Forecasting Techniques in Bike Sharing Services}
-\date{Nov 13, 2021}
+\date{Nov 14, 2021}
 \release{}
 \author{Luca Baggi}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -1368,6 +1368,794 @@ After choosing the value for \(K\), stall data is aggregated to compute the coor
 \end{sphinxuseclass}
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{04-stations_kmeans_17_0}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+
+\chapter{Time Series Analysis}
+\label{\detokenize{05-time_series_analysis:time-series-analysis}}\label{\detokenize{05-time_series_analysis::doc}}
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Base libraries}
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+
+\PYG{c+c1}{\PYGZsh{} Data visualisations}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{gridspec} \PYG{k}{as} \PYG{n+nn}{gridspec}
+\PYG{k+kn}{import} \PYG{n+nn}{seaborn} \PYG{k}{as} \PYG{n+nn}{sns}
+
+\PYG{c+c1}{\PYGZsh{} connect to db}
+\PYG{k+kn}{import} \PYG{n+nn}{psycopg2}
+
+\PYG{c+c1}{\PYGZsh{} path manipulation}
+\PYG{k+kn}{from} \PYG{n+nn}{pathlib} \PYG{k+kn}{import} \PYG{n}{Path}
+
+\PYG{c+c1}{\PYGZsh{} type hints for functions}
+\PYG{k+kn}{from} \PYG{n+nn}{typing} \PYG{k+kn}{import} \PYG{n}{Optional}
+
+\PYG{c+c1}{\PYGZsh{} to use pandas dtypes in matplotlib plots}
+\PYG{k+kn}{from} \PYG{n+nn}{pandas}\PYG{n+nn}{.}\PYG{n+nn}{plotting} \PYG{k+kn}{import} \PYG{n}{register\PYGZus{}matplotlib\PYGZus{}converters}
+
+\PYG{n}{register\PYGZus{}matplotlib\PYGZus{}converters}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} set settings for seaborn}
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{set\PYGZus{}style}\PYG{p}{(}\PYG{n}{style}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{whitegrid}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{rc}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{grid.color}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{.9}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{set\PYGZus{}palette}\PYG{p}{(}\PYG{n}{palette}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{deep}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{sns\PYGZus{}c} \PYG{o}{=} \PYG{n}{sns}\PYG{o}{.}\PYG{n}{color\PYGZus{}palette}\PYG{p}{(}\PYG{n}{palette}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{deep}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} customise matplotlib and sns plot dimensions}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{figure.figsize}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{]}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{figure.dpi}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{100}
+\PYG{n}{title\PYGZus{}font} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{fontname}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{DejaVu Sans Mono}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{\PYGZsh{} create paths}
+\PYG{n}{milan\PYGZus{}data} \PYG{o}{=} \PYG{n}{Path}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{../data/milan}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} establish connection with the database}
+\PYG{n}{conn} \PYG{o}{=} \PYG{n}{psycopg2}\PYG{o}{.}\PYG{n}{connect}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{dbname=bikemi user=luca}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\sphinxAtStartPar
+The cluster table is uploaded to the local database using a Bash script that calls PostgreSQL’s \sphinxcode{\sphinxupquote{psql}} under the hood. Then, this table is \sphinxcode{\sphinxupquote{JOIN}}\sphinxhyphen{}ed with the \sphinxcode{\sphinxupquote{MATERIALIZED VIEW}} with hourly rentals to create a new \sphinxcode{\sphinxupquote{MATERIALIZED VIEW}}, that aggregates the individual station time series to the Traffic Analysis Zone level.
+
+\sphinxAtStartPar
+The resulting data is an instance of the so\sphinxhyphen{}called “long” or panel data format, with 18632 rows for each of the 46 time series. The number is actually smaller it would be if we had three years of hourly observations, because as the service is not active between midnight and 7 a.m.: in other words, these series have ‘holes’.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}hourly\PYGZus{}data}\PYG{p}{(}\PYG{n}{connection}\PYG{p}{,} \PYG{n}{wide}\PYG{p}{:} \PYG{n+nb}{bool} \PYG{o}{=} \PYG{k+kc}{False}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
+    \PYG{n}{query}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+s2}{        SELECT}
+\PYG{l+s+s2}{            h.data\PYGZus{}partenza,}
+\PYG{l+s+s2}{            h.cluster,}
+\PYG{l+s+s2}{            h.noleggi\PYGZus{}per\PYGZus{}ora}
+\PYG{l+s+s2}{        FROM bikemi\PYGZus{}rentals.clusters\PYGZus{}hourly\PYGZus{}rentals h;}
+\PYG{l+s+s2}{    }\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{wide}\PYG{p}{:}
+        \PYG{k}{return} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}sql}\PYG{p}{(}\PYG{n}{query}\PYG{p}{,} \PYG{n}{connection}\PYG{p}{)}
+    \PYG{k}{return} \PYG{p}{(}
+        \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}sql}\PYG{p}{(}\PYG{n}{query}\PYG{p}{,} \PYG{n}{connection}\PYG{p}{)}
+            \PYG{o}{.}\PYG{n}{pivot}\PYG{p}{(}\PYG{n}{index}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{data\PYGZus{}partenza}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{columns}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{cluster}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{values}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{noleggi\PYGZus{}per\PYGZus{}ora}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+    \PYG{p}{)}
+
+
+\PYG{n}{get\PYGZus{}hourly\PYGZus{}data}\PYG{p}{(}\PYG{n}{conn}\PYG{p}{,} \PYG{n}{wide}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{p}{:}\PYG{l+m+mi}{5}\PYG{p}{]}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+cluster              0   1   2   3   4
+data\PYGZus{}partenza                         
+2015\PYGZhy{}06\PYGZhy{}01 07:00:00  1  11   0   8  21
+2015\PYGZhy{}06\PYGZhy{}01 08:00:00  2   9   6   6  10
+2015\PYGZhy{}06\PYGZhy{}01 09:00:00  3   8  11  16   9
+2015\PYGZhy{}06\PYGZhy{}01 10:00:00  2   6  18   6  19
+2015\PYGZhy{}06\PYGZhy{}01 11:00:00  5  15  19  16  12
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\sphinxAtStartPar
+The cluster labels are just a range of integers, which the overall interpretability. The issue is quickly solved by creating a small function that assigns a new identifier to the cluster, simply by merging the cluster label with the neighbourhood it is located in.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}clusters}\PYG{p}{(}\PYG{n}{connection}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
+    \PYG{n}{query}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+s2}{        SELECT DISTINCT}
+\PYG{l+s+s2}{            c.cluster,}
+\PYG{l+s+s2}{            c.cluster\PYGZus{}nil}
+\PYG{l+s+s2}{        FROM bikemi\PYGZus{}rentals.bikemi\PYGZus{}clustered\PYGZus{}stalls c}
+\PYG{l+s+s2}{        ORDER BY c.cluster}
+\PYG{l+s+s2}{    }\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+    \PYG{k}{return} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}sql}\PYG{p}{(}\PYG{n}{query}\PYG{p}{,} \PYG{n}{connection}\PYG{p}{)}\PYG{o}{.}\PYG{n}{set\PYGZus{}index}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{cluster}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+
+\PYG{n}{clusters}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame} \PYG{o}{=} \PYG{n}{get\PYGZus{}clusters}\PYG{p}{(}\PYG{n}{conn}\PYG{p}{)}
+
+\PYG{n}{clusters}\PYG{o}{.}\PYG{n}{head}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+                        cluster\PYGZus{}nil
+cluster                            
+0                            FARINI
+1        PORTA TICINESE \PYGZhy{} CONCHETTA
+2                             DUOMO
+3                            PAGANO
+4             GIARDINI P.TA VENEZIA
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{rename\PYGZus{}clusters}\PYG{p}{(}
+        \PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,}
+        \PYG{n}{clusters\PYGZus{}data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,}
+        \PYG{n}{names\PYGZus{}col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
+        \PYG{n}{cluster\PYGZus{}col}\PYG{p}{:} \PYG{n}{Optional}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{]} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
+        \PYG{n}{suffix}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{id}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
+    \PYG{n}{df}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame} \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{p}{)}
+
+    \PYG{k}{def} \PYG{n+nf}{new\PYGZus{}cluster\PYGZus{}names}\PYG{p}{(}
+            \PYG{n}{\PYGZus{}clusters\PYGZus{}data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,}
+            \PYG{n}{\PYGZus{}names\PYGZus{}col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
+            \PYG{n}{\PYGZus{}clusters\PYGZus{}col}\PYG{p}{:} \PYG{n}{Optional}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{]} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
+            \PYG{n}{\PYGZus{}suffix}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{id}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n+nb}{list}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{]}\PYG{p}{:}
+        \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{\PYGZus{}clusters\PYGZus{}col}\PYG{p}{:}
+            \PYG{k}{return} \PYG{p}{(}
+                \PYG{n}{\PYGZus{}clusters\PYGZus{}data}\PYG{p}{[}\PYG{n}{\PYGZus{}names\PYGZus{}col}\PYG{p}{]}
+                    \PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{str}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+                    \PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{p}{)}
+                    \PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{cat}\PYG{p}{(}\PYG{n}{\PYGZus{}clusters\PYGZus{}data}\PYG{o}{.}\PYG{n}{index}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{n+nb}{str}\PYG{p}{)}\PYG{p}{,} \PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ \PYGZhy{} }\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+            \PYG{p}{)}
+
+        \PYG{k}{return} \PYG{p}{(}
+            \PYG{n}{\PYGZus{}clusters\PYGZus{}data}\PYG{p}{[}\PYG{n}{\PYGZus{}names\PYGZus{}col}\PYG{p}{]}
+                \PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{str}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+                \PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{p}{)}
+                \PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{cat}\PYG{p}{(}\PYG{n}{\PYGZus{}clusters\PYGZus{}data}\PYG{p}{[}\PYG{n}{\PYGZus{}clusters\PYGZus{}col}\PYG{p}{]}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{n+nb}{str}\PYG{p}{)}\PYG{p}{,} \PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ \PYGZhy{} }\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+                \PYG{o}{.}\PYG{n}{to\PYGZus{}list}\PYG{p}{(}\PYG{p}{)}
+        \PYG{p}{)}
+
+    \PYG{n}{df}\PYG{o}{.}\PYG{n}{columns} \PYG{o}{=} \PYG{n}{new\PYGZus{}cluster\PYGZus{}names}\PYG{p}{(}\PYG{n}{clusters\PYGZus{}data}\PYG{p}{,} \PYG{n}{names\PYGZus{}col}\PYG{p}{,} \PYG{n}{cluster\PYGZus{}col}\PYG{p}{,} \PYG{n}{suffix}\PYG{p}{)}
+
+    \PYG{k}{return} \PYG{n}{df}
+
+
+\PYG{k}{def} \PYG{n+nf}{sort\PYGZus{}cols}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
+    \PYG{k}{return} \PYG{n}{data}\PYG{o}{.}\PYG{n}{filter}\PYG{p}{(}\PYG{n}{data}\PYG{o}{.}\PYG{n}{columns}\PYG{o}{.}\PYG{n}{sort\PYGZus{}values}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}
+
+
+\PYG{n}{hourly\PYGZus{}rentals}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame} \PYG{o}{=} \PYG{p}{(}
+    \PYG{n}{get\PYGZus{}hourly\PYGZus{}data}\PYG{p}{(}\PYG{n}{conn}\PYG{p}{,} \PYG{n}{wide}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+        \PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{rename\PYGZus{}clusters}\PYG{p}{,} \PYG{n}{clusters}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{cluster\PYGZus{}nil}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+        \PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{sort\PYGZus{}cols}\PYG{p}{)}
+\PYG{p}{)}
+
+\PYG{n}{hourly\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{p}{:}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{p}{:}\PYG{l+m+mi}{3}\PYG{p}{]}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+cluster\PYGZus{}nil          Brera \PYGZhy{} 25  Brera \PYGZhy{} 26  Brera \PYGZhy{} 43
+data\PYGZus{}partenza                                          
+2015\PYGZhy{}06\PYGZhy{}01 07:00:00           7           7          12
+2015\PYGZhy{}06\PYGZhy{}01 08:00:00          11           5           9
+2015\PYGZhy{}06\PYGZhy{}01 09:00:00           6           9          13
+2015\PYGZhy{}06\PYGZhy{}01 10:00:00          11           7           8
+2015\PYGZhy{}06\PYGZhy{}01 11:00:00          16          14          11
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+
+\section{Time Series Analysis}
+\label{\detokenize{05-time_series_analysis:id1}}
+\sphinxAtStartPar
+Visualising high\sphinxhyphen{}dimensionality datasets can be quite a challenge, which will also represent itself in when fitting the models. As a shortcut, we can compare the TAZ series inside the same NIL to spot different patterns that might occur.
+
+\sphinxAtStartPar
+We choose to visualise data throughout the month of October 2016, as the demand is generally higher in autumn, and this should highlight different seasonality patterns better. October 1st, 2016 starts as a Saturday and it is immediate to see that peak hours are around lunchtime. During weekdays, the distribution seems bimodal, with a smaller peak in the mornings.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}series}\PYG{p}{(}\PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,} \PYG{n}{series}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
+    \PYG{n}{fig} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{tight\PYGZus{}layout}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+    \PYG{n}{fig}\PYG{o}{.}\PYG{n}{suptitle}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Traffic Analysis Zone }\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{series}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{gs} \PYG{o}{=} \PYG{n}{gridspec}\PYG{o}{.}\PYG{n}{GridSpec}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)}
+
+    \PYG{n}{main\PYGZus{}ax} \PYG{o}{=} \PYG{n}{fig}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{n}{gs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{p}{:}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{main\PYGZus{}ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{data}\PYG{o}{.}\PYG{n}{loc}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}10\PYGZhy{}01}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}11\PYGZhy{}01}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{series}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{main\PYGZus{}ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016/10/01 \PYGZhy{} 2016/11/01}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{left\PYGZus{}ax} \PYG{o}{=} \PYG{n}{fig}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{n}{gs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{left\PYGZus{}ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{data}\PYG{o}{.}\PYG{n}{loc}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}10\PYGZhy{}01}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}10\PYGZhy{}07}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{series}\PYG{p}{]}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{left\PYGZus{}ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016/10/01 \PYGZhy{} 2016/10/07}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{right\PYGZus{}ax} \PYG{o}{=} \PYG{n}{fig}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{n}{gs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{right\PYGZus{}ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{data}\PYG{o}{.}\PYG{n}{loc}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}10\PYGZhy{}01 07:00}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{2016\PYGZhy{}10\PYGZhy{}02 00:00}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{series}\PYG{p}{]}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{right\PYGZus{}ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{10/01 7 a.m. \PYGZhy{} midnight}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+
+
+\PYG{n}{hourly\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{plot\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{hourly\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{plot\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 43}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{05-time_series_analysis_8_0}.png}
+
+\noindent\sphinxincludegraphics{{05-time_series_analysis_8_1}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\sphinxAtStartPar
+Data in \sphinxcode{\sphinxupquote{Brera}} TAZs is quite similar: this is because all stations in Brera are all above the average, when ranking the clusters by absolute number of rentals across the observed time period:
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}nil}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{Series}\PYG{p}{:}
+    \PYG{n}{tmp} \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{index}\PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{extract}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{(.*)(}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{s\PYGZhy{}}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{s}\PYG{l+s+s1}{\PYGZbs{}}\PYG{l+s+s1}{d*)\PYGZdl{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{expand}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+
+    \PYG{n}{tmp}\PYG{o}{.}\PYG{n}{index} \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{index}
+
+    \PYG{k}{return} \PYG{n}{tmp}
+
+
+\PYG{n}{taz\PYGZus{}rankings} \PYG{o}{=} \PYG{p}{(}
+    \PYG{n}{hourly\PYGZus{}rentals}
+        \PYG{o}{.}\PYG{n}{apply}\PYG{p}{(}\PYG{n+nb}{sum}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+        \PYG{o}{.}\PYG{n}{sort\PYGZus{}values}\PYG{p}{(}\PYG{n}{ascending}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{)}
+        \PYG{o}{.}\PYG{n}{rename}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{total\PYGZus{}rentals}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+        \PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{)}
+        \PYG{o}{.}\PYG{n}{assign}\PYG{p}{(}\PYG{n}{nil}\PYG{o}{=}\PYG{k}{lambda} \PYG{n}{df}\PYG{p}{:} \PYG{n}{df}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{get\PYGZus{}nil}\PYG{p}{)}\PYG{p}{,}
+                \PYG{n}{total\PYGZus{}rentals}\PYG{o}{=}\PYG{k}{lambda} \PYG{n}{df}\PYG{p}{:} \PYG{n}{df}\PYG{o}{.}\PYG{n}{total\PYGZus{}rentals} \PYG{o}{/} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{df}\PYG{o}{.}\PYG{n}{total\PYGZus{}rentals}\PYG{p}{)}
+                \PYG{p}{)}
+\PYG{p}{)}
+
+
+\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}absolute\PYGZus{}ranking}\PYG{p}{(}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
+    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{n}{taz\PYGZus{}rankings}\PYG{o}{.}\PYG{n}{plot}\PYG{o}{.}\PYG{n}{barh}\PYG{p}{(}\PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+                           \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{,}
+                           \PYG{n}{legend}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+                           \PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Traffic Analysis Zones, Ranked by Relative Number of Rentals}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{invert\PYGZus{}yaxis}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+
+
+\PYG{n}{plot\PYGZus{}absolute\PYGZus{}ranking}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{05-time_series_analysis_10_0}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\sphinxAtStartPar
+Some different patterns can be seen in, for example, in the NIL \sphinxcode{\sphinxupquote{Porta Ticinese \sphinxhyphen{} Conca Del Naviglio}} the two TAZ \sphinxcode{\sphinxupquote{20}} and \sphinxcode{\sphinxupquote{31}}, or between \sphinxcode{\sphinxupquote{Stazione Centrale \sphinxhyphen{} Ponte Seveso}} number \sphinxcode{\sphinxupquote{18}} and \sphinxcode{\sphinxupquote{37}}. The first Traffic Analysis Zone in these areas is always in the top of the ladder, while the second is closer to the tail, and as such the demand in the two clusters behaves differently: in number \sphinxcode{\sphinxupquote{20}}, during weekdays the two modes appear to be much closer to each other, while in \sphinxcode{\sphinxupquote{31}} it is not unusual for the morning peak to be greater.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{hourly\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{plot\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Porta Ticinese \PYGZhy{} Conca Del Naviglio \PYGZhy{} 20}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{hourly\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{plot\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Porta Ticinese \PYGZhy{} Conca Del Naviglio \PYGZhy{} 31}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{05-time_series_analysis_12_0}.png}
+
+\noindent\sphinxincludegraphics{{05-time_series_analysis_12_1}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\sphinxAtStartPar
+This heterogeneity is what Chen and his coauthors, mentioned in the past chapter, refer to as \sphinxstyleemphasis{opportunistic contextual factors}. From these figures we can also clearly identify the \sphinxstyleemphasis{common contextual factors}: between the 13th and 15th of October, the demand decreases significantly across every station. This was due because of heavier rain than usual being expected for the day \sphinxhyphen{} between 20mm and 30mm.
+
+
+\section{Last Aggregations and Time Series Decomposition}
+\label{\detokenize{05-time_series_analysis:last-aggregations-and-time-series-decomposition}}
+\sphinxAtStartPar
+Before proceeding, however, data is further aggregated at daily level. Daily forecasts can be of lesser usefulness for bike\sphinxhyphen{}sharing services (BSS) managers, especially to those who implement dynamic rebalancing, i.e. redistribute bikes during the day. Daily forecasts are still employed in the literature (Low dimensionality paper), while smaller and mixed time\sphinxhyphen{}intervals are more frequent especially in deep\sphinxhyphen{}learing approaches: either hourly (“A deep learning approach on short\sphinxhyphen{}term spatiotemporal distribution forecasting of dockless bike\sphinxhyphen{}sharing system”) or even in 10, 15, 20 and 30 minutes intervals (“The station\sphinxhyphen{}free sharing bike demand forecasting with a deep learning approach and large\sphinxhyphen{}scale datasets”). Sometimes, even daily and hourly forecasts are developed (“Forecasting Bike Sharing Demand Using Fuzzy Inference Mechanism”).
+
+\sphinxAtStartPar
+In this last paper, the authors employ a fuzzy inference mechanism to forecast demand, with a dataset with two years worth of observations. The authors find that a fuzzy inference mechanism can outperform a long short\sphinxhyphen{}term memory neural network (LSTM NN) “without performing any optimization on either FLS {[}Fuzzy Logic System{]} parameters or neural network parameters”, but admit that a better tuned LSTM might still be better. More importantly, however, the authors note that “one out of every six samples is taken into consideration for hourly forecast to reduce the forecasting time”.
+
+\sphinxAtStartPar
+“Analysis and Prediction of Bikesharing Traffic Flow – Citi Bike” develop a forecasting model for CitiBike, New York’s BSS, using hourly data, and conclude that “complex seasonalities should be taken into account in traditional time series models”. Hourly data allows to capture three types of seasonalities: yearly, weekly, and daily. However, the available data is only a year\sphinxhyphen{}long and, therefore, “only weekly, and daily seasonality are considered”.
+
+\sphinxAtStartPar
+The choice to further aggregate the data at the daily level stems from these considerations, and more. First, more fine\sphinxhyphen{}grained predictions are usually dealt with deep\sphinxhyphen{}learning models. In other cases, like with (autore sopra) hourly forecasts are associated with shorter time intervals, while we want to exploit yearly seasonalities fully. Statistical models like seasonal ARIMA (SARIMA) do not perform well with long seasonality and “cannot deal with multiple seasonality as well” and, for this reason, shorter time windows are used to compute the forecast with hourly intervals. Choosing a hourly forecasting horizon would likely imply to sample data from one year only, in order to shorten the duration of model fitting. Finally, and perhaps more importantly, the rest of the literature often employs external weather data, especially rain measurements. Since we do not possess external data, we rely on the yearly seasonalities to convey the weather signal, which might not be carried by shorter forecasting windows.
+
+
+\subsection{Time Aggregation Implementation}
+\label{\detokenize{05-time_series_analysis:time-aggregation-implementation}}
+\sphinxAtStartPar
+This last aggregation is once again performed on the local database, since the query language is optimized to perform these operations without reading data into memory. The query is a slight variation of the one used to retrieve hourly demand at the TAZ level, that retrieves the clusters identifiers and the neighbourhood as a unique string:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{CREATE} \PYG{k}{MATERIALIZED} \PYG{k}{VIEW} \PYG{k}{IF} \PYG{k}{NOT} \PYG{k}{EXISTS} \PYG{n}{clusters\PYGZus{}daily\PYGZus{}rentals} \PYG{k}{AS}
+\PYG{p}{(}
+\PYG{k}{SELECT}
+    \PYG{n}{drb2019}\PYG{l+m+mf}{.}\PYG{n}{data\PYGZus{}partenza}\PYG{p}{,}
+    \PYG{n}{bcs}\PYG{l+m+mf}{.}\PYG{n}{cluster\PYGZus{}nil} \PYG{o}{||} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ \PYGZhy{} }\PYG{l+s+s1}{\PYGZsq{}} \PYG{o}{||} \PYG{n}{bcs}\PYG{l+m+mf}{.}\PYG{k}{cluster} \PYG{k}{AS} \PYG{k}{cluster}\PYG{p}{,}
+    \PYG{n}{SUM}\PYG{p}{(}\PYG{n}{drb2019}\PYG{l+m+mf}{.}\PYG{n}{noleggi\PYGZus{}giornalieri}\PYG{p}{)} \PYG{k}{AS} \PYG{n}{noleggi\PYGZus{}giornalieri}
+\PYG{k}{FROM} \PYG{n}{daily\PYGZus{}rentals\PYGZus{}before\PYGZus{}2019} \PYG{n}{drb2019}
+         \PYG{k}{JOIN} \PYG{n}{bikemi\PYGZus{}clustered\PYGZus{}stalls} \PYG{n}{bcs} \PYG{k}{on} \PYG{n}{drb2019}\PYG{l+m+mf}{.}\PYG{n}{numero\PYGZus{}stazione} \PYG{o}{=} \PYG{n}{bcs}\PYG{l+m+mf}{.}\PYG{n}{numero\PYGZus{}stazione}
+\PYG{k}{GROUP} \PYG{k}{BY} \PYG{n}{drb2019}\PYG{l+m+mf}{.}\PYG{n}{data\PYGZus{}partenza}\PYG{p}{,} \PYG{n}{bcs}\PYG{l+m+mf}{.}\PYG{k}{cluster}\PYG{p}{,} \PYG{n}{bcs}\PYG{l+m+mf}{.}\PYG{n}{cluster\PYGZus{}nil}
+\PYG{k}{ORDER} \PYG{k}{BY} \PYG{n}{bcs}\PYG{l+m+mf}{.}\PYG{k}{cluster}\PYG{p}{,} \PYG{n}{drb2019}\PYG{l+m+mf}{.}\PYG{n}{data\PYGZus{}partenza}
+    \PYG{p}{)}\PYG{p}{;}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+And then read the final data into memory.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{retrieve\PYGZus{}daily\PYGZus{}data}\PYG{p}{(}\PYG{n}{connection}\PYG{p}{,} \PYG{n}{wide}\PYG{p}{:} \PYG{n+nb}{bool} \PYG{o}{=} \PYG{k+kc}{False}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
+    \PYG{n}{query} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+s2}{        SELECT}
+\PYG{l+s+s2}{            cdr.data\PYGZus{}partenza,}
+\PYG{l+s+s2}{            cdr.cluster,}
+\PYG{l+s+s2}{            cdr.noleggi\PYGZus{}giornalieri}
+\PYG{l+s+s2}{        FROM bikemi\PYGZus{}rentals.clusters\PYGZus{}daily\PYGZus{}rentals cdr}
+\PYG{l+s+s2}{    }\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{wide}\PYG{p}{:}
+        \PYG{k}{return} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}sql}\PYG{p}{(}\PYG{n}{query}\PYG{p}{,} \PYG{n}{connection}\PYG{p}{)}\PYG{o}{.}\PYG{n}{rename}\PYG{p}{(}\PYG{n}{index}\PYG{o}{=}\PYG{n+nb}{str}\PYG{o}{.}\PYG{n}{title}\PYG{p}{)}
+    \PYG{k}{return} \PYG{p}{(}
+        \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}sql}\PYG{p}{(}\PYG{n}{query}\PYG{p}{,} \PYG{n}{connection}\PYG{p}{)}
+            \PYG{o}{.}\PYG{n}{pivot}\PYG{p}{(}\PYG{n}{index}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{data\PYGZus{}partenza}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{columns}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{cluster}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{values}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{noleggi\PYGZus{}giornalieri}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+            \PYG{o}{.}\PYG{n}{rename}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{n+nb}{str}\PYG{o}{.}\PYG{n}{title}\PYG{p}{)}
+            \PYG{o}{.}\PYG{n}{asfreq}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{D}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+    \PYG{p}{)}
+
+
+\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame} \PYG{o}{=} \PYG{n}{retrieve\PYGZus{}daily\PYGZus{}data}\PYG{p}{(}\PYG{n}{conn}\PYG{p}{,} \PYG{n}{wide}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+
+\section{Seasonal Decomposition}
+\label{\detokenize{05-time_series_analysis:seasonal-decomposition}}
+\sphinxAtStartPar
+Python library \sphinxcode{\sphinxupquote{statsmodels}} is the choice to perform seasonal decompositions. Simply put, seasonal decomposition assumes that a time\sphinxhyphen{}series is made up of components: a trend (and cycle) \(T\), the seasonality \(S\) and the remainder \(R\) HYNDMAN. A trend is a long\sphinxhyphen{}term increase or decrease in the data. Seasonalities are cyclical variations of the data that occur with fixed and known period, while cycles do not exhibit a clear frequency (such as, for example, the economic cycle).
+
+\sphinxAtStartPar
+As a starter, the base function \sphinxcode{\sphinxupquote{seasonal\_decompose}} implements additive and multiplicative decompositions. The models behind these two strategies are quite simple: \(y_t = S_t + T_t + R_t\) for the additive model and \(y_t = S_t \times T_t \times R_t\). The multiplicative specification is preferred when the magnitude of seasonal fluctuations varies around the level of the time series. Also, it is worth noting that the two equations are convertible: \(y_t = S_t \times T_t \times R_t\) is equivalent to \(logy_t = logS_t + logT_t + logR_t\).
+
+\sphinxAtStartPar
+The algorithm that performs the decomposition is quite simple: first, a moving\sphinxhyphen{}average is fit using a time window that is twice the size of the periodicity of the series. For example, monthly data will have a window \(m\) of 12 observations. i.e. twelve months. This will be our estimated trend\sphinxhyphen{}cycle component \(\hat{T}_t\), which is then subtracted from the observed data. The seasonal component \(\hat{S}_t\) is computed as the average of the de\sphinxhyphen{}trended data for that season: for example, with monthly periodicity an average is computed for each month using the values of each month. The residuals \(\hat{R}_t\) are obtained subtracting the seasonal component from the de\sphinxhyphen{}trended series. This applies to additive models; for multiplicative specifications, every subtraction is replaced with a division.
+
+\sphinxAtStartPar
+These techniques are quite rudimentary, so much so that \sphinxcode{\sphinxupquote{statsmodels}} recommends applying more sophisticated techniques. As an example, classical decomposition (which dates back to the 1920s) is unable to capture variation in the seasonal cycle, which is assumed to be the same from year to year.  Nonetheless, they represent a good starting point to identify patterns in the time series, and the building block for more advanced strategies. As we are dealing with daily data, there will be two main seasonalities we want to identify: yearly and weekly patterns.
+
+\sphinxAtStartPar
+The first thing that comes up is that the seasonal pattern is quite tight: this is because weekly seasonalities are fit in a span of two years. The \sphinxcode{\sphinxupquote{seasonal\_decompose}} function requires at least two “complete cycles” of data, i.e. two years should be enough for our purposes. The function by default uses the same periodicity as the time\sphinxhyphen{}index of the \sphinxcode{\sphinxupquote{pandas.DataFrame}} passed as data argument: in this case, daily. We would also override it to display only higher order seasonalities, for example by setting a week\sphinxhyphen{}long period. The trend can also be estimated with a least\sphinxhyphen{}squares regression using an input number of data points.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{tsa}\PYG{n+nn}{.}\PYG{n+nn}{seasonal} \PYG{k+kn}{import} \PYG{n}{seasonal\PYGZus{}decompose}
+
+
+\PYG{k}{def} \PYG{n+nf}{build\PYGZus{}plots}\PYG{p}{(}
+        \PYG{n}{decomposed\PYGZus{}series}\PYG{p}{,}
+        \PYG{n}{series\PYGZus{}name}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
+        \PYG{n}{decomposer\PYGZus{}name}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
+        \PYG{n}{\PYGZus{}palette}
+\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
+    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{8}\PYG{p}{)}\PYG{p}{,} \PYG{n}{constrained\PYGZus{}layout}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+
+    \PYG{n}{decomposed\PYGZus{}series}\PYG{o}{.}\PYG{n}{observed}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{c}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,} \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Observed Component}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{decomposed\PYGZus{}series}\PYG{o}{.}\PYG{n}{trend}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{c}\PYG{o}{=}\PYG{n}{\PYGZus{}palette}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,} \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Trend}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{decomposed\PYGZus{}series}\PYG{o}{.}\PYG{n}{seasonal}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{c}\PYG{o}{=}\PYG{n}{\PYGZus{}palette}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{p}{,} \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Seasonality}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{decomposed\PYGZus{}series}\PYG{o}{.}\PYG{n}{resid}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{c}\PYG{o}{=}\PYG{n}{\PYGZus{}palette}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}\PYG{p}{,} \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Residuals}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{suptitle}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Daily Rentals in }\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{series\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{ \PYGZhy{} }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{decomposer\PYGZus{}name}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{p}{)}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+
+
+\PYG{k}{def} \PYG{n+nf}{decompose\PYGZus{}series}\PYG{p}{(}
+        \PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,}
+        \PYG{n}{col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
+        \PYG{n}{period}\PYG{p}{:} \PYG{n+nb}{int}\PYG{p}{,}
+        \PYG{n}{mode}\PYG{p}{:} \PYG{n}{Optional}\PYG{p}{[}\PYG{n+nb}{str}\PYG{p}{]} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
+        \PYG{n}{palette}\PYG{o}{=}\PYG{n}{sns}\PYG{o}{.}\PYG{n}{color\PYGZus{}palette}\PYG{p}{(}\PYG{n}{palette}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{deep}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
+    \PYG{k}{if} \PYG{n}{mode} \PYG{o+ow}{is} \PYG{k+kc}{None}\PYG{p}{:}
+        \PYG{n}{\PYGZus{}model}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{additive}\PYG{l+s+s2}{\PYGZdq{}}
+    \PYG{k}{elif} \PYG{n}{mode} \PYG{o+ow}{not} \PYG{o+ow}{in} \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{additive}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{multiplicative}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{k+kc}{None}\PYG{p}{]}\PYG{p}{:}
+        \PYG{k}{raise} \PYG{n+ne}{ValueError}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{mode}\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{ must either be }\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{additive}\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{ (default value) or }\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{multiplicative}\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{n}{\PYGZus{}model}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{n}{mode}
+
+    \PYG{n}{decomposition} \PYG{o}{=} \PYG{n}{seasonal\PYGZus{}decompose}\PYG{p}{(}
+        \PYG{n}{x}\PYG{o}{=}\PYG{n}{data}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]}\PYG{p}{,}
+        \PYG{n}{model}\PYG{o}{=}\PYG{n}{\PYGZus{}model}\PYG{p}{,}
+        \PYG{n}{period}\PYG{o}{=}\PYG{n}{period}
+    \PYG{p}{)}
+
+    \PYG{n}{build\PYGZus{}plots}\PYG{p}{(}\PYG{n}{decomposition}\PYG{p}{,} \PYG{n}{col}\PYG{p}{,} \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{\PYGZus{}model}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ Seasonal Decomposition }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{period} \PYG{l+s+si}{= \PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{palette}\PYG{p}{)}
+
+
+\PYG{n}{daily\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{decompose\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{period}\PYG{o}{=}\PYG{l+m+mi}{7}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{05-time_series_analysis_16_0}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\sphinxAtStartPar
+From the observed component we can already spot the yearly patterns, which are outlined in the trended series. There are always two troughs: one in August and the other one during Christmas holidays and New Year’s Eve. There peak is always reached in May (and is preceded by a small dip around April and Easter holidays). Other two small dips can be observed around Carnival, in February (which is slightly longer and shifted, compared to the rest of Italy) and perhaps around Labour’s Day (May 1st) and the National Holiday on June 2nd. Then, the demand dips during the autumn too: at All Saint’s day (between Halloween and November 1st) and the city’s Patrons celebrations on December 9th (while December 8th is also a national holiday). This displays that predictable patterns such as holidays will indeed play a role in accruing the accuracy of the forecasts: after all, as outlined in the literature and from observing the patterns in the origin\sphinxhyphen{}destination matrix, docked bike\sphinxhyphen{}sharing services are strictly related to commuting patterns.
+
+\sphinxAtStartPar
+The overall series displays a growing trend from January to the peak in May, a plateau around June and July, then the great August dip and a gradual declining trend from September to the end of the year. These yearly patterns are basically the biggest sources of variation, and are what we aim to capture with daily aggregated data. The residuals appear clearly heteroskedastic, but perhaps stationary. The residual variance increases around April and October\sphinxhyphen{}November: we might guesstimate it is due to weather and rain conditions.
+
+\sphinxAtStartPar
+It is also worth noting the scales: seasonalities scales are very much in the negative range (on average, the seasonal decomposition sums up to 0), but is as much as half the range of values for residuals. It seems clear that this decomposition does not do a great job, as the unexplained component is much large.
+
+\sphinxAtStartPar
+As an exercise, we can change the \sphinxcode{\sphinxupquote{period}} of the data 30 days, as an exercise. This returns a much different seasonal pattern, which, however, is even less informative: the range of values is up to ten time smaller than the residuals. This also returns a much smoother linear trend, where the dips are less pronounced.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{daily\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{decompose\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{period}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{05-time_series_analysis_18_0}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+
+\subsection{Advanced Decomposition}
+\label{\detokenize{05-time_series_analysis:advanced-decomposition}}
+\sphinxAtStartPar
+To investigate these patterns we can exploit more advanced decompostion patterns. Official tools are often developed by official bureaus, as seasonal decomposition is especially needed when dealing with monthly or quarterly data. Inside the European Union, the \sphinxhref{https://ec.europa.eu/eurostat/cros/content/software-jdemetra\_en}{official recommendation} is the JDemetra+ software library. The US Census Bureau implemented the X\sphinxhyphen{}11 category of models, which also allow the seasonal component to vary over time and are robust to outliers and missing values. These models, however, are not suited for daily and weekly data points (HYNDMAN).
+
+\sphinxAtStartPar
+For this reason, another technique is frequently used: STL decomposition, or Seasonal Trend decomposition using LOESS, proposed by Cleveland and his coauthors (Cleveland). LOESS is an acronym that unpacks to Locally Estimated Scatterplot Smoothing (or Savitzky\sphinxhyphen{}Golay filter), that indicates a non\sphinxhyphen{}parametric regression that is locally fitted. Simply put, the LOESS fits multiple, even polynomial regressions, “in a moving fashion analogous to how a moving average is computed for a time series” (Locally Weighted Regression: An Approach to Regression Analysis by Local Fitting). \sphinxcode{\sphinxupquote{statsmodels}} implements the STL decomposition directly from the fortran library developed by Cleveland, and has a plethora of arguments to tweak. These can be split into three categories.
+
+\sphinxAtStartPar
+The main parameters are the following:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{endog}} is the data to be decomposed.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{period}} is the periodicity of the sequence. It is detected automatically if the data is provided as a Pandas \sphinxcode{\sphinxupquote{DataFrame}}. For example, if the data is monthly, the period is 12. In our case, since the data is daily, the period will be 7.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{seasonal}} is the length of the seasonal smoother and is set to 7 by default.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{trend}} is the length of the trend smoother. Must be an \sphinxstyleemphasis{odd} integer. If not provided uses the smallest odd integer greater than 1.5 * \sphinxcode{\sphinxupquote{period}} / (1 \sphinxhyphen{} 1.5 / \sphinxcode{\sphinxupquote{seasonal}})
+
+\item {} 
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{low\_pass}} is the length of the low\sphinxhyphen{}pass filter used for each subseries. Must be an odd integer >=3. If not provided, uses the smallest odd integer greater than \sphinxcode{\sphinxupquote{period}}.
+
+\end{itemize}
+
+\sphinxAtStartPar
+What this implies is that with STL decomposition we have a much greater control over the length of each smoother: we can look for a monthly trend and weekly seasonalities, for instance.
+
+\sphinxAtStartPar
+Then come the degrees parameters, i.e. whether to use a constant or a constant and trend. \sphinxcode{\sphinxupquote{0}} indicates that only the constant is used and \sphinxcode{\sphinxupquote{1}} also uses the trend. These values can be set with the parameters \sphinxcode{\sphinxupquote{seasonal\_degint}}, \sphinxcode{\sphinxupquote{trend\_degint}} and \sphinxcode{\sphinxupquote{low\_pass\_degint}}.
+
+\sphinxAtStartPar
+Lastly, there are the interpolation step parameters. Basically, they reduce the estimation time by interpolating values between an interval. If any \sphinxcode{\sphinxupquote{\_interpolation}} parameter is set to an integer greater than or equal to one, LOESS is used every number of points, while the skipped values are linearly interpolated. Interpolation can happen at the \sphinxcode{\sphinxupquote{seasonal}}, \sphinxcode{\sphinxupquote{trend}} and \sphinxcode{\sphinxupquote{low\_pass}} level.
+
+\sphinxAtStartPar
+The function also has a \sphinxcode{\sphinxupquote{robustbool}} flag, indicating whether to use a weighted version that is robust to some forms of outliers.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{tsa}\PYG{n+nn}{.}\PYG{n+nn}{seasonal} \PYG{k+kn}{import} \PYG{n}{STL}
+
+\PYG{n}{stl\PYGZus{}7} \PYG{o}{=} \PYG{n}{STL}\PYG{p}{(}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{n}{period}\PYG{o}{=}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{seasonal}\PYG{o}{=}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{trend}\PYG{o}{=}\PYG{l+m+mi}{31}\PYG{p}{,} \PYG{n}{seasonal\PYGZus{}deg}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{build\PYGZus{}plots}\PYG{p}{(}\PYG{n}{stl\PYGZus{}7}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{STL: Seasonal = 7, Trend = 31}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{sns\PYGZus{}c}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{05-time_series_analysis_20_0}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\sphinxAtStartPar
+The STL decomposition fits a much smoother trend, which we set to \sphinxcode{\sphinxupquote{31}} to capture the monthly variation. A higher figure, say yearly, would yield much smoother curves. It is immediate to notice that the seasonal patterns are dampened and vary across time quite significantly and display a much greater positive magnitude compared to the additive decomposition. Seasonal components shrink where the trend dips. The residuals also slightly improve: their variance becomes less hectic, because the STL better captures seasonality dynamics. However, high spikes remain.
+
+
+\section{Correlation Analysis}
+\label{\detokenize{05-time_series_analysis:correlation-analysis}}
+\sphinxAtStartPar
+Time series data is unique as the data points are not \(i.i.d.\) distributed. In other words, even if we can assume that the data comes from the same distribution (i.e., is \(i.d.\)), independence is not present. Data points are correlated across time: hence the definition \sphinxstyleemphasis{auto\sphinxhyphen{}correlation}. To explore time\sphinxhyphen{}dependencies structure, the auto\sphinxhyphen{}correlation function (ACF) and partial auto\sphinxhyphen{}correlation function (PACF) are used. We denote the sample autocorrelation at lag \(k\) by \(r_k\)
+\begin{equation*}
+\begin{split}r_k = \frac{\sum_{t=k+1}^T (y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^T (y_t-\bar{y})^2}\end{split}
+\end{equation*}
+\sphinxAtStartPar
+However, the autocorrelation between to points at \(k\) lags of distance might simply be due both points being connected by the same “chain” of intermediate values \(y_{t-1}\) to \(y_{t-(k+1)}\), rather than because of any new information contained in  \(y_k\)  that could be used to forecast \(y_t\). This problem is solved via the PACF, which \sphinxhyphen{} simply put \sphinxhyphen{} estimates an autoregressive models (i.e., a linear regression fit only on the lags) and returns the coefficient of the \(k\)th component.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{graphics}\PYG{n+nn}{.}\PYG{n+nn}{tsaplots} \PYG{k+kn}{import} \PYG{n}{plot\PYGZus{}acf}\PYG{p}{,} \PYG{n}{plot\PYGZus{}pacf}
+
+\PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{constrained\PYGZus{}layout}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{plot\PYGZus{}acf}\PYG{p}{(}
+    \PYG{n}{x}\PYG{o}{=}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,}
+    \PYG{n}{lags}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{,}
+    \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{,}
+    \PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Autocorrelation Function}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{zero}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,}
+\PYG{p}{)}
+\PYG{n}{plot\PYGZus{}pacf}\PYG{p}{(}
+    \PYG{n}{x}\PYG{o}{=}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,}
+    \PYG{n}{lags}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{,}
+    \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,}
+    \PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Partial Autocorrelation Function}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{method}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ywm}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{zero}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,}
+\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{suptitle}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{BikeMi Daily Rentals in TAZ }\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{Bikemi \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{o}{*}\PYG{o}{*}\PYG{n}{title\PYGZus{}font}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+[]
+\end{sphinxVerbatim}
+
+\noindent\sphinxincludegraphics{{05-time_series_analysis_22_1}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\sphinxAtStartPar
+The plots indicate a strong auto\sphinxhyphen{}regressive component: basically all values in the week before are significant and the autocorrelations corresponding to the seasonal periodicities (approximately one week before) are all significant still one month later. The partial autocorrelation function drops to non\sphinxhyphen{}significant levels quite sooner but appear to still be significant around the seasonal components.
+
+
+\section{Differencing}
+\label{\detokenize{05-time_series_analysis:differencing}}
+\sphinxAtStartPar
+Differencing is the last step in our time series analysis. Given that the time series display seasonality, by definition they are non\sphinxhyphen{}stationary. Stationarity is a property that has two formulations. In its \sphinxstyleemphasis{strong} formulation, a time series \(\{y_t\}\) is stationary if, for any \(s\), the distribution of \((y_t,... y_{t+s})\) does not depend on \(s\). This property is difficult to observe in economic terms \sphinxhyphen{} but can be observed in the realm of physics, like the swing of a (frictionless) pendulum: no matter the time, its properties like amplitude and period remain the same. For this reason, we settle with \sphinxstyleemphasis{weakly stationarity}, and time series that display this property are also called \sphinxstyleemphasis{wide\sphinxhyphen{}sense stationary}, \sphinxstyleemphasis{covariance stationary}, or \sphinxstyleemphasis{second order stationary} processes.
+
+\sphinxAtStartPar
+As the name suggests, these processes have first and second\sphinxhyphen{}order moments that are fixed in time; the same applies to auto\sphinxhyphen{}correlation, that should only depend on the length of the lag \(k\), i.e. should be the same across any two time points at distance \(k\). These two properties do not imply each other, unless when the underlying process is Gaussian. Our data does not seem unequivocably normal:
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}hist}\PYG{p}{(}
+        \PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,}
+        \PYG{n}{col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
+        \PYG{n}{bins}\PYG{p}{:} \PYG{n}{Optional}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{]} \PYG{o}{=} \PYG{k+kc}{None}\PYG{p}{,}
+        \PYG{n}{kde}\PYG{p}{:} \PYG{n+nb}{bool} \PYG{o}{=} \PYG{k+kc}{True}\PYG{p}{,}
+        \PYG{n}{log}\PYG{p}{:} \PYG{n+nb}{bool} \PYG{o}{=} \PYG{k+kc}{False}
+\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
+    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{k}{if} \PYG{n}{log}\PYG{p}{:}
+        \PYG{n}{series} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{)}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{n}{series} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]}
+
+    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{bins}\PYG{p}{:}
+        \PYG{n}{bins} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{series}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{10}\PYG{p}{)}
+
+    \PYG{n}{series}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}
+        \PYG{n}{sns}\PYG{o}{.}\PYG{n}{histplot}\PYG{p}{,}
+        \PYG{n}{ax}\PYG{o}{=}\PYG{n}{ax}\PYG{p}{,}
+        \PYG{n}{kde}\PYG{o}{=}\PYG{n}{kde}\PYG{p}{,}
+        \PYG{n}{bins}\PYG{o}{=}\PYG{n}{bins}
+    \PYG{p}{)}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}
+        \PYG{n}{xlabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+        \PYG{n}{ylabel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+        \PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Forecasting Demand Distribution in }\PYG{l+s+s2}{\PYGZsq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{col}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{:}\PYG{l+s+s2}{\PYGZdq{}}
+    \PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+
+
+\PYG{n}{daily\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{plot\PYGZus{}hist}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{bins}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{05-time_series_analysis_25_0}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\sphinxAtStartPar
+To transform a non\sphinxhyphen{}stationary series into a (weakly) stationary one, the principal tool is taking differences, i.e. subtracting from every \(y_t\) the \(k\)\sphinxhyphen{}th lagged value. Usually, however, the differences that are preferred are the ones that are interpretable: first differences represent the change between two observations, and the seasonal differences represent the increase from one seasonal period to the other (in this case, between two weeks).
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}differences}\PYG{p}{(}\PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,} \PYG{n}{col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,} \PYG{n}{lag}\PYG{p}{:} \PYG{n+nb}{int}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{n}{sns}\PYG{o}{.}\PYG{n}{color\PYGZus{}palette}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{deep}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
+    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{lag}\PYG{p}{)}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{n}{color}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{BikeMi Daily Rentals, }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{col}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{, Differencing Order: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{lag}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+
+
+\PYG{n}{plot\PYGZus{}differences}\PYG{p}{(}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{plot\PYGZus{}differences}\PYG{p}{(}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{05-time_series_analysis_27_0}.png}
+
+\noindent\sphinxincludegraphics{{05-time_series_analysis_27_1}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+\sphinxAtStartPar
+First differencing returns seemingly stationary data, but the seasonal component is not removed. On the contrary, the seasonal differences are less noisy. Still, the two datasets display high variance, with a change as great as 400 observations. We can also difference the series twice; this, however, might not be recommendable if the series is already stationary after one round of differencing: “applying more differences than required will induce false dynamics or autocorrelations that do not really exist in the time series” \sphinxstylestrong{hyndman}. At first glance, double differences seem to return a series that is more convincingly stationary.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}double\PYGZus{}differences}\PYG{p}{(}\PYG{n}{data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,} \PYG{n}{col}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,} \PYG{n}{lag}\PYG{p}{:} \PYG{n+nb}{list}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{]} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{]}\PYG{p}{,}
+                            \PYG{n}{color}\PYG{o}{=}\PYG{n}{sns}\PYG{o}{.}\PYG{n}{color\PYGZus{}palette}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{deep}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
+    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{lag}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{lag}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{n}{color}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{BikeMi Daily Rentals, }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{col}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{, Differencing Order: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{lag}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+
+
+\PYG{n}{plot\PYGZus{}double\PYGZus{}differences}\PYG{p}{(}\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{p}{[}\PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{n}{sns\PYGZus{}c}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{05-time_series_analysis_29_0}.png}
+
+\end{sphinxuseclass}
+\end{sphinxuseclass}
+
+\subsection{Testing for Stationarity}
+\label{\detokenize{05-time_series_analysis:testing-for-stationarity}}
+\sphinxAtStartPar
+Stationarity can be assessed more objectively using a particular category of statistical tests named \sphinxstyleemphasis{unit root tests}. Simply put,
+
+\sphinxAtStartPar
+One of the most popular unit root tests is the \sphinxstyleemphasis{Kwiatkowski\sphinxhyphen{}Phillips\sphinxhyphen{}Schmidt\sphinxhyphen{}Shin (KPSS) test}. With the authors’ words, the null hypothesis is that “an observable series is stationary around a deterministic trend”, against the alternative that “the series is difference\sphinxhyphen{}stationary”, i.e. requires differencing. In other words, the test’s null hypothesis is that the process is level or trend stationary (i.e., does not exhibit a trend) and if we reject the null hypothesis (for \(p\) values smaller than \(0.05\)) differencing is required.
+
+\sphinxAtStartPar
+Another test is the (Augmented) Dickey\sphinxhyphen{}Fuller or ADF test. While the KPSS test’s null hypothesis is that the series is already stationary, the ADF test assumes the opposite, i.e. the series is not stationary because it has a unit root. If we reject the null, we assume the time series to be stationary. Both tests suggest that data from \sphinxcode{\sphinxupquote{Brera \sphinxhyphen{} 25}} is compatible with the hypothesis that the series is stationary, by taking either first order differences, seasonal differences (and the combination of both). For this reason, we shall stick to seasonal differences.
+
+\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell_input}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{tsa}\PYG{n+nn}{.}\PYG{n+nn}{stattools} \PYG{k+kn}{import} \PYG{n}{adfuller}\PYG{p}{,} \PYG{n}{kpss}
+\PYG{k+kn}{import} \PYG{n+nn}{warnings}
+\PYG{k+kn}{from} \PYG{n+nn}{rich}\PYG{n+nn}{.}\PYG{n+nn}{console} \PYG{k+kn}{import} \PYG{n}{Console}
+
+\PYG{n}{console} \PYG{o}{=} \PYG{n}{Console}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{stationarity\PYGZus{}test}\PYG{p}{(}\PYG{n}{lagged\PYGZus{}series}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{k+kc}{None}\PYG{p}{:}
+
+
+    \PYG{k}{with} \PYG{n}{warnings}\PYG{o}{.}\PYG{n}{catch\PYGZus{}warnings}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{warnings}\PYG{o}{.}\PYG{n}{filterwarnings}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ignore}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+        \PYG{n}{adfuller\PYGZus{}results} \PYG{o}{=} \PYG{n}{adfuller}\PYG{p}{(}
+            \PYG{c+c1}{\PYGZsh{} take seasonal diffs and drop the 7 missing values}
+            \PYG{n}{lagged\PYGZus{}series}\PYG{o}{.}\PYG{n}{dropna}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{regression}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ct}\PYG{l+s+s2}{\PYGZdq{}}
+        \PYG{p}{)}
+
+        \PYG{n}{kpss\PYGZus{}results} \PYG{o}{=} \PYG{n}{kpss}\PYG{p}{(}
+            \PYG{n}{lagged\PYGZus{}series}\PYG{o}{.}\PYG{n}{dropna}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+            \PYG{n}{regression}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ct}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+            \PYG{n}{nlags}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{auto}\PYG{l+s+s2}{\PYGZdq{}}
+        \PYG{p}{)}
+
+        \PYG{n}{console}\PYG{o}{.}\PYG{n}{print}\PYG{p}{(}
+        \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ADF test statistic: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{adfuller\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ ADF p\PYGZhy{}value: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{adfuller\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3\PYGZpc{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
+        \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is no unit root \PYGZhy{} the series *is* stationary}\PYG{l+s+s1}{\PYGZsq{}} \PYG{k}{if} \PYG{n}{adfuller\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZlt{}} \PYG{l+m+mf}{0.05} \PYG{k}{else} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is a unit root \PYGZhy{} the series *is not* stationary}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
+        \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{KPSS test statistic: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{kpss\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ KPSS p\PYGZhy{}value: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{kpss\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.3\PYGZpc{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{:}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
+        \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+si}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is a unit root \PYGZhy{} the series *is not* stationary}\PYG{l+s+s1}{\PYGZsq{}} \PYG{k}{if} \PYG{n}{kpss\PYGZus{}results}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{\PYGZlt{}} \PYG{l+m+mf}{0.05} \PYG{k}{else} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{there is no unit root \PYGZhy{} the series *is* stationary}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}
+        \PYG{p}{)}
+
+\PYG{n}{console}\PYG{o}{.}\PYG{n}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{First Order Differences (Lag: 1)}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{stationarity\PYGZus{}test}\PYG{p}{)}
+\PYG{n}{console}\PYG{o}{.}\PYG{n}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Seasonal Differences (Lag: 7)}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{)}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{stationarity\PYGZus{}test}\PYG{p}{)}
+\PYG{n}{console}\PYG{o}{.}\PYG{n}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Double Differences (Lag: 7 and 1)}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{)}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{stationarity\PYGZus{}test}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
+\begin{sphinxuseclass}{cell_output}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+First Order Differences \PYG{Color+ColorBold}{(}Lag: \PYG{Color+ColorBold+ColorBoldCyan}{1}\PYG{Color+ColorBold}{)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ADF test statistic: \PYG{Color+ColorBold+ColorBoldCyan}{\PYGZhy{}9.08} ADF p\PYGZhy{}value: \PYG{Color+ColorBold+ColorBoldCyan}{0.000}\PYGZpc{}:
+there is no unit root \PYGZhy{} the series *is* stationary
+
+KPSS test statistic: \PYG{Color+ColorBold+ColorBoldCyan}{0.06} KPSS p\PYGZhy{}value: \PYG{Color+ColorBold+ColorBoldCyan}{10.000}\PYGZpc{}:
+there is no unit root \PYGZhy{} the series *is* stationary
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+Seasonal Differences \PYG{Color+ColorBold}{(}Lag: \PYG{Color+ColorBold+ColorBoldCyan}{7}\PYG{Color+ColorBold}{)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ADF test statistic: \PYG{Color+ColorBold+ColorBoldCyan}{\PYGZhy{}7.9} ADF p\PYGZhy{}value: \PYG{Color+ColorBold+ColorBoldCyan}{0.000}\PYGZpc{}:
+there is no unit root \PYGZhy{} the series *is* stationary
+
+KPSS test statistic: \PYG{Color+ColorBold+ColorBoldCyan}{0.012} KPSS p\PYGZhy{}value: \PYG{Color+ColorBold+ColorBoldCyan}{10.000}\PYGZpc{}:
+there is no unit root \PYGZhy{} the series *is* stationary
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+Double Differences \PYG{Color+ColorBold}{(}Lag: \PYG{Color+ColorBold+ColorBoldCyan}{7} and \PYG{Color+ColorBold+ColorBoldCyan}{1}\PYG{Color+ColorBold}{)}
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ADF test statistic: \PYG{Color+ColorBold+ColorBoldCyan}{\PYGZhy{}12.5} ADF p\PYGZhy{}value: \PYG{Color+ColorBold+ColorBoldCyan}{0.000}\PYGZpc{}:
+there is no unit root \PYGZhy{} the series *is* stationary
+
+KPSS test statistic: \PYG{Color+ColorBold+ColorBoldCyan}{0.0509} KPSS p\PYGZhy{}value: \PYG{Color+ColorBold+ColorBoldCyan}{10.000}\PYGZpc{}:
+there is no unit root \PYGZhy{} the series *is* stationary
+\end{sphinxVerbatim}
 
 \end{sphinxuseclass}
 \end{sphinxuseclass}

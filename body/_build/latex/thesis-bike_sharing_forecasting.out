@@ -26,3 +26,12 @@
 \BOOKMARK [2][-]{subsection.4.1.2}{Alternative\040Approaches\040to\040k-Means\040Clustering}{section.4.1}% 26
 \BOOKMARK [1][-]{section.4.2}{k-Means\040Clustering\040Evaluation\040Metrics}{chapter.4}% 27
 \BOOKMARK [1][-]{section.4.3}{Fitting\040k-Means\040on\040BikeMi\040Stalls\040Geographic\040Data}{chapter.4}% 28
+\BOOKMARK [0][-]{chapter.5}{Time\040Series\040Analysis}{}% 29
+\BOOKMARK [1][-]{section.5.1}{Time\040Series\040Analysis}{chapter.5}% 30
+\BOOKMARK [1][-]{section.5.2}{Last\040Aggregations\040and\040Time\040Series\040Decomposition}{chapter.5}% 31
+\BOOKMARK [2][-]{subsection.5.2.1}{Time\040Aggregation\040Implementation}{section.5.2}% 32
+\BOOKMARK [1][-]{section.5.3}{Seasonal\040Decomposition}{chapter.5}% 33
+\BOOKMARK [2][-]{subsection.5.3.1}{Advanced\040Decomposition}{section.5.3}% 34
+\BOOKMARK [1][-]{section.5.4}{Correlation\040Analysis}{chapter.5}% 35
+\BOOKMARK [1][-]{section.5.5}{Differencing}{chapter.5}% 36
+\BOOKMARK [2][-]{subsection.5.5.1}{Testing\040for\040Stationarity}{section.5.5}% 37
