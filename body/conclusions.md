@@ -1,26 +1,5 @@
----
-jupytext:
-  formats: notebooks///ipynb,body///md:myst
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.5
-kernelspec:
-  display_name: PyCharm (tesi)
-  language: python
-  name: pycharm-dd017f2c
----
+# Conclusions
 
-# Extensions
+The metrics developed in the past chapter should speak for themselves. However, before jumping to conclusions, it is worth outlining its limitations. From the start, this project did not aim at achieving performance, yet value small improvements that could be derived from data analytics and pre-processing work, using the least amount of resources (starting from the hardware: a mid-range laptop with an old processor). For this reason, there is no systemic approach to multivariate models: for one, complex models cannot be cross-validated by brute force given these computational resource. More importantly, however, this missing chapter is due to the very nature of the forecasting task. While libraries such as `scikit-learn` are mature and have been used in production for years, they still lack the high-level API interface to implement sophisticated models using time-series cross-validation techniques, such as the sliding window.
 
-+++
-
-* Use time and prices of bikes to forecast revenue
-    * forecast duration given starting point, time... then use the identifiers to derive revenue
-* Dockless sharing services in Milan
-
-+++
-
-* time series clustering with spatial cross validation
-* enrich geographic data from OSM
+Deep learning models are a tempting road to walk down on; however, there might be more adventurous paths to explore. Just to mention one out of all, time series clustering seems a promising avenue to deal with hourly frequencies and could fruitfully be combined with a spatial cross-validation. They say "the data science job is 80% about cleaning data, and the remaninder 20% complaining about cleaning the data", and that is true. Data wrangling and feature extraction can dramatically improve the model performance. As contested as it might be, the Prophet library cleverly implements some tricks to exploit calendar variation that enable much quicker fitting times and better performance with automated procedures. Splines and Fourier terms are cheap ways to extract signal from the data, and are much more affordable both in economic terms and in the environmental cost associated with computation. Smart feature engineering can beat complex models and bring scalability at these low levels.

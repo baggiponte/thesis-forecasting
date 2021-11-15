@@ -237,5 +237,3 @@ Xu, C., Ji, J., &#38; Liu, P. (2018). The station-free sharing bike demand forec
  Taylor, S. J., &#38; Letham, B. (2017). *Forecasting at scale* (e3190v2). PeerJ Inc. https://doi.org/10.7287/peerj.preprints.3190v2
 
  Wang, B., &#38; Kim, I. (2018). Short-term prediction for bike-sharing service using machine learning. *Transportation Research Procedia34*, 171–178. https://doi.org/10.1016/j.trpro.2018.11.029
-
-## Chapter 7

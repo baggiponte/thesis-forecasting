@@ -84,7 +84,7 @@
         
 
 \title{A Comparison of Forecasting Techniques in Bike Sharing Services}
-\date{Nov 15, 2021}
+\date{Nov 16, 2021}
 \release{}
 \author{Luca Baggi}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -101,7 +101,16 @@
 
 
 \sphinxAtStartPar
-Insert catchphrase
+Of course, these lines could not start without a mention to my supervisor, Prof. Giancarlo Manzi. I am grateful to him for his offer to work on this delicate topic, which allowed me to nurture my interest for modelling and statistics. The Professor supported me since the very beginning, providing aid and promptly answering my emails while also granting me the independence to research and explore Milan’s BikeMi data and statistical methods.
+
+\sphinxAtStartPar
+Many thanks to Marco Repetto, brilliant PhD candidate and data scientist at Siemens \sphinxhyphen{} my as my tutor in the optimisation course in Milan \sphinxhyphen{} who showed me the way to Python, data science and, more importantly, the open source software. Thanks to Paolo Maranzano, who \sphinxhyphen{} up to a certain extent \sphinxhyphen{} has been shadow\sphinxhyphen{}advisor, for his precious advice about time series.
+
+\sphinxAtStartPar
+Thanks to Balázs for the meticulous effort in reviewing my drafts, as well as for the time spent together during the weekends at the Main Building of the European Central Bank, both working at our projects during the (not\sphinxhyphen{}so\sphinxhyphen{}crazy) hot and definitely sunny summer months. Thanks to Jeanne, Tosca, Raffaella and Anke and many more of the amazing people at the Directorate General Research, who never stopped cheering for me and trying to answer my doubts (or rants).
+
+\sphinxAtStartPar
+This list is getting long \sphinxhyphen{} and should be longer, indeed \sphinxhyphen{} but this will likely be my last dissertation (at least for a while) and it would be a shame not to acknowledge the people who shared this journey with me. Chiara and Isabella became some of my closest friends, thanks to Trenord (coincidenze? Io non credo), and I must say the same of Veronica, Alessandra and Alessandro F. and Alessandro V., as well as Marvin and Max. Of course, being Italian, I came to terms with the fact that I need to play my role till the very end. So, finally: thanks to my parents, Cristina and Fulvio, who have never stopped believing in what I was doing, and have always provided me any means to do what was best for me. Thank you, Teresa (and brother and sisters and family) for putting up with my work and never leaving my side.
 
 
 \chapter{Introduction}
@@ -179,10 +188,7 @@ Most of the new approaches involve deep learning (DL) techniques, such as long\s
 There is no way we could best the performance of such sophisticated models. However, this may not be the ultimate goal for policymakers. Despite their impressive performances, deep learning methods are hard to implement. They require a considerable amount of resources and, unlike simpler models, are much more difficult to visualise and interpret. For one, they require senior data scientists and access to a local server cluster with access to Graphic Processing Units (GPUs) or cloud computing platforms such as Google Cloud, Microsoft Azure or Amazon Web Services. This infrastructure needs time to set up and delays are inevitable, since the data manipulated by public administration deserves a much greater degree of privacy. Besides, such models require a longer time to train \sphinxhyphen{} which translates to more expensive models.
 
 \sphinxAtStartPar
-Given the policymaker constraints, DL techniques may well be out of time, and budget. Our goal is to satisfy the constraints of a local planner with tight budget and more pressing issues, or the limited options of a private BSS company who needs to sustain high operational costs. We will develop two classes of models, univariate and multivariate, using both statistical and machine\sphinxhyphen{}learning methods. We will also attempt to evaluate the usefulness of external data \sphinxhyphen{} which might be hard to require and process \sphinxhyphen{} and the performances of libraries such as Facebook’s Prophet, which have been specifically designed for ‘forecasting at scale’, i.e. forecasting multiple time\sphinxhyphen{}series (in the order of the thousands) with little to no pre\sphinxhyphen{}processing, feature engineering and simple models.
-
-\sphinxAtStartPar
-This experiment has many drawbacks and limitations: as a starter, it does not include a proper spatial analysis, and does not explore Vector Auto Regressive (VAR) models, nor Bayesian models. Our goal is to prove that feature engineering and better data can do a better job at improving a model compared to more advanced techniques, especially under (hypothetically) tight budget constraints. In other words, we might want to get the feel for the marginally decreasing utility of accuracy improvements, which come at progressively greater computational costs.
+Given the policymaker constraints, DL techniques may well be out of time, and budget. Our goal is to satisfy the constraints of a local planner with tight budget and more pressing issues, or the limited options of a private BSS company who needs to sustain high operational costs. First, we will deal with data ingestion and manipulation, using PostgreSQL database manager. Then, we will exploit the open source data offered by the municipality of Milan to perform spatial operations and reduce dimensionality. After that, a \sphinxstyleemphasis{k}\sphinxhyphen{}means algorithm will be fit to cluster the stations into Traffic Analysis Zones (TAZ), that will be the basis for the forecasting models. Finally, we will see how unvariate models perform and we will try to extract as much information as possible exploiting the seasonal patterns in the data. A naïve model will be established as benchmark and then two unvariate models will be trained. The first one is an ARIMA model, the second is an application of the “controversial” Prophet library, developed by Facebook (now Meta), which should exploit to a better degree seasonal and calendar variations.
 
 
 \section{The Open Source Stack, Transparency and Reproducibility}
@@ -903,7 +909,7 @@ To provide a more practical example, let us assume that there are four clusters,
 The main, if not only, hyperparameter to tune in \sphinxstyleemphasis{k}\sphinxhyphen{}Means is, indeed, the number of clusters.
 As most machine learning methods, \sphinxstyleemphasis{k}\sphinxhyphen{}Means is a quite old algorithm and has thus been widely studied.
 The first metric to look at is indeed the inertia, or \sphinxstyleemphasis{within\sphinxhyphen{}cluster sum\sphinxhyphen{}of\sphinxhyphen{}squares} (\(WSS\)), which is usually computed using the Euclidean norm:
-\label{equation:04-stations_kmeans:81745750-4070-4360-921e-34254ffe5636}\begin{align}
+\label{equation:04-stations_kmeans:84607966-869d-4c3a-9c72-afde444aa5d7}\begin{align}
 & WSS = \sum_{i=0}^{n}\underset{\mu_{j}\in{C}}{min}(||x_{i} - \mu_{j}||^2)
 \end{align}
 \sphinxAtStartPar
@@ -917,7 +923,7 @@ These measures are computed for each set of data points and the labels assigned 
 
 \sphinxAtStartPar
 The Calinski\sphinxhyphen{}Harabasz Index is defined as:
-\label{equation:04-stations_kmeans:7236fc86-f0c7-491b-9b76-7fb519d32501}\begin{align}
+\label{equation:04-stations_kmeans:183d64c5-db9b-4fa8-a22b-97ac8b6a1061}\begin{align}
 & s = \frac{\mathrm{tr}(B_k)}{\mathrm{tr}(W_k)} \times \frac{n_E - k}{k - 1}
 \end{align}
 \sphinxAtStartPar
@@ -925,7 +931,7 @@ Where \(B_k\) is the dispersion between clusters and \(W_k\) is the one within c
 
 \sphinxAtStartPar
 Finally, the Davies\sphinxhyphen{}Bouldin index indicates a better separation between clusters the lower it is, and is computed as the average similarity across the two closer classes \(C_i\) and \(C_k\). The similarity measure between \(C_i\) and \(C_k\) is called \(R_{ij}\) and is defined as \(R_{ij} = \frac{s_i + s_j}{d_{ij}}\), where \(s\) is the average distance between each point of a cluster and its centre, and \$d\_\{ij\} is the distance between the two clusters’ centroids. The Davies\sphinxhyphen{}Bouldin index is thus formally defined as such:
-\label{equation:04-stations_kmeans:462ce06e-60f7-4af3-a1f9-1b96040372bf}\begin{align}
+\label{equation:04-stations_kmeans:3c8d6dc2-98c3-4aea-8c51-6b094ed8c61b}\begin{align}
 & DB = \frac{1}{k} \sum_{i=1}^k \max_{i \neq j} R_{ij}
 \end{align}
 \begin{sphinxuseclass}{cell}
@@ -1495,7 +1501,7 @@ The STL decomposition fits a much smoother trend, which we set to \sphinxcode{\s
 \label{\detokenize{05-time_series_analysis:correlation-analysis}}
 \sphinxAtStartPar
 Time series data is unique as the data points are not \(i.i.d.\) distributed. In other words, even if we can assume that the data comes from the same distribution (i.e., is \(i.d.\)), independence is not present. Data points are correlated across time: hence the definition \sphinxstyleemphasis{auto\sphinxhyphen{}correlation}. To explore time\sphinxhyphen{}dependencies structure, the auto\sphinxhyphen{}correlation function (ACF) and partial auto\sphinxhyphen{}correlation function (PACF) are used. We denote the sample autocorrelation at lag \(k\) by \(r_k\)
-\label{equation:05-time_series_analysis:3e5a264e-c75f-4993-b3b3-9ecc4ae298f3}\begin{align}
+\label{equation:05-time_series_analysis:f4826a34-e234-48bb-92ae-dcc62e9c2652}\begin{align}
 &r_k = \frac{\sum_{t=k+1}^T (y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^T (y_t-\bar{y})^2}
 \end{align}
 \sphinxAtStartPar
@@ -1677,13 +1683,13 @@ the (sum of) prediction error, defined as \(e_{t} = y_{t} - \hat{y}_{t}\). Often
 \label{\detokenize{06-forecasting:scale-dependent-metrics}}
 \sphinxAtStartPar
 The first and by far most popular error metrics are the mean absolute error (MAE) and the root mean squared error (RMSE). These are defined as such:
-\label{equation:06-forecasting:3eeb7571-f7f8-4865-8f09-db29568783c2}\begin{align}
+\label{equation:06-forecasting:d1b5d16c-2859-44d9-a007-6e5b398dae95}\begin{align}
 &MAE = \frac{1}{n}\sum_{j = 1}^n \left| {{y_j} - {{\hat y}_j}} \right|\\
 &RMSE=\sqrt{\frac{1}{n}\sum_{j=1}^{n}(\hat{y}_{i}-y_{i})^{2}}\\
 \end{align}
 \sphinxAtStartPar
 These metrics are widely used, and virtually all papers in the literature employ either (MAE seems to be prevalent). Another “niche” metric is sometimes used: it is the root mean squared logarithmic error, or RMSLE. This is defined as:
-\label{equation:06-forecasting:8ab9ebe9-1bdf-435f-80b3-3bd488d0aeb5}\begin{align}
+\label{equation:06-forecasting:542fca62-ed82-4a39-92b7-6a370528157a}\begin{align}
 &RMSLE =\sqrt{\frac{1}{n}\sum_{i=1}^{N}(log(\hat{y}_{i}+1)-\log(y_{i}+1))^{2}}
 \end{align}
 \sphinxAtStartPar
@@ -1697,7 +1703,7 @@ However, it is worth noting that “A forecast method that minimises the MAE wil
 \label{\detokenize{06-forecasting:percentage-metrics}}
 \sphinxAtStartPar
 The advantage of percentage errors is that they are unit\sphinxhyphen{}free and can be used to compare performance across different datasets. This case might be of our interst, since we might want to apply the same model architectures to the different time series of the stations. The most common percentage metric employed is the Mean absolute percentage error, or MAPE, which is defined as follows:
-\label{equation:06-forecasting:dac7b920-6bd3-42e5-b359-577e052dd67d}\begin{align}
+\label{equation:06-forecasting:65f215ff-d7e8-4366-b208-6aa1bfa87fe3}\begin{align}
 &MAPE= \frac{1}{n}\sum_{i=1}^{n}\left\vert \frac{\hat{y}_{i}-y_{i}}{y_{i}}\right\vert
 \end{align}
 \sphinxAtStartPar
@@ -1705,13 +1711,13 @@ The disadvantage of MAPE is that it may involve divisions by zero, yielding unde
 
 \sphinxAtStartPar
 To circumvent this problem, Hyndman and Koheler (R. J. Hyndman \& Koehler, 2006) proposed to use \sphinxstyleemphasis{scaled} error metrics. Simply put, the MAE is computed and then is scaled by the \sphinxstyleemphasis{training} MAE of a simple forecast method. The scaled error \(q_j\) is defined as such:
-\label{equation:06-forecasting:3f804e78-13b2-4c43-99f4-45e7532df4de}\begin{align}
+\label{equation:06-forecasting:a2187d0c-b9e3-4627-a8f6-5edad490b4ad}\begin{align}
 q_{j} = \frac{\displaystyle e_{j}}
     {\displaystyle\frac{1}{T-1}\sum_{t=2}^T |y_{t}-y_{t-1}|}.
 \end{align}
 \sphinxAtStartPar
 And then the mean absolute scaled error (MASE) and root mean squared scaled error (RMSSE) are defined as such:
-\label{equation:06-forecasting:21f64f6f-597d-4ae4-912b-64936f7b252f}\begin{align}
+\label{equation:06-forecasting:1665f32f-7501-4afc-b62a-559c52847d81}\begin{align}
 & MASE = \text{mean}(|q_{j}|) \\
 & RMSSE = \sqrt{\text{mean}(q_{j}^2)}
 \end{align}
@@ -2024,6 +2030,15 @@ scores  76.110 10678.567  0.560
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
+
+\chapter{Conclusions}
+\label{\detokenize{conclusions:conclusions}}\label{\detokenize{conclusions::doc}}
+\sphinxAtStartPar
+The metrics developed in the past chapter should speak for themselves. However, before jumping to conclusions, it is worth outlining its limitations. From the start, this project did not aim at achieving performance, yet value small improvements that could be derived from data analytics and pre\sphinxhyphen{}processing work, using the least amount of resources (starting from the hardware: a mid\sphinxhyphen{}range laptop with an old processor). For this reason, there is no systemic approach to multivariate models: for one, complex models cannot be cross\sphinxhyphen{}validated by brute force given these computational resource. More importantly, however, this missing chapter is due to the very nature of the forecasting task. While libraries such as \sphinxcode{\sphinxupquote{scikit\sphinxhyphen{}learn}} are mature and have been used in production for years, they still lack the high\sphinxhyphen{}level API interface to implement sophisticated models using time\sphinxhyphen{}series cross\sphinxhyphen{}validation techniques, such as the sliding window.
+
+\sphinxAtStartPar
+Deep learning models are a tempting road to walk down on; however, there might be more adventurous paths to explore. Just to mention one out of all, time series clustering seems a promising avenue to deal with hourly frequencies and could fruitfully be combined with a spatial cross\sphinxhyphen{}validation. They say “the data science job is 80\% about cleaning data, and the remaninder 20\% complaining about cleaning the data”, and that is true. Data wrangling and feature extraction can dramatically improve the model performance. As contested as it might be, the Prophet library cleverly implements some tricks to exploit calendar variation that enable much quicker fitting times and better performance with automated procedures. Splines and Fourier terms are cheap ways to extract signal from the data, and are much more affordable both in economic terms and in the environmental cost associated with computation. Smart feature engineering can beat complex models and bring scalability at these low levels.
+
 
 \chapter{References}
 \label{\detokenize{references:references}}\label{\detokenize{references::doc}}
@@ -2384,9 +2399,6 @@ Taylor, S. J., \& Letham, B. (2017). \sphinxstyleemphasis{Forecasting at scale} 
 \sphinxAtStartPar
 Wang, B., \& Kim, I. (2018). Short\sphinxhyphen{}term prediction for bike\sphinxhyphen{}sharing service using machine learning. \sphinxstyleemphasis{Transportation Research Procedia34}, 171–178. https://doi.org/10.1016/j.trpro.2018.11.029
 
-
-\section{Chapter 7}
-\label{\detokenize{references:chapter-7}}
 
 
 

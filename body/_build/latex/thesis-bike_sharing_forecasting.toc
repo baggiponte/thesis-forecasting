@@ -42,11 +42,11 @@
 \contentsline {section}{\numberline {6.4}Naïve Forecaster}{57}{section.6.4}%
 \contentsline {section}{\numberline {6.5}Univariate Time Series: Arima}{58}{section.6.5}%
 \contentsline {section}{\numberline {6.6}Unvariate Time Series: Prophet}{61}{section.6.6}%
-\contentsline {chapter}{\numberline {7}References}{63}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Chapter 1}{63}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Chapter 2}{65}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Chapter 3}{67}{section.7.3}%
-\contentsline {section}{\numberline {7.4}Chapter 4}{67}{section.7.4}%
-\contentsline {section}{\numberline {7.5}Chapter 5}{68}{section.7.5}%
-\contentsline {section}{\numberline {7.6}Chapter 6}{69}{section.7.6}%
-\contentsline {section}{\numberline {7.7}Chapter 7}{69}{section.7.7}%
+\contentsline {chapter}{\numberline {7}Conclusions}{63}{chapter.7}%
+\contentsline {chapter}{\numberline {8}References}{65}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Chapter 1}{65}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Chapter 2}{67}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Chapter 3}{69}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Chapter 4}{69}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Chapter 5}{70}{section.8.5}%
+\contentsline {section}{\numberline {8.6}Chapter 6}{71}{section.8.6}%

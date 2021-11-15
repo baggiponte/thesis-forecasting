@@ -1,3 +1,9 @@
-# FrontMatter
+# Acknowledgements
 
-Insert catchphrase
+Of course, these lines could not start without a mention to my supervisor, Prof. Giancarlo Manzi. I am grateful to him for his offer to work on this delicate topic, which allowed me to nurture my interest for modelling and statistics. The Professor supported me since the very beginning, providing aid and promptly answering my emails while also granting me the independence to research and explore Milan's BikeMi data and statistical methods.
+
+Many thanks to Marco Repetto, brilliant PhD candidate and data scientist at Siemens - my as my tutor in the optimisation course in Milan - who showed me the way to Python, data science and, more importantly, the open source software. Thanks to Paolo Maranzano, who - up to a certain extent - has been shadow-advisor, for his precious advice about time series.
+
+Thanks to Balázs for the meticulous effort in reviewing my drafts, as well as for the time spent together during the weekends at the Main Building of the European Central Bank, both working at our projects during the (not-so-crazy) hot and definitely sunny summer months. Thanks to Jeanne, Tosca, Raffaella and Anke and many more of the amazing people at the Directorate General Research, who never stopped cheering for me and trying to answer my doubts (or rants).
+
+This list is getting long - and should be longer, indeed - but this will likely be my last dissertation (at least for a while) and it would be a shame not to acknowledge the people who shared this journey with me. Chiara and Isabella became some of my closest friends, thanks to Trenord (coincidenze? Io non credo), and I must say the same of Veronica, Alessandra and Alessandro F. and Alessandro V., as well as Marvin and Max. Of course, being Italian, I came to terms with the fact that I need to play my role till the very end. So, finally: thanks to my parents, Cristina and Fulvio, who have never stopped believing in what I was doing, and have always provided me any means to do what was best for me. Thank you, Teresa (and brother and sisters and family) for putting up with my work and never leaving my side.
