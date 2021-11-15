@@ -903,7 +903,7 @@ To provide a more practical example, let us assume that there are four clusters,
 The main, if not only, hyperparameter to tune in \sphinxstyleemphasis{k}\sphinxhyphen{}Means is, indeed, the number of clusters.
 As most machine learning methods, \sphinxstyleemphasis{k}\sphinxhyphen{}Means is a quite old algorithm and has thus been widely studied.
 The first metric to look at is indeed the inertia, or \sphinxstyleemphasis{within\sphinxhyphen{}cluster sum\sphinxhyphen{}of\sphinxhyphen{}squares} (\(WSS\)), which is usually computed using the Euclidean norm:
-\label{equation:04-stations_kmeans:f7e3694c-3415-4224-8c96-2b755bc7e4eb}\begin{align}
+\label{equation:04-stations_kmeans:81745750-4070-4360-921e-34254ffe5636}\begin{align}
 & WSS = \sum_{i=0}^{n}\underset{\mu_{j}\in{C}}{min}(||x_{i} - \mu_{j}||^2)
 \end{align}
 \sphinxAtStartPar
@@ -917,7 +917,7 @@ These measures are computed for each set of data points and the labels assigned 
 
 \sphinxAtStartPar
 The Calinski\sphinxhyphen{}Harabasz Index is defined as:
-\label{equation:04-stations_kmeans:b18a2d85-93af-4b3d-8787-67593a382c79}\begin{align}
+\label{equation:04-stations_kmeans:7236fc86-f0c7-491b-9b76-7fb519d32501}\begin{align}
 & s = \frac{\mathrm{tr}(B_k)}{\mathrm{tr}(W_k)} \times \frac{n_E - k}{k - 1}
 \end{align}
 \sphinxAtStartPar
@@ -925,7 +925,7 @@ Where \(B_k\) is the dispersion between clusters and \(W_k\) is the one within c
 
 \sphinxAtStartPar
 Finally, the Davies\sphinxhyphen{}Bouldin index indicates a better separation between clusters the lower it is, and is computed as the average similarity across the two closer classes \(C_i\) and \(C_k\). The similarity measure between \(C_i\) and \(C_k\) is called \(R_{ij}\) and is defined as \(R_{ij} = \frac{s_i + s_j}{d_{ij}}\), where \(s\) is the average distance between each point of a cluster and its centre, and \$d\_\{ij\} is the distance between the two clusters’ centroids. The Davies\sphinxhyphen{}Bouldin index is thus formally defined as such:
-\label{equation:04-stations_kmeans:57753249-7bab-40bc-bba9-680132af5d50}\begin{align}
+\label{equation:04-stations_kmeans:462ce06e-60f7-4af3-a1f9-1b96040372bf}\begin{align}
 & DB = \frac{1}{k} \sum_{i=1}^k \max_{i \neq j} R_{ij}
 \end{align}
 \begin{sphinxuseclass}{cell}
@@ -1495,7 +1495,7 @@ The STL decomposition fits a much smoother trend, which we set to \sphinxcode{\s
 \label{\detokenize{05-time_series_analysis:correlation-analysis}}
 \sphinxAtStartPar
 Time series data is unique as the data points are not \(i.i.d.\) distributed. In other words, even if we can assume that the data comes from the same distribution (i.e., is \(i.d.\)), independence is not present. Data points are correlated across time: hence the definition \sphinxstyleemphasis{auto\sphinxhyphen{}correlation}. To explore time\sphinxhyphen{}dependencies structure, the auto\sphinxhyphen{}correlation function (ACF) and partial auto\sphinxhyphen{}correlation function (PACF) are used. We denote the sample autocorrelation at lag \(k\) by \(r_k\)
-\label{equation:05-time_series_analysis:0cfe26f2-8167-494f-9860-6328ad38e188}\begin{align}
+\label{equation:05-time_series_analysis:3e5a264e-c75f-4993-b3b3-9ecc4ae298f3}\begin{align}
 &r_k = \frac{\sum_{t=k+1}^T (y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^T (y_t-\bar{y})^2}
 \end{align}
 \sphinxAtStartPar
@@ -1677,13 +1677,13 @@ the (sum of) prediction error, defined as \(e_{t} = y_{t} - \hat{y}_{t}\). Often
 \label{\detokenize{06-forecasting:scale-dependent-metrics}}
 \sphinxAtStartPar
 The first and by far most popular error metrics are the mean absolute error (MAE) and the root mean squared error (RMSE). These are defined as such:
-\label{equation:06-forecasting:c16f73bd-3a84-4435-9db5-2b60948673fa}\begin{align}
+\label{equation:06-forecasting:3eeb7571-f7f8-4865-8f09-db29568783c2}\begin{align}
 &MAE = \frac{1}{n}\sum_{j = 1}^n \left| {{y_j} - {{\hat y}_j}} \right|\\
 &RMSE=\sqrt{\frac{1}{n}\sum_{j=1}^{n}(\hat{y}_{i}-y_{i})^{2}}\\
 \end{align}
 \sphinxAtStartPar
 These metrics are widely used, and virtually all papers in the literature employ either (MAE seems to be prevalent). Another “niche” metric is sometimes used: it is the root mean squared logarithmic error, or RMSLE. This is defined as:
-\label{equation:06-forecasting:2d9678ca-57bf-447e-8549-7bdce37b31d1}\begin{align}
+\label{equation:06-forecasting:8ab9ebe9-1bdf-435f-80b3-3bd488d0aeb5}\begin{align}
 &RMSLE =\sqrt{\frac{1}{n}\sum_{i=1}^{N}(log(\hat{y}_{i}+1)-\log(y_{i}+1))^{2}}
 \end{align}
 \sphinxAtStartPar
@@ -1697,7 +1697,7 @@ However, it is worth noting that “A forecast method that minimises the MAE wil
 \label{\detokenize{06-forecasting:percentage-metrics}}
 \sphinxAtStartPar
 The advantage of percentage errors is that they are unit\sphinxhyphen{}free and can be used to compare performance across different datasets. This case might be of our interst, since we might want to apply the same model architectures to the different time series of the stations. The most common percentage metric employed is the Mean absolute percentage error, or MAPE, which is defined as follows:
-\label{equation:06-forecasting:172ab603-4d81-43f3-a5c7-4c4a381b8be5}\begin{align}
+\label{equation:06-forecasting:dac7b920-6bd3-42e5-b359-577e052dd67d}\begin{align}
 &MAPE= \frac{1}{n}\sum_{i=1}^{n}\left\vert \frac{\hat{y}_{i}-y_{i}}{y_{i}}\right\vert
 \end{align}
 \sphinxAtStartPar
@@ -1705,13 +1705,13 @@ The disadvantage of MAPE is that it may involve divisions by zero, yielding unde
 
 \sphinxAtStartPar
 To circumvent this problem, Hyndman and Koheler (R. J. Hyndman \& Koehler, 2006) proposed to use \sphinxstyleemphasis{scaled} error metrics. Simply put, the MAE is computed and then is scaled by the \sphinxstyleemphasis{training} MAE of a simple forecast method. The scaled error \(q_j\) is defined as such:
-\label{equation:06-forecasting:4b05855a-eaa7-44d1-90d1-706e70effb3f}\begin{align}
+\label{equation:06-forecasting:3f804e78-13b2-4c43-99f4-45e7532df4de}\begin{align}
 q_{j} = \frac{\displaystyle e_{j}}
     {\displaystyle\frac{1}{T-1}\sum_{t=2}^T |y_{t}-y_{t-1}|}.
 \end{align}
 \sphinxAtStartPar
 And then the mean absolute scaled error (MASE) and root mean squared scaled error (RMSSE) are defined as such:
-\label{equation:06-forecasting:586f505a-92c7-4eeb-b319-6b33070d2699}\begin{align}
+\label{equation:06-forecasting:21f64f6f-597d-4ae4-912b-64936f7b252f}\begin{align}
 & MASE = \text{mean}(|q_{j}|) \\
 & RMSSE = \sqrt{\text{mean}(q_{j}^2)}
 \end{align}
@@ -1752,10 +1752,22 @@ As naive forecaster, we simply choose a seasonal model with periodicity set to 7
 
 \begin{sphinxuseclass}{cell}
 \begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{06-forecasting_7_0}.png}
+
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \begin{sphinxuseclass}{cell}
 \begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{cell_output}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+             0         1      2
+metrics    MAE      RMSE  RMSLE
+scores  87.165 14327.643  0.438
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -1772,6 +1784,169 @@ In order to find the best model, with the stepwise procedure the auto\sphinxhyph
 
 \begin{sphinxuseclass}{cell}
 \begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{cell_output}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+Performing stepwise search to minimize bic
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(0,0,0)(1,1,1)[7] intercept   : BIC=inf, Time=2.04 sec
+ ARIMA(0,0,0)(0,1,0)[7] intercept   : BIC=1199.065, Time=0.02 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,0)(1,1,0)[7] intercept   : BIC=1149.762, Time=2.51 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(0,0,1)(0,1,1)[7] intercept   : BIC=1174.342, Time=0.53 sec
+ ARIMA(0,0,0)(0,1,0)[7]             : BIC=1194.517, Time=0.02 sec
+ ARIMA(1,0,0)(0,1,0)[7] intercept   : BIC=1159.588, Time=0.12 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,0)(2,1,0)[7] intercept   : BIC=1151.659, Time=1.06 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,0)(1,1,1)[7] intercept   : BIC=1147.470, Time=3.10 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,0)(0,1,1)[7] intercept   : BIC=1144.159, Time=0.77 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,0)(0,1,2)[7] intercept   : BIC=1148.124, Time=1.08 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,0)(1,1,2)[7] intercept   : BIC=inf, Time=1.86 sec
+ ARIMA(0,0,0)(0,1,1)[7] intercept   : BIC=1203.499, Time=0.15 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,0)(0,1,1)[7] intercept   : BIC=1143.264, Time=0.49 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,0)(0,1,0)[7] intercept   : BIC=1159.172, Time=0.35 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,0)(1,1,1)[7] intercept   : BIC=1146.840, Time=0.96 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,0)(0,1,2)[7] intercept   : BIC=1147.451, Time=0.65 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,0)(1,1,0)[7] intercept   : BIC=1147.397, Time=0.45 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,0)(1,1,2)[7] intercept   : BIC=inf, Time=1.61 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(3,0,0)(0,1,1)[7] intercept   : BIC=1143.844, Time=0.62 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,1)(0,1,1)[7] intercept   : BIC=1145.108, Time=0.47 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(0,1,1)[7] intercept   : BIC=1140.630, Time=0.35 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(0,1,0)[7] intercept   : BIC=1158.056, Time=0.26 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(1,1,1)[7] intercept   : BIC=1144.211, Time=0.71 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(0,1,2)[7] intercept   : BIC=1144.747, Time=0.88 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(1,1,0)[7] intercept   : BIC=1145.720, Time=0.42 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(1,1,2)[7] intercept   : BIC=inf, Time=2.36 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,2)(0,1,1)[7] intercept   : BIC=1144.997, Time=0.64 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(0,0,2)(0,1,1)[7] intercept   : BIC=1168.529, Time=0.44 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,2)(0,1,1)[7] intercept   : BIC=1149.061, Time=0.87 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(0,1,1)[7]             : BIC=1136.084, Time=0.24 sec
+ ARIMA(1,0,1)(0,1,0)[7]             : BIC=1153.469, Time=0.08 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(1,1,1)[7]             : BIC=1139.604, Time=0.46 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(0,1,2)[7]             : BIC=1140.169, Time=0.67 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(1,1,0)[7]             : BIC=1141.157, Time=0.27 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,1)(1,1,2)[7]             : BIC=inf, Time=1.31 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(0,0,1)(0,1,1)[7]             : BIC=1169.792, Time=0.30 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,0)(0,1,1)[7]             : BIC=1139.541, Time=0.37 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,1)(0,1,1)[7]             : BIC=1140.564, Time=0.41 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(1,0,2)(0,1,1)[7]             : BIC=1140.453, Time=0.80 sec
+ ARIMA(0,0,0)(0,1,1)[7]             : BIC=1198.961, Time=0.15 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(0,0,2)(0,1,1)[7]             : BIC=1163.936, Time=0.32 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,0)(0,1,1)[7]             : BIC=1138.682, Time=0.36 sec
+\end{sphinxVerbatim}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+ ARIMA(2,0,2)(0,1,1)[7]             : BIC=1144.521, Time=0.48 sec
+
+Best model:  ARIMA(1,0,1)(0,1,1)[7]          
+Total fit time: 32.080 seconds
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
@@ -1779,10 +1954,18 @@ The auto\sphinxhyphen{}ARIMA procedure suggests a SARIMA(1,0,1)(0,1,1,7), using 
 
 \begin{sphinxuseclass}{cell}
 \begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{06-forecasting_12_0}.png}
+
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \begin{sphinxuseclass}{cell}
 \begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{06-forecasting_14_0}.png}
+
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
@@ -1790,6 +1973,14 @@ The ARIMA model follows the trend, but does not seem to catch the sudden spikes 
 
 \begin{sphinxuseclass}{cell}
 \begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{cell_output}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+              0         1      2
+metrics     MAE      RMSE  RMSLE
+scores  158.631 35406.785  0.782
+\end{sphinxVerbatim}
+
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -1812,6 +2003,10 @@ This makes it both flexible and dangerous: outside its domain, i.e. highly seaso
 
 \begin{sphinxuseclass}{cell}
 \begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{cell_output}
+\noindent\sphinxincludegraphics{{06-forecasting_19_0}.png}
+
+\end{sphinxuseclass}
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
@@ -1819,32 +2014,16 @@ The model clearly captures the trend dynamics and is quite quick in capturing th
 
 \begin{sphinxuseclass}{cell}
 \begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{cell_output}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+             0         1      2
+metrics    MAE      RMSE  RMSLE
+scores  76.110 10678.567  0.560
+\end{sphinxVerbatim}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\end{sphinxuseclass}
 
 \chapter{References}
 \label{\detokenize{references:references}}\label{\detokenize{references::doc}}
