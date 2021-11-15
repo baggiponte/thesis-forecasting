@@ -205,6 +205,19 @@
   howpublished = {http://www.catb.org/esr/writings/cathedral-bazaar/cathedral-bazaar/index.html\#catbmain}
 }
 
+@inproceedings{cerqueiraComparativeStudyPerformance2017,
+  title = {A {{Comparative Study}} of {{Performance Estimation Methods}} for {{Time Series Forecasting}}},
+  booktitle = {2017 {{IEEE International Conference}} on {{Data Science}} and {{Advanced Analytics}} ({{DSAA}})},
+  author = {Cerqueira, Vitor and Torgo, Luis and Smailovi{\'c}, Jasmina and Mozeti{\v c}, Igor},
+  year = {2017},
+  month = oct,
+  pages = {529--538},
+  doi = {10.1109/DSAA.2017.7},
+  abstract = {Performance estimation denotes a task of estimating the loss that a predictive model will incur on unseen data. These procedures are part of the pipeline in every machine learning task and are used for assessing the overall generalisation ability of models. In this paper we address the application of these methods to time series forecasting tasks. For independent and identically distributed data the most common approach is cross-validation. However, the dependency among observations in time series raises some caveats about the most appropriate way to estimate performance in these datasets and currently there is no settled way to do so. We compare different variants of cross-validation and different variants of out-of-sample approaches using two case studies: One with 53 real-world time series and another with three synthetic time series. Results show noticeable differences in the performance estimation methods in the two scenarios. In particular, empirical experiments suggest that cross-validation approaches can be applied to stationary synthetic time series. However, in real-world scenarios the most accurate estimates are produced by the out-of-sample methods, which preserve the temporal order of observations.},
+  keywords = {cross validation,Data models,Estimation,Forecasting,model selection,performance estimation,Predictive models,time series,Time series analysis,Training},
+  file = {/Users/luca/Zotero/storage/RJPY9WE9/8259815.html}
+}
+
 @article{CheAriaRespiriamo2021,
   title = {Che Aria Respiriamo},
   year = {2021},
@@ -242,6 +255,19 @@
   doi = {10.1007/s10109-011-0149-5},
   abstract = {Modelling autocorrelation structure among space\textendash time observations is crucial in space\textendash time modelling and forecasting. The aim of this research is to examine the spatio-temporal autocorrelation structure of road networks in order to determine likely requirements for building a suitable space\textendash time forecasting model. Exploratory space\textendash time autocorrelation analysis is carried out using journey time data collected on London's road network. Through the use of both global and local autocorrelation measures, the autocorrelation structure of the road network is found to be dynamic and heterogeneous in both space and time. It reveals that a global measure of autocorrelation is not sufficient to explain the network structure. Dynamic and local structures must be accounted for space\textendash time modelling and forecasting. This has broad implications for space\textendash time modelling and network complexity.},
   langid = {english}
+}
+
+@inproceedings{chenPredictionStationLevel2017,
+  title = {Prediction of {{Station Level Demand}} in a {{Bike Sharing System Using Recurrent Neural Networks}}},
+  booktitle = {2017 {{IEEE}} 85th {{Vehicular Technology Conference}} ({{VTC Spring}})},
+  author = {Chen, Po-Chuan and Hsieh, He-Yen and Sigalingging, Xanno Kharis and Chen, Yan-Ru and Leu, Jenq-Shiou},
+  year = {2017},
+  month = jun,
+  pages = {1--5},
+  doi = {10.1109/VTCSpring.2017.8108575},
+  abstract = {Bike sharing systems have been widely applied to many cities and brought convenience to local citizens for short-ranged transportation. The bike shortage problem due to uneven bikes distribution is one of the biggest challenges in bike sharing systems. In this paper, we focus on station level prediction for each bike station. The proposed architecture is based on Recurrent Neural Network (RNN) and we use only one model to predict both rental and return demand for every station at once which is efficient for online balancing strategies. Without considering the global level bike distribution, the MAPE/RMSLE of the sum over the demand of each station may be too high for rebalancing strategies but the MAE/RMSE are satisficing at station level. Our evaluation shows that the proposed methods meet satisfied results at station level and global level in New York Citi Bike dataset.},
+  keywords = {Backpropagation,Computer architecture,Feedforward neural networks,Logic gates,Meteorology,Recurrent neural networks,Temperature distribution},
+  file = {/Users/luca/Zotero/storage/LUJ77VMT/8108575.html}
 }
 
 @article{chenWeChatUseChinese2017,
@@ -677,6 +703,33 @@
   keywords = {AQI,COVID-19,Lockdown,NO,O,PM}
 }
 
+@article{loningSktimeUnifiedInterface2019,
+  title = {Sktime: A {{Unified Interface}} for {{Machine Learning}} with {{Time Series}}},
+  shorttitle = {Sktime},
+  author = {L{\"o}ning, M. and Bagnall, A. and Ganesh, Sajaysurya and Kazakov, V. and Lines, J. and Kir{\'a}ly, F.},
+  year = {2019},
+  journal = {ArXiv},
+  abstract = {We present sktime -- a new scikit-learn compatible Python library with a unified interface for machine learning with time series. Time series data gives rise to various distinct but closely related learning tasks, such as forecasting and time series classification, many of which can be solved by reducing them to related simpler tasks. We discuss the main rationale for creating a unified interface, including reduction, as well as the design of sktime's core API, supported by a clear overview of common time series tasks and reduction approaches.}
+}
+
+@article{lozanoMultiAgentSystemDemand2018,
+  title = {Multi-{{Agent System}} for {{Demand Prediction}} and {{Trip Visualization}} in {{Bike Sharing Systems}}},
+  author = {Lozano, {\'A}lvaro and De Paz, Juan F. and Villarrubia Gonz{\'a}lez, Gabriel and Iglesia, Daniel H. De La and Bajo, Javier},
+  year = {2018},
+  month = jan,
+  journal = {Applied Sciences},
+  volume = {8},
+  number = {1},
+  pages = {67},
+  publisher = {{Multidisciplinary Digital Publishing Institute}},
+  doi = {10.3390/app8010067},
+  abstract = {This paper proposes a multi agent system that provides visualization and prediction tools for bike sharing systems (BSS). The presented multi-agent system includes an agent that performs data collection and cleaning processes, it is also capable of creating demand forecasting models for each bicycle station. Moreover, the architecture offers API (Application Programming Interface) services and provides a web application for visualization and forecasting. This work aims to make the system generic enough for it to be able to integrate data from different types of bike sharing systems. Thus, in future studies it will be possible to employ the proposed system in different types of bike sharing systems. This article contains a literature review, a section on the process of developing the system and the built-in prediction models. Moreover, a case study which validates the proposed system by implementing it in a public bicycle sharing system in Salamanca, called SalenBici. It also includes an outline of the results and conclusions, a discussion on the challenges encountered in this domain, as well as possibilities for future work.},
+  copyright = {http://creativecommons.org/licenses/by/3.0/},
+  langid = {english},
+  keywords = {bike sharing systems (BSS),data visualization,multi agent systems,open data,organizations and institutions,regression models,socio-technical systems},
+  file = {/Users/luca/Zotero/storage/N74GD3B8/htm.html}
+}
+
 @article{maChallengesCollaborativeGovernance2018,
   title = {Challenges of Collaborative Governance in the Sharing Economy: The Case of Free-Floating Bike Sharing in {{Shanghai}}},
   shorttitle = {Challenges of Collaborative Governance in the Sharing Economy},
@@ -923,6 +976,15 @@
   doi = {10.1289/EHP3754}
 }
 
+@article{scikit-learn,
+  title = {Scikit-Learn: Machine Learning in {{Python}}},
+  author = {Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V. and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P. and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},
+  year = {2011},
+  journal = {Journal of Machine Learning Research},
+  volume = {12},
+  pages = {2825--2830}
+}
+
 @inproceedings{seabold2010statsmodels,
   title = {Statsmodels: Econometric and Statistical Modeling with Python},
   booktitle = {9th Python in Science Conference},
@@ -1101,18 +1163,21 @@
   keywords = {Benefit,Company performance,Digitalization,Listed company,Obstacle}
 }
 
-@article{xuStationfreeSharingBike2018,
-  title = {The Station-Free Sharing Bike Demand Forecasting with a Deep Learning Approach and Large-Scale Datasets},
-  author = {Xu, Chengcheng and Ji, Junyi and Liu, Pan},
+@article{wangShorttermPredictionBikesharing2018,
+  title = {Short-Term Prediction for Bike-Sharing Service Using Machine Learning},
+  author = {Wang, Bo and Kim, Inhi},
   year = {2018},
-  month = oct,
-  journal = {Transportation Research Part C: Emerging Technologies},
-  volume = {95},
-  pages = {47--60},
-  issn = {0968-090X},
-  doi = {10.1016/j.trc.2018.07.013},
+  month = jan,
+  journal = {Transportation Research Procedia},
+  series = {International {{Symposium}} of {{Transport Simulation}} ({{ISTS}}'18) and the {{International Workshop}} on {{Traffic Data Collection}} and Its {{Standardization}} ({{IWTDCS}}'18){{Emerging Transport Technologies}} for {{Next Generation Mobility}}},
+  volume = {34},
+  pages = {171--178},
+  issn = {2352-1465},
+  doi = {10.1016/j.trpro.2018.11.029},
+  abstract = {The bike-sharing service has brought many conveniences to citizens and served as an effective supplement to the mass transit system. For docked bike-sharing service, each docking station has the designated location to store bikes and the station could be empty or saturated in different times. Bike-sharing operators generally redistribute bikes between stations by driving trucks according to their experiences which might lead unnecessary human resources It is ineffective for the operators and inconvenient for users to access this service. Therefore, predicting an accurate number of available bikes in the stations is important for both the operators and users. This paper mainly focuses on the short-term forecasting for docking station usage in a case of Suzhou, China. Two latest and highly efficient models here, LSTM and GRU, are adopted to predict the short-term available number of bikes in docking stations with one-month historical data. Random Forest is used to compare as a benchmark. The results show that both RNNs (LSTM and GRU) and Random Forest able to achieve good performance with acceptable error and comparative accuracies. Random forest is more advantageous in terms of training time while LSTM with complex structures can predict better for the long term. The maximum difference between the real data and the predicted value is only 1 or 2 bikes, which supports the developed models are practically ready to use.},
   langid = {english},
-  keywords = {Big data,Bike sharing,Deep learning,Long short-term memory networks,Sharing mobility,Station-free bike sharing,Travel demand forecasting}
+  keywords = {bike-sharing,random forest,RNN (recurrent neural networks),short-term forecasting},
+  file = {/Users/luca/Zotero/storage/T4AG2QRE/S2352146518303181.html}
 }
 
 @article{xuStationfreeSharingBike2018a,
@@ -1129,6 +1194,22 @@
   langid = {english},
   keywords = {Big data,Bike sharing,Deep learning,Long short-term memory networks,Sharing mobility,Station-free bike sharing,Travel demand forecasting},
   file = {/Users/luca/Zotero/storage/IBP9QLU5/S0968090X18306764.html}
+}
+
+@article{yangUseDeepLearning2018,
+  title = {Use of {{Deep Learning}} to {{Predict Daily Usage}} of {{Bike Sharing Systems}}},
+  author = {Yang, Hong and Xie, Kun and Ozbay, Kaan and Ma, Yifang and Wang, Zhenyu},
+  year = {2018},
+  month = dec,
+  journal = {Transportation Research Record},
+  volume = {2672},
+  number = {36},
+  pages = {92--102},
+  publisher = {{SAGE Publications Inc}},
+  issn = {0361-1981},
+  doi = {10.1177/0361198118801354},
+  abstract = {The use of bikes among stations is often spatiotemporally imbalanced, causing many problems in daily operations. Predictively knowing how the system demand evolves in advance helps improve the preparedness of operational schemes. This paper aims to present a predictive modeling approach to analyze the use of bicycles in bike sharing systems. Specifically, a deep learning (DL) approach using the convolutional neural networks (CNNs) was proposed to predict the daily bicycle pickups at both city and station levels. A numerical study using data from the Citi Bike system in New York City (NYC) was performed to assess the performance of the proposed approach. Other than the historical records, relevant information like weather was also incorporated in the modeling process. The modeling results show that the proposed approach can achieve improved predictive performance in both city- and station-level analyses, confirming the merits of the proposed method against other baseline approaches. In addition, including information from neighboring stations into the models can help improve the performance of station-level prediction. The predictive performance of the CNN was also found to be related to parameters such as temporal window, number of neighboring stations, learning ratio, patch size, and the inclusion of additional data such as drop-offs. Thus, the implementation of the proposed models requires necessary calibration to determine appropriate parameters for a given bike sharing system.},
+  langid = {english}
 }
 
 @article{zhangBikeAllocationStrategies2019,
