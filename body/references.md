@@ -218,4 +218,24 @@ Xu, C., Ji, J., &#38; Liu, P. (2018). The station-free sharing bike demand forec
 
 ## Chapter 6
 
+ Chen, P.-C., Hsieh, H.-Y., Sigalingging, X. K., Chen, Y.-R., &#38; Leu, J.-S. (2017). Prediction of Station Level Demand in a Bike Sharing System Using Recurrent Neural Networks. *2017 IEEE 85th Vehicular Technology Conference (VTC Spring)*, 1–5. https://doi.org/10.1109/VTCSpring.2017.8108575
+
+ Hamad, S. Y. Y., Ma, T., &#38; Antoniou, C. (2021). Analysis and Prediction of Bikesharing Traffic Flow – Citi Bike, New York. *2021 7th International Conference on Models and Technologies for Intelligent Transportation Systems (MT-ITS)*, 1–8. https://doi.org/10.1109/MT-ITS49943.2021.9529290
+
+ Hyndman, R., &#38; Athanasopoulos, G. (2021). *Forecasting: Principles and Practice*. https://research.monash.edu/en/publications/forecasting-principles-and-practice-3
+
+ Hyndman, R. J. (2020). A brief history of forecasting competitions. *International Journal of Forecasting36*(1), 7–14. https://doi.org/10.1016/j.ijforecast.2019.03.015
+
+ Hyndman, R. J., &#38; Khandakar, Y. (2008). Automatic Time Series Forecasting: The forecast Package for R. *Journal of Statistical Software27*, 1–22. https://doi.org/10.18637/jss.v027.i03
+
+ Hyndman, R. J., &#38; Koehler, A. B. (2006). Another look at measures of forecast accuracy. *International Journal of Forecasting22*(4), 679–688. https://doi.org/10.1016/j.ijforecast.2006.03.001
+
+ Lozano, Á., De Paz, J. F., Villarrubia González, G., Iglesia, D. H. D. L., &#38; Bajo, J. (2018). Multi-Agent System for Demand Prediction and Trip Visualization in Bike Sharing Systems. *Applied Sciences8*(1), 67. https://doi.org/10.3390/app8010067
+
+ Smith, T. G., &#38; others. (2017). *pmdarima*. http://www.alkaline-ml.com/pmdarima
+
+ Taylor, S. J., &#38; Letham, B. (2017). *Forecasting at scale* (e3190v2). PeerJ Inc. https://doi.org/10.7287/peerj.preprints.3190v2
+
+ Wang, B., &#38; Kim, I. (2018). Short-term prediction for bike-sharing service using machine learning. *Transportation Research Procedia34*, 171–178. https://doi.org/10.1016/j.trpro.2018.11.029
+
 ## Chapter 7

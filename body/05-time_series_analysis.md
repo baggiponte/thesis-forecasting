@@ -285,13 +285,13 @@ hourly_rentals.pipe(plot_series, "Porta Ticinese - Conca Del Naviglio - 20")
 hourly_rentals.pipe(plot_series, "Porta Ticinese - Conca Del Naviglio - 31")
 ```
 
-+++ {"tags": [], "citation-manager": {"citations": {"mpg0p": [{"id": "7765261/XHX7DVAI", "source": "zotero"}], "lhreq": [{"id": "7765261/NF5NTFPJ", "source": "zotero"}], "xygcf": [{"id": "7765261/TGWZPY5K", "source": "zotero"}], "n2fvn": [{"id": "7765261/AV7Y8QLN", "source": "zotero"}], "8bjge": [{"id": "7765261/N9UYFCCB", "source": "zotero"}], "yid5b": [{"id": "7765261/N9UYFCCB", "source": "zotero"}], "dop97": [{"id": "7765261/XAXEHQ4L", "source": "zotero"}], "lta8j": [{"id": "7765261/XAXEHQ4L", "source": "zotero"}], "9r4ua": [{"id": "7765261/AZASRXQL", "source": "zotero"}], "470kq": [{"id": "7765261/A98ZAEJ7", "source": "zotero"}], "pok2i": [{"id": "7765261/6UPFA24A", "source": "zotero"}]}}}
++++ {"citation-manager": {"citations": {"470kq": [{"id": "7765261/A98ZAEJ7", "source": "zotero"}], "8bjge": [{"id": "7765261/N9UYFCCB", "source": "zotero"}], "9r4ua": [{"id": "7765261/AZASRXQL", "source": "zotero"}], "dop97": [{"id": "7765261/XAXEHQ4L", "source": "zotero"}], "lhreq": [{"id": "7765261/NF5NTFPJ", "source": "zotero"}], "lta8j": [{"id": "7765261/XAXEHQ4L", "source": "zotero"}], "mpg0p": [{"id": "7765261/XHX7DVAI", "source": "zotero"}], "n2fvn": [{"id": "7765261/AV7Y8QLN", "source": "zotero"}], "pok2i": [{"id": "7765261/6UPFA24A", "source": "zotero"}], "xygcf": [{"id": "7765261/TGWZPY5K", "source": "zotero"}], "yid5b": [{"id": "7765261/N9UYFCCB", "source": "zotero"}]}}, "tags": []}
 
 This heterogeneity is what Chen and his coauthors <cite id="mpg0p">(Chen et al., 2016)</cite> refer to as *opportunistic contextual factors*. From these figures we can also clearly identify the *common contextual factors*: between the 13th and 15th of October, the demand decreases significantly across every station. This was due because of heavier rain than usual being expected for the day - between 20mm and 30mm.
 
 ## Last Aggregations and Time Series Decomposition
 
-Before proceeding, however, data is further aggregated at daily level. Daily forecasts can be of lesser usefulness for bike-sharing services (BSS) managers, especially to those who implement dynamic rebalancing, i.e. redistribute bikes during the day. Daily forecasts are still employed in the literature <cite id="lhreq">(Cantelmo et al., 2020)</cite>, while smaller and mixed time-intervals are more frequent especially in deep-learing approaches: either hourly <cite id="xygcf">(Ai et al., 2019)</cite> or even in 10, 15, 20 and 30 minutes intervals <cite id="n2fvn">(Xu et al., 2018)</cite>. Sometimes, even daily and hourly forecasts are developed <cite id="8bjge">(Salaken et al., 2015)</cite>.
+Before proceeding, however, data is further aggregated at daily level. Daily forecasts can be of lesser usefulness for bike-sharing services (BSS) managers, especially to those who implement dynamic rebalancing, i.e. redistribute bikes during the day. Daily forecasts are still employed in the literature <cite id="lhreq">(Cantelmo et al., 2020)</cite>, while smaller and mixed time-intervals are more frequent especially in deep-learning approaches: either hourly <cite id="xygcf">(Ai et al., 2019)</cite> or even in 10, 15, 20 and 30 minutes intervals <cite id="n2fvn">(Xu et al., 2018)</cite>. Daily forecasts are still used even with deep learning models (Use of deep learning..) and sometimes, daily and hourly forecasts are used at the same time <cite id="8bjge">(Salaken et al., 2015)</cite>.
 
 In this last paper, the authors employ a fuzzy inference mechanism to forecast demand, with a dataset with two years worth of observations. The authors find that a fuzzy inference mechanism can outperform a long short-term memory neural network (LSTM NN) "without performing any optimization on either FLS [Fuzzy Logic System] parameters or neural network parameters", but admit that a better tuned LSTM might still be better. More importantly, however, the authors note that "one out of every six samples is taken into consideration for hourly forecast to reduce the forecasting time" <cite id="yid5b">(Salaken et al., 2015)</cite>.
 
@@ -351,7 +351,7 @@ def retrieve_daily_data(connection, wide: bool = False) -> pd.DataFrame:
 daily_rentals: pd.DataFrame = retrieve_daily_data(conn, wide=True)
 ```
 
-+++ {"pycharm": {"name": "#%% md\n"}, "citation-manager": {"citations": {"ecnzm": [{"id": "7765261/Y6KTLUAA", "source": "zotero"}], "1vo8j": [{"id": "7765261/JZFSWWKG", "source": "zotero"}]}}, "tags": []}
++++ {"citation-manager": {"citations": {"1vo8j": [{"id": "7765261/JZFSWWKG", "source": "zotero"}], "ecnzm": [{"id": "7765261/Y6KTLUAA", "source": "zotero"}]}}, "pycharm": {"name": "#%% md\n"}, "tags": []}
 
 ## Seasonal Decomposition
 
@@ -451,7 +451,7 @@ tags: [hide-input]
 daily_rentals.pipe(decompose_series, "Brera - 25", period=30)
 ```
 
-+++ {"pycharm": {"name": "#%% md\n"}, "citation-manager": {"citations": {"9w2x6": [{"id": "7765261/Y6KTLUAA", "source": "zotero"}], "8uj4a": [{"id": "7765261/FCTBRGBQ", "source": "zotero"}], "7m1hc": [{"id": "7765261/FCTBRGBQ", "source": "zotero"}]}}, "tags": []}
++++ {"citation-manager": {"citations": {"7m1hc": [{"id": "7765261/FCTBRGBQ", "source": "zotero"}], "8uj4a": [{"id": "7765261/FCTBRGBQ", "source": "zotero"}], "9w2x6": [{"id": "7765261/Y6KTLUAA", "source": "zotero"}]}}, "pycharm": {"name": "#%% md\n"}, "tags": []}
 
 ### Advanced Decomposition
 
@@ -499,7 +499,10 @@ The STL decomposition fits a much smoother trend, which we set to `31` to captur
 
 Time series data is unique as the data points are not $i.i.d.$ distributed. In other words, even if we can assume that the data comes from the same distribution (i.e., is $i.d.$), independence is not present. Data points are correlated across time: hence the definition *auto-correlation*. To explore time-dependencies structure, the auto-correlation function (ACF) and partial auto-correlation function (PACF) are used. We denote the sample autocorrelation at lag $k$ by $r_k$
 
-$$r_k = \frac{\sum_{t=k+1}^T (y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^T (y_t-\bar{y})^2}$$
+\begin{align}
+&r_k = \frac{\sum_{t=k+1}^T (y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^T (y_t-\bar{y})^2}
+\end{align}
+
 
 However, the autocorrelation between to points at $k$ lags of distance might simply be due both points being connected by the same "chain" of intermediate values $y_{t-1}$ to $y_{t-(k+1)}$, rather than because of any new information contained in  $y_k$  that could be used to forecast $y_t$. This problem is solved via the PACF, which - simply put - estimates an autoregressive models (i.e., a linear regression fit only on the lags) and returns the coefficient of the $k$th component.
 
@@ -641,7 +644,7 @@ def plot_double_differences(data: pd.DataFrame, col: str, lag=None,
 plot_double_differences(daily_rentals, "Brera - 25", color=sns_c[3])
 ```
 
-+++ {"tags": [], "citation-manager": {"citations": {"upeh9": [{"id": "7765261/6RAPS9W8", "source": "zotero"}], "mrcq5": [{"id": "7765261/82M2DAFE", "source": "zotero"}]}}}
++++ {"citation-manager": {"citations": {"mrcq5": [{"id": "7765261/82M2DAFE", "source": "zotero"}], "upeh9": [{"id": "7765261/6RAPS9W8", "source": "zotero"}]}}, "tags": []}
 
 ### Testing for Stationarity
 
