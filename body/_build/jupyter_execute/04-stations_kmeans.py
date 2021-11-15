@@ -83,9 +83,9 @@ nils: geopandas.GeoDataFrame = (
 # As most machine learning methods, *k*-Means is a quite old algorithm and has thus been widely studied.
 # The first metric to look at is indeed the inertia, or *within-cluster sum-of-squares* ($WSS$), which is usually computed using the Euclidean norm:
 # 
-# $$
-# \sum_{i=0}^{n}\underset{\mu_{j}\in{C}}{min}(||x_{i} - \mu_{j}||^2)
-# $$
+# \begin{align}
+# & WSS = \sum_{i=0}^{n}\underset{\mu_{j}\in{C}}{min}(||x_{i} - \mu_{j}||^2)
+# \end{align}
 # 
 # Other norms can be used; however, some other performance metrics can only be calculated with the Euclidean distance. While clustering is usually presented as an unsupervised machine-learning technique, a first set of metrics is actually computed comparing the clustering with the ground truths. This is necessary because the evaluation metrics should not take into account the absolute number of clusters, yet if this clustering defines "separations of the data similar to some ground truth set of classes" <cite id="pdryw">(<i>Clustering</i>, n.d.)</cite>.
 # 
@@ -95,17 +95,17 @@ nils: geopandas.GeoDataFrame = (
 # 
 # The Calinski-Harabasz Index is defined as:
 # 
-# $$
-# s = \frac{\mathrm{tr}(B_k)}{\mathrm{tr}(W_k)} \times \frac{n_E - k}{k - 1}
-# $$
+# \begin{align}
+# & s = \frac{\mathrm{tr}(B_k)}{\mathrm{tr}(W_k)} \times \frac{n_E - k}{k - 1}
+# \end{align}
 # 
 # Where $B_k$ is the dispersion between clusters and $W_k$ is the one within clusters and $n$ is the number of observations in the dataset $E$. Because of this, the index is a raw number (i.e., it is not normalised between, say, $0$ and $1$). Since we want the clusters to be as far apart as possible and the points inside to be as close as possible, we will choose $K$ such as it maximises the Calinski-Harabasz index.
 # 
 # Finally, the Davies-Bouldin index indicates a better separation between clusters the lower it is, and is computed as the average similarity across the two closer classes $C_i$ and $C_k$. The similarity measure between $C_i$ and $C_k$ is called $R_{ij}$ and is defined as $R_{ij} = \frac{s_i + s_j}{d_{ij}}$, where $s$ is the average distance between each point of a cluster and its centre, and $d_{ij} is the distance between the two clusters' centroids. The Davies-Bouldin index is thus formally defined as such:
 # 
-# $$
-# DB = \frac{1}{k} \sum_{i=1}^k \max_{i \neq j} R_{ij}
-# $$
+# \begin{align}
+# & DB = \frac{1}{k} \sum_{i=1}^k \max_{i \neq j} R_{ij}
+# \end{align}
 
 # In[2]:
 

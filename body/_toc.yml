@@ -11,4 +11,5 @@ chapters:
   - file: 03-data_ingestion_and_spatial_operations
   - file: 04-stations_kmeans
   - file: 05-time_series_analysis
-  - file: references.md
+  - file: 06-forecasting
+  - file: references

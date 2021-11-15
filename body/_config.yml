@@ -10,7 +10,7 @@ only_build_toc_files: true
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: cache
-  timeout: 120
+  timeout: 1200
 
 parse:
   myst_enable_extensions:
