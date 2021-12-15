@@ -26,13 +26,13 @@
 \contentsline {section}{\numberline {4.3}Fitting \sphinxstyleemphasis {k}\sphinxhyphen {}Means on BikeMi Stalls Geographic Data}{31}{section.4.3}%
 \contentsline {chapter}{\numberline {5}Time Series Analysis}{41}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Time Series Analysis}{42}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Last Aggregations and Time Series Decomposition}{45}{section.5.2}%
+\contentsline {section}{\numberline {5.2}Last Aggregations and Time Series Decomposition}{44}{section.5.2}%
 \contentsline {subsection}{\numberline {5.2.1}Time Aggregation Implementation}{45}{subsection.5.2.1}%
-\contentsline {section}{\numberline {5.3}Seasonal Decomposition}{46}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Advanced Decomposition}{49}{subsection.5.3.1}%
-\contentsline {section}{\numberline {5.4}Correlation Analysis}{51}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Differencing}{51}{section.5.5}%
-\contentsline {subsection}{\numberline {5.5.1}Testing for Stationarity}{53}{subsection.5.5.1}%
+\contentsline {section}{\numberline {5.3}Seasonal Decomposition}{45}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Advanced Decomposition}{48}{subsection.5.3.1}%
+\contentsline {section}{\numberline {5.4}Correlation Analysis}{50}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Differencing}{50}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}Testing for Stationarity}{52}{subsection.5.5.1}%
 \contentsline {chapter}{\numberline {6}Demand Forecasting}{55}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Type of Forecast and Benchmark Model}{55}{section.6.1}%
 \contentsline {section}{\numberline {6.2}Metrics}{55}{section.6.2}%
@@ -41,7 +41,7 @@
 \contentsline {section}{\numberline {6.3}Cross Validation}{57}{section.6.3}%
 \contentsline {section}{\numberline {6.4}Naïve Forecaster}{57}{section.6.4}%
 \contentsline {section}{\numberline {6.5}Univariate Time Series: Arima}{58}{section.6.5}%
-\contentsline {section}{\numberline {6.6}Unvariate Time Series: Prophet}{61}{section.6.6}%
+\contentsline {section}{\numberline {6.6}Unvariate Time Series: Prophet}{62}{section.6.6}%
 \contentsline {chapter}{\numberline {7}Conclusions}{63}{chapter.7}%
 \contentsline {chapter}{\numberline {8}References}{65}{chapter.8}%
 \contentsline {section}{\numberline {8.1}Chapter 1}{65}{section.8.1}%

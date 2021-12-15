@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: A Comparison of Forecasting Techniques in Bike Sharing Services
+title: A Comparison of Forecasting Techniques for Bike Sharing Demand 
 author: Luca Baggi
 logo: logo_tesi_unimi_spes.jpg
 only_build_toc_files: true

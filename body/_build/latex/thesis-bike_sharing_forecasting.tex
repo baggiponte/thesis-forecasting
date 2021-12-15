@@ -83,8 +83,8 @@
         % End of preamble defined in sphinx-jupyterbook-latex %
         
 
-\title{A Comparison of Forecasting Techniques in Bike Sharing Services}
-\date{Nov 16, 2021}
+\title{A Comparison of Forecasting Techniques for Bike Sharing Demand}
+\date{Dec 15, 2021}
 \release{}
 \author{Luca Baggi}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -101,16 +101,16 @@
 
 
 \sphinxAtStartPar
-Of course, these lines could not start without a mention to my supervisor, Prof. Giancarlo Manzi. I am grateful to him for his offer to work on this delicate topic, which allowed me to nurture my interest for modelling and statistics. The Professor supported me since the very beginning, providing aid and promptly answering my emails while also granting me the independence to research and explore Milan’s BikeMi data and statistical methods.
+Of course, this page could not start without a proper mention to my supervisor, Prof. Giancarlo Manzi. I am grateful to him for his offer to work on this delicate topic, allowing me to nurture my interest for sustainability and statistical modelling. Prof. Manzi supported me since the very beginning of this project, providing aid and promptly answering my requests \sphinxhyphen{} while also granting me the independence to research and explore Milan’s BikeMi data and statistical methods.
 
 \sphinxAtStartPar
-Many thanks to Marco Repetto, brilliant PhD candidate and data scientist at Siemens \sphinxhyphen{} my as my tutor in the optimisation course in Milan \sphinxhyphen{} who showed me the way to Python, data science and, more importantly, the open source software. Thanks to Paolo Maranzano, who \sphinxhyphen{} up to a certain extent \sphinxhyphen{} has been shadow\sphinxhyphen{}advisor, for his precious advice about time series.
+Many thanks to Marco Repetto, brilliant PhD candidate and data scientist at Siemens \sphinxhyphen{} who I first met as teaching assistant and ended up to be my advisor for this project. Marco showed me the way to Python and \sphinxhyphen{} more broadly \sphinxhyphen{} open source software, which are the best (if not the only tool) to ensure open science and truly reproducible and accessible research. Thanks to Paolo Maranzano, who \sphinxhyphen{} up to a certain extent \sphinxhyphen{} has been shadow\sphinxhyphen{}advisor, for his precious advice about time series.
 
 \sphinxAtStartPar
 Thanks to Balázs for the meticulous effort in reviewing my drafts, as well as for the time spent together during the weekends at the Main Building of the European Central Bank, both working at our projects during the (not\sphinxhyphen{}so\sphinxhyphen{}crazy) hot and definitely sunny summer months. Thanks to Jeanne, Tosca, Raffaella and Anke and many more of the amazing people at the Directorate General Research, who never stopped cheering for me and trying to answer my doubts (or rants).
 
 \sphinxAtStartPar
-This list is getting long \sphinxhyphen{} and should be longer, indeed \sphinxhyphen{} but this will likely be my last dissertation (at least for a while) and it would be a shame not to acknowledge the people who shared this journey with me. Chiara and Isabella became some of my closest friends, thanks to Trenord (coincidenze? Io non credo), and I must say the same of Veronica, Alessandra and Alessandro F. and Alessandro V., as well as Marvin and Max. Of course, being Italian, I came to terms with the fact that I need to play my role till the very end. So, finally: thanks to my parents, Cristina and Fulvio, who have never stopped believing in what I was doing, and have always provided me any means to do what was best for me. Thank you, Teresa (and brother and sisters and family) for putting up with my work and never leaving my side.
+This list is getting long \sphinxhyphen{} and should be longer, indeed \sphinxhyphen{} but this will likely be my last dissertation (at least for a while) and it would be a shame not to acknowledge the people who shared this journey with me. Chiara and Isabella became some of my closest friends, partly because of the time spent together while Trenord was late (\sphinxstyleemphasis{coincidenze? Io non credo}) \sphinxhyphen{} but I must say the same of Veronica, Alessandra, Alessandro F. and Alessandro V., as well as Marvin and Max. Of course, being Italian, I came to terms with the fact that I need to play my role till the very end. So, finally: thanks to my parents, Cristina and Fulvio, who I have always looked up to and who have always wanted the best for me. Thank you, Teresa, for putting up with my work and for always being at my side.
 
 
 \chapter{Introduction}
@@ -347,7 +347,8 @@ Through spatial analysis, the researchers confirm that traffic flows from the pe
 The data was made available thanks to a partnership established by Prof. Giancarlo Manzi of the University of Milan and Clear Channel Italia, the provider of the service. The data is comprised of all the individual trips performed by each client (\sphinxcode{\sphinxupquote{cliente\_anonimizzato}}). This includes the bike type (which can either be a regular bike or an electric bike), the bike identifier, the station of departure and arrival with the time, the duration of the trip \sphinxcode{\sphinxupquote{durata\_noleggio}} plus the total travel distance. We do not know how the total travel distance \sphinxcode{\sphinxupquote{distanza\_totale}} is computed. Here are a selection of fields for the first five rows of the source data (time features are rounded to the daily level to fit into the page):
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
     bici tipo\PYGZus{}bici  cliente\PYGZus{}anonimizzato giorno\PYGZus{}prelievo  \PYGZbs{}
@@ -365,7 +366,8 @@ The data was made available thanks to a partnership established by Prof. Giancar
 4                  XXV Aprile          2015\PYGZhy{}07\PYGZhy{}01              Sant\PYGZsq{}Ambrogio  
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
@@ -381,7 +383,8 @@ The Rust port of \sphinxcode{\sphinxupquote{csvkit}} is called \sphinxhref{https
 Finally, \sphinxcode{\sphinxupquote{psql}} (PostgreSQL”s command line utility) was used to upload the “clean” data into a local database instance. PostgreSQL was also used to perform basic survey statistics, like computing the number of rows, and data aggregation (such as counting the number of observations by year). Looking at the frequency tables by year, there appears to be an oddly small number of observations from 2018. This is because there is indeed missing data from June 2018 until the end of the year. For this reason, we chose to work only with data from June 2015 to the end of May 2018.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
         count
@@ -394,7 +397,8 @@ date
 2020  1243540
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -437,18 +441,21 @@ In addition to selecting only trips from June 2015 to June 2018, we also disrega
 The service has almost two\sphinxhyphen{}hundred thousands unique subscribers in the time period. For the years 2016 and 2017, the only ones for which we have complete data, the number of subscribers is almost a hundred thousand. By lookind at the unique subscribers for the other two years, it might seem that the number of subscribers in the second half of the year is higher.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
     count
 0  192431
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
       count
@@ -459,14 +466,16 @@ anno
 2018  50860
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 It is also of interest to look at the number of rentals of each user, broken down by year. As expected, there are more observations from the years 2016 and 2017 as these are complete years. The great number of usage translates to an average of almost 4 trips per day \sphinxhyphen{} i.e., to reach the first train station and then the workplace.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
                       noleggi\PYGZus{}totali  anno
@@ -483,7 +492,8 @@ cliente\PYGZus{}anonimizzato
 90177                            988  2016
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -493,7 +503,8 @@ cliente\PYGZus{}anonimizzato
 As a starter, it is useful to look at the origin\sphinxhyphen{}destination (OD) matrix, to see which are the most popular starting and departure points. On the aggregate level, the most popular points on the OD matrix are the train stations and sightseeing places such as Duomo.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
        stazione\PYGZus{}prelievo  numero\PYGZus{}noleggi  stazione\PYGZus{}restituzione  \PYGZbs{}
@@ -521,14 +532,16 @@ As a starter, it is useful to look at the origin\sphinxhyphen{}destination (OD) 
 9           98083  
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 The ranking is basically unchanged if we look only at data from Monday to Friday and within “core” commuting hours (say, from 7 to 10 and from 17 to 20). However, trips towards stations become more frequent and destinations such as Moscova are slightly less popular. Indeed, employees might straight bike to Moscova after work to take a sip from their Negroni.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
        stazione\PYGZus{}prelievo  numero\PYGZus{}noleggi  stazione\PYGZus{}restituzione  \PYGZbs{}
@@ -556,14 +569,16 @@ The ranking is basically unchanged if we look only at data from Monday to Friday
 9           98083  
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 The behaviour changes if we look ad the individual trips, i.e. if we \sphinxcode{\sphinxupquote{GROUP BY}} both departure and destination stations (\sphinxcode{\sphinxupquote{nome\_stazione\_prelievo}} and \sphinxcode{\sphinxupquote{nome\_stazione\_restituzione}}). To be exact, \sphinxcode{\sphinxupquote{Coni Zugna Solari}} is close to both the station in Porta Genova as well as the Navigli and Darsena, which partly explains its popularity.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
      stazione\PYGZus{}prelievo   stazione\PYGZus{}destinazione  numero\PYGZus{}noleggi
@@ -579,14 +594,16 @@ The behaviour changes if we look ad the individual trips, i.e. if we \sphinxcode
 9            Cadorna 3           Arcivescovado            6197
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 The same considerations apply when looking at the top trips only within the “core” commuting hours. This reinforces the conclusion that BikeMi is consistently used for commuting purposes.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
      stazione\PYGZus{}prelievo   stazione\PYGZus{}destinazione  numero\PYGZus{}noleggi
@@ -602,7 +619,8 @@ The same considerations apply when looking at the top trips only within the “c
 9            Cadorna 3           Arcivescovado            6197
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -612,7 +630,8 @@ The same considerations apply when looking at the top trips only within the “c
 On its open data portal, the Comune di Milano publishes all sorts of open data \sphinxhyphen{} like the daily entrances in the so\sphinxhyphen{}called Area C, where access to private cars is limited. On this treasure trove of data, we can also find things like the location of column fountains and newsstands, but also the geo\sphinxhyphen{}referenced data of bike tracks and the location of \sphinxhref{https://dati.comune.milano.it/it/dataset/ds65\_infogeo\_aree\_sosta\_bike\_sharing\_localizzazione\_}{BikeMi Stations}. As noted previously, the service has some 320 stations, spread unevenly across the town, as it was outlined by previous studies (Saibene \& Manzi, 2015). As a starter, we filter out all stations that have been introduced after 2019. This leaves us with 281 official stations, versus 279 in the historic data.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
                                   nome  municipio  anno  \PYGZbs{}
@@ -632,18 +651,21 @@ numero\PYGZus{}stazione
 005              POINT (9.17641 45.46312)  
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 The data is represented with the (geographic) coordinate reference system (CRS) \sphinxcode{\sphinxupquote{EPSG:4326}}, but in order to use the \sphinxcode{\sphinxupquote{contextily}} library we need to cast it to the (projected) reference system \sphinxcode{\sphinxupquote{EPSG:3587}}. As the map shows, the stalls stretch to the North, towards Bicocca and Sesto San Giovanni. We can already see that the stalls distribution outside the city centre follows bike lanes (in blue).
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{03-data_ingestion_and_spatial_operations_28_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -749,7 +771,8 @@ We start by creating another two \sphinxcode{\sphinxupquote{materialised views}}
 \sphinxAtStartPar
 Then, we compute the number of null values in the data (\sphinxcode{\sphinxupquote{null\_obs}}), pivot the table to wider format and compute the percentage of missing values in each station (\sphinxcode{\sphinxupquote{null\_obs}}). Using Pandas”\sphinxcode{\sphinxupquote{cut()}} method, we can convert this numerical column into a categorical variable (\sphinxcode{\sphinxupquote{null\_obs\_ranking}}) and choose the number of levels \sphinxhyphen{} five, in our case \sphinxhyphen{} to split the column into even intervals with.
 
-\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell}\begin{sphinxVerbatimInput}
+
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{obs\PYGZus{}number} \PYG{o}{=} \PYG{n}{daily\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{index}\PYG{o}{.}\PYG{n}{unique}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
@@ -776,39 +799,46 @@ Then, we compute the number of null values in the data (\sphinxcode{\sphinxupquo
 \PYG{p}{)}
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimInput}
+
 \end{sphinxuseclass}
 \sphinxAtStartPar
 In this way, we can see that the number of stations with an “unacceptable” number of missing values is smaller than thirty.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{03-data_ingestion_and_spatial_operations_36_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 More than 80 percent of the stations display a count of null observations inferior to 20 percent.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{03-data_ingestion_and_spatial_operations_38_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 We can also join this data with the station spatial data to plot them. While this does not expose patterns that could be used to reduce the dimensionality of the data, it shows that there are some stations that need to be dropped off even from the most crowded areas in the city. This could not be spotted before as, to the best of our knowledge, no one in the BikeMi literature has ever found a way to take into account of how public work on roads and infrastructure had effects on the bike sharing service.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{03-data_ingestion_and_spatial_operations_40_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -818,11 +848,13 @@ We can also join this data with the station spatial data to plot them. While thi
 Besides dropping the “emptiest” stations, we should also come up with a way to narrow down the geographic area inside which we perform the analysis. Previously, authors have chosen to analyse just the area inside the Bastioni, or “Area C” (Saibene \& Manzi, 2015) or the whole set of stations (Toro et al., 2020). This was mainly due to the different purpose of their analysis and the data availability (Saibene and Manzi analyse data from 2008 to 2012). For our goal, as well as the policymaker perspective, this choice seems restricting, as it leaves out most of the train stations. It is worth noting that analysing the bike sharing traffic inside of Area C can be appropriate: for example, since, the municipality publishes the number of daily accesses to the area, which could be used to evaluate the effect of sharing services on traffic.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{03-data_ingestion_and_spatial_operations_43_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
@@ -836,22 +868,26 @@ This approach might just reinforce the bias towards the centre of the city, but 
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{03-data_ingestion_and_spatial_operations_46_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 This leaves us with the following stations, which we store as a \sphinxcode{\sphinxupquote{.csv}} file and then upload into our local PostgreSQL database with a Bash script.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{03-data_ingestion_and_spatial_operations_48_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \begin{sphinxuseclass}{cell}
@@ -934,7 +970,8 @@ Finally, the Davies\sphinxhyphen{}Bouldin index indicates a better separation be
 \label{equation:04-stations_kmeans:3c8d6dc2-98c3-4aea-8c51-6b094ed8c61b}\begin{align}
 & DB = \frac{1}{k} \sum_{i=1}^k \max_{i \neq j} R_{ij}
 \end{align}
-\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell}\begin{sphinxVerbatimInput}
+
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k+kn}{from} \PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{metrics} \PYG{k+kn}{import} \PYG{n}{silhouette\PYGZus{}score}\PYG{p}{,} \PYG{n}{davies\PYGZus{}bouldin\PYGZus{}score}\PYG{p}{,} \PYG{n}{calinski\PYGZus{}harabasz\PYGZus{}score}
@@ -952,7 +989,8 @@ Finally, the Davies\sphinxhyphen{}Bouldin index indicates a better separation be
 \PYG{n}{selected\PYGZus{}stalls\PYGZus{}lonlat}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame} \PYG{o}{=} \PYG{n}{bikemi\PYGZus{}selected\PYGZus{}stalls}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{filter\PYGZus{}coords}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimInput}
+
 \end{sphinxuseclass}
 
 \section{Fitting \sphinxstyleemphasis{k}\sphinxhyphen{}Means on BikeMi Stalls Geographic Data}
@@ -963,7 +1001,8 @@ We define two functions, using Python and its \sphinxcode{\sphinxupquote{scikit\
 \sphinxAtStartPar
 The \(WSS\) or inertia is not really indicative of a significant value of \(K\). The silhouette coefficient is greatest for a quite small number of clusters (smaller than 5) and in general not greater than 20. This appears to be the case for the Calinski\sphinxhyphen{}Harabasz index too and, while the same cannot be said of the Davies\sphinxhyphen{}Bouldin index, beyond said threshold the index is bound to improve. Our final choice should fall on 18, as we believe that clustering the whole set of stations into three great TAZ bears no practical utility for the purpose of the policymaker \sphinxhyphen{} i.e., forecasting bikes demand in Milan.
 
-\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell}\begin{sphinxVerbatimInput}
+
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k}{def} \PYG{n+nf}{get\PYGZus{}kmeans\PYGZus{}metrics}\PYG{p}{(}\PYG{n}{data}\PYG{p}{,} \PYG{n}{k\PYGZus{}max}\PYG{p}{,} \PYG{n}{random\PYGZus{}state}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
@@ -1012,16 +1051,20 @@ The \(WSS\) or inertia is not really indicative of a significant value of \(K\).
 \PYG{n}{plot\PYGZus{}all\PYGZus{}metrics}\PYG{p}{(}\PYG{n}{selected\PYGZus{}stalls\PYGZus{}metrics}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimInput}
+\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{04-stations_kmeans_9_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \sphinxAtStartPar
 However, as mentioned above, the total number of neighbourhoods inside our area of analysis is 25: at this point, the policymaker might just be better off aggregating the data by neighbourhood, without going through the hassle of computing the \sphinxstyleemphasis{k}\sphinxhyphen{}Means. Indeed, in this context the purpose of fitting a \sphinxstyleemphasis{k}\sphinxhyphen{}Means should be to isolate a small amount of Traffic Analysis Zones inside each neighbourhood, in order to be able to aggregate together stations that are quite close to each other and that cannot all be used at once as independent variables for the forecasting models without injecting error in the estimates via multicollinearity. In this way, it would also be possible to include neighbourhood fixed effects \sphinxhyphen{} which would otherwise be impossible to add to the regression if data was aggregated ad that level.
 
-\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell}\begin{sphinxVerbatimInput}
+
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k}{def} \PYG{n+nf}{fit\PYGZus{}kmeans}\PYG{p}{(}\PYG{n}{input\PYGZus{}data}\PYG{p}{,} \PYG{n}{k}\PYG{p}{,} \PYG{n}{rand}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n+nb}{object}\PYG{p}{:}
@@ -1068,9 +1111,11 @@ However, as mentioned above, the total number of neighbourhoods inside our area 
     \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
 \end{sphinxVerbatim}
 
+\end{sphinxuseclass}\end{sphinxVerbatimInput}
+
 \end{sphinxuseclass}
-\end{sphinxuseclass}
-\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell}\begin{sphinxVerbatimInput}
+
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{kmeans\PYGZus{}18} \PYG{o}{=} \PYG{n}{fit\PYGZus{}kmeans}\PYG{p}{(}\PYG{n}{selected\PYGZus{}stalls\PYGZus{}lonlat}\PYG{p}{,} \PYG{n}{k}\PYG{o}{=}\PYG{l+m+mi}{18}\PYG{p}{,} \PYG{n}{rand}\PYG{o}{=}\PYG{l+m+mi}{42}\PYG{p}{)}
@@ -1088,16 +1133,20 @@ However, as mentioned above, the total number of neighbourhoods inside our area 
 \PYG{p}{)}
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimInput}
+\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{04-stations_kmeans_12_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \sphinxAtStartPar
 If we sort the metrics matrix by the values of \sphinxcode{\sphinxupquote{sihlouette\_coefficient}}, the first number of clusters greater than 25 than we meet is 46. This, however, is only the 18th best value for \(K\) according to the \sphinxcode{\sphinxupquote{silhouette\_score}}.
 
-\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell}\begin{sphinxVerbatimInput}
+
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k}{def} \PYG{n+nf}{get\PYGZus{}k\PYGZus{}greater\PYGZus{}than\PYGZus{}25}\PYG{p}{(}\PYG{n}{metrics\PYGZus{}data}\PYG{p}{:} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{,} \PYG{n}{metric}\PYG{p}{:} \PYG{n+nb}{str} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{silhouette\PYGZus{}coefficient}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZgt{}} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{:}
@@ -1108,7 +1157,9 @@ If we sort the metrics matrix by the values of \sphinxcode{\sphinxupquote{sihlou
 \PYG{n}{get\PYGZus{}k\PYGZus{}greater\PYGZus{}than\PYGZus{}25}\PYG{p}{(}\PYG{n}{selected\PYGZus{}stalls\PYGZus{}metrics}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimInput}
+\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
      inertia  silhouette\PYGZus{}coefficient  calinski\PYGZus{}harabasz  davies\PYGZus{}bouldin  \PYGZbs{}
@@ -1120,9 +1171,11 @@ k
 46       18  
 \end{sphinxVerbatim}
 
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
-\end{sphinxuseclass}
-\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell}\begin{sphinxVerbatimInput}
+
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{n}{kmeans\PYGZus{}46} \PYG{o}{=} \PYG{n}{fit\PYGZus{}kmeans}\PYG{p}{(}\PYG{n}{selected\PYGZus{}stalls\PYGZus{}lonlat}\PYG{p}{,} \PYG{n}{k}\PYG{o}{=}\PYG{l+m+mi}{46}\PYG{p}{,} \PYG{n}{rand}\PYG{o}{=}\PYG{l+m+mi}{42}\PYG{p}{)}
@@ -1142,16 +1195,20 @@ k
 \PYG{p}{)}
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimInput}
+\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{04-stations_kmeans_15_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \sphinxAtStartPar
 After choosing the value for \(K\), stall data is aggregated to compute the coordinates of these new “virtual stalls” as the average of the coordinates of the stations inside the cluster. Because of how spatial joins work, one neighbourhood is not plotted, and there seems to be one cluster without left without a NIL. However, the identifier (\sphinxcode{\sphinxupquote{12}}, i.e. Maciachini \sphinxhyphen{} Maggiolina) is still correctly assigned. As the last step, these virtual clusters are assigned with a join operation to the list of selected stalls, and exported.
 
-\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell}\begin{sphinxVerbatimInput}
+
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k}{def} \PYG{n+nf}{plot\PYGZus{}virtual\PYGZus{}clusters}\PYG{p}{(}
@@ -1184,11 +1241,14 @@ After choosing the value for \(K\), stall data is aggregated to compute the coor
 \PYG{n}{plot\PYGZus{}virtual\PYGZus{}clusters}\PYG{p}{(}\PYG{n}{virtual\PYGZus{}stalls}\PYG{p}{,} \PYG{n}{layer}\PYG{o}{=}\PYG{n}{selected\PYGZus{}nills\PYGZus{}46k}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimInput}
+\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{04-stations_kmeans_17_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 
 \chapter{Time Series Analysis}
@@ -1200,7 +1260,8 @@ The cluster table is uploaded to the local database using a Bash script that cal
 The resulting data is an instance of the so\sphinxhyphen{}called “long” or panel data format, with 18632 rows for each of the 46 time series. The number is actually smaller it would be if we had three years of hourly observations, because as the service is not active between midnight and 7 a.m.: in other words, these series have ‘holes’.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 cluster              0   1   2   3   4
@@ -1212,14 +1273,16 @@ data\PYGZus{}partenza
 2015\PYGZhy{}06\PYGZhy{}01 11:00:00  5  15  19  16  12
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 The cluster labels are just a range of integers, which the overall interpretability. The issue is quickly solved by creating a small function that assigns a new identifier to the cluster, simply by merging the cluster label with the neighbourhood it is located in.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
                         cluster\PYGZus{}nil
@@ -1231,11 +1294,13 @@ cluster
 4             GIARDINI P.TA VENEZIA
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 cluster\PYGZus{}nil          Brera \PYGZhy{} 25  Brera \PYGZhy{} 26  Brera \PYGZhy{} 43
@@ -1247,7 +1312,8 @@ data\PYGZus{}partenza
 2015\PYGZhy{}06\PYGZhy{}01 11:00:00          16          14          11
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -1260,37 +1326,43 @@ Visualising high\sphinxhyphen{}dimensionality datasets can be quite a challenge,
 We choose to visualise data throughout the month of October 2016, as the demand is generally higher in autumn, and this should highlight different seasonality patterns better. October 1st, 2016 starts as a Saturday and it is immediate to see that peak hours are around lunchtime. During weekdays, the distribution seems bimodal, with a smaller peak in the mornings.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_8_0}.png}
 
 \noindent\sphinxincludegraphics{{05-time_series_analysis_8_1}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 Data in \sphinxcode{\sphinxupquote{Brera}} TAZs is quite similar: this is because all stations in Brera are all above the average, when ranking the clusters by absolute number of rentals across the observed time period:
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_10_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 Some different patterns can be seen in, for example, in the NIL \sphinxcode{\sphinxupquote{Porta Ticinese \sphinxhyphen{} Conca Del Naviglio}} the two TAZ \sphinxcode{\sphinxupquote{20}} and \sphinxcode{\sphinxupquote{31}}, or between \sphinxcode{\sphinxupquote{Stazione Centrale \sphinxhyphen{} Ponte Seveso}} number \sphinxcode{\sphinxupquote{18}} and \sphinxcode{\sphinxupquote{37}}. The first Traffic Analysis Zone in these areas is always in the top of the ladder, while the second is closer to the tail, and as such the demand in the two clusters behaves differently: in number \sphinxcode{\sphinxupquote{20}}, during weekdays the two modes appear to be much closer to each other, while in \sphinxcode{\sphinxupquote{31}} it is not unusual for the morning peak to be greater.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_12_0}.png}
 
 \noindent\sphinxincludegraphics{{05-time_series_analysis_12_1}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
@@ -1356,7 +1428,8 @@ These techniques are quite rudimentary, so much so that \sphinxcode{\sphinxupquo
 \sphinxAtStartPar
 The first thing that comes up is that the seasonal pattern is quite tight: this is because weekly seasonalities are fit in a span of two years. The \sphinxcode{\sphinxupquote{seasonal\_decompose}} function requires at least two “complete cycles” of data, i.e. two years should be enough for our purposes. The function by default uses the same periodicity as the time\sphinxhyphen{}index of the \sphinxcode{\sphinxupquote{pandas.DataFrame}} passed as data argument: in this case, daily. We would also override it to display only higher order seasonalities, for example by setting a week\sphinxhyphen{}long period. The trend can also be estimated with a least\sphinxhyphen{}squares regression using an input number of data points.
 
-\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell}\begin{sphinxVerbatimInput}
+
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k+kn}{from} \PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{tsa}\PYG{n+nn}{.}\PYG{n+nn}{seasonal} \PYG{k+kn}{import} \PYG{n}{seasonal\PYGZus{}decompose}
@@ -1413,11 +1486,14 @@ The first thing that comes up is that the seasonal pattern is quite tight: this 
 \PYG{n}{daily\PYGZus{}rentals}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{decompose\PYGZus{}series}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{period}\PYG{o}{=}\PYG{l+m+mi}{7}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimInput}
+\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_16_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \sphinxAtStartPar
 From the observed component we can already spot the yearly patterns, which are outlined in the trended series. There are always two troughs: one in August and the other one during Christmas holidays and New Year’s Eve. There peak is always reached in May (and is preceded by a small dip around April and Easter holidays). Other two small dips can be observed around Carnival, in February (which is slightly longer and shifted, compared to the rest of Italy) and perhaps around Labour’s Day (May 1st) and the National Holiday on June 2nd. Then, the demand dips during the autumn too: at All Saint’s day (between Halloween and November 1st) and the city’s Patrons celebrations on December 9th (while December 8th is also a national holiday). This displays that predictable patterns such as holidays will indeed play a role in accruing the accuracy of the forecasts: after all, as outlined in the literature and from observing the patterns in the origin\sphinxhyphen{}destination matrix, docked bike\sphinxhyphen{}sharing services are strictly related to commuting patterns.
@@ -1432,11 +1508,13 @@ It is also worth noting the scales: seasonalities scales are very much in the ne
 As an exercise, we can change the \sphinxcode{\sphinxupquote{period}} of the data 30 days, as an exercise. This returns a much different seasonal pattern, which, however, is even less informative: the range of values is up to ten time smaller than the residuals. This also returns a much smoother linear trend, where the dips are less pronounced.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_18_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -1486,11 +1564,13 @@ Lastly, there are the interpolation step parameters. Basically, they reduce the 
 The function also has a \sphinxcode{\sphinxupquote{robustbool}} flag, indicating whether to use a weighted version that is robust to some forms of outliers.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_20_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
@@ -1508,7 +1588,8 @@ Time series data is unique as the data points are not \(i.i.d.\) distributed. In
 However, the autocorrelation between to points at \(k\) lags of distance might simply be due both points being connected by the same “chain” of intermediate values \(y_{t-1}\) to \(y_{t-(k+1)}\), rather than because of any new information contained in  \(y_k\)  that could be used to forecast \(y_t\). This problem is solved via the PACF, which \sphinxhyphen{} simply put \sphinxhyphen{} estimates an autoregressive models (i.e., a linear regression fit only on the lags) and returns the coefficient of the \(k\)th component.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 []
@@ -1516,7 +1597,8 @@ However, the autocorrelation between to points at \(k\) lags of distance might s
 
 \noindent\sphinxincludegraphics{{05-time_series_analysis_22_1}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
@@ -1532,35 +1614,41 @@ Differencing is the last step in our time series analysis. Given that the time s
 As the name suggests, these processes have first and second\sphinxhyphen{}order moments that are fixed in time; the same applies to auto\sphinxhyphen{}correlation, that should only depend on the length of the lag \(k\), i.e. should be the same across any two time points at distance \(k\). These two properties do not imply each other, unless when the underlying process is Gaussian. Our data does not seem unequivocably normal:
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_25_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 To transform a non\sphinxhyphen{}stationary series into a (weakly) stationary one, the principal tool is taking differences, i.e. subtracting from every \(y_t\) the \(k\)\sphinxhyphen{}th lagged value. Usually, however, the differences that are preferred are the ones that are interpretable: first differences represent the change between two observations, and the seasonal differences represent the increase from one seasonal period to the other (in this case, between two weeks).
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_27_0}.png}
 
 \noindent\sphinxincludegraphics{{05-time_series_analysis_27_1}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 First differencing returns seemingly stationary data, but the seasonal component is not removed. On the contrary, the seasonal differences are less noisy. Still, the two datasets display high variance, with a change as great as 400 observations. We can also difference the series twice; this, however, might not be recommendable if the series is already stationary after one round of differencing: “applying more differences than required will induce false dynamics or autocorrelations that do not really exist in the time series” (Hyndman \& Athanasopoulos, 2021). At first glance, double differences seem to return a series that is more convincingly stationary.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{05-time_series_analysis_29_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -1575,7 +1663,8 @@ One of the most popular unit root tests is the \sphinxstyleemphasis{Kwiatkowski\
 \sphinxAtStartPar
 Another test is the (Augmented) Dickey\sphinxhyphen{}Fuller or ADF test (Dickey \& Fuller, 2012). While the KPSS test’s null hypothesis is that the series is already stationary, the ADF test assumes the opposite, i.e. the series is not stationary because it has a unit root. If we reject the null, we assume the time series to be stationary. Both tests suggest that data from \sphinxcode{\sphinxupquote{Brera \sphinxhyphen{} 25}} is compatible with the hypothesis that the series is stationary, by taking either first order differences, seasonal differences (and the combination of both). For this reason, we shall stick to seasonal differences.
 
-\begin{sphinxuseclass}{cell}
+\begin{sphinxuseclass}{cell}\begin{sphinxVerbatimInput}
+
 \begin{sphinxuseclass}{cell_input}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k+kn}{from} \PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{tsa}\PYG{n+nn}{.}\PYG{n+nn}{stattools} \PYG{k+kn}{import} \PYG{n}{adfuller}\PYG{p}{,} \PYG{n}{kpss}
@@ -1613,7 +1702,9 @@ Another test is the (Augmented) Dickey\sphinxhyphen{}Fuller or ADF test (Dickey 
 \PYG{n}{daily\PYGZus{}rentals}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Brera \PYGZhy{} 25}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{)}\PYG{o}{.}\PYG{n}{diff}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{pipe}\PYG{p}{(}\PYG{n}{stationarity\PYGZus{}test}\PYG{p}{)}
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimInput}
+\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 First Order Differences \PYG{Color+ColorBold}{(}Lag: \PYG{Color+ColorBold+ColorBoldCyan}{1}\PYG{Color+ColorBold}{)}
@@ -1651,7 +1742,8 @@ KPSS test statistic: \PYG{Color+ColorBold+ColorBoldCyan}{0.0509} KPSS p\PYGZhy{}
 there is no unit root \PYGZhy{} the series *is* stationary
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 
 \chapter{Demand Forecasting}
@@ -1757,15 +1849,18 @@ We write a custom function to average the predictions and take that as the predi
 As naive forecaster, we simply choose a seasonal model with periodicity set to 7 (i.e., takes the value of the demand on the same day of the week before). We pass the model trough the cross\sphinxhyphen{}validation pipeline solely to get an estimate of the fitting time: to obtain the results it would be sufficient to shift the whole series by one week.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{06-forecasting_7_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
              0         1      2
@@ -1773,7 +1868,8 @@ metrics    MAE      RMSE  RMSLE
 scores  87.165 14327.643  0.438
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -1789,7 +1885,8 @@ In fact, normally Auto\sphinxhyphen{}ARIMA would use differencing tests (like th
 In order to find the best model, with the stepwise procedure the auto\sphinxhyphen{}ARIMA optimizes for a given information criterion, like the Akaike Information Criterion and the Bayesian Information Criterion. Simply put, the AIC and BIC are a linear function of the maximum likelihood with a correction to penalise specifications that are too complex.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 Performing stepwise search to minimize bic
@@ -1952,33 +2049,39 @@ Best model:  ARIMA(1,0,1)(0,1,1)[7]
 Total fit time: 32.080 seconds
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 The auto\sphinxhyphen{}ARIMA procedure suggests a SARIMA(1,0,1)(0,1,1,7), using both the Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC). Before fitting, let’s have a look at the diagnostics. We need to verify that residuals are standardised with zero mean, and normally distributed and that are not serially correlated.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{06-forecasting_12_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{06-forecasting_14_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 The ARIMA model follows the trend, but does not seem to catch the sudden spikes and dips due to holidays, which echo in later observations with some delay \sphinxhyphen{} even if the seasonal component is just \sphinxcode{\sphinxupquote{Q=1}}. Fitting time was significantly higher, so we chose to double the forecasting horizon and set the forecasting step to 7, actually fitting a bit less than half of the initial 726 models. \sphinxcode{\sphinxupquote{pmdarima}}’s \sphinxcode{\sphinxupquote{cross\_val\_predict}} already averages the results. We are not surprised to see a performance that is not stellar, but the results are actually discouraging: the model performs worse than the naive benchmark.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
               0         1      2
@@ -1986,7 +2089,8 @@ metrics     MAE      RMSE  RMSLE
 scores  158.631 35406.785  0.782
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
@@ -2008,18 +2112,21 @@ According to the authors, the library purpose is to enable forecasting “at sca
 This makes it both flexible and dangerous: outside its domain, i.e. highly seasonal series, Prophet models won’t likely yield accurate forecasts. For example, Prophet models simply cannot be applied in the financial sector, where models are random walks and “tend to exhibit little highly profitable predictable seasonality”. Nonetheless, from our previous time\sphinxhyphen{}series analysis it is evident that our data displays multiple seasonal patterns, as well as holiday\sphinxhyphen{}related patterns which cannot be explained by a dichotomic dummy variable.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \noindent\sphinxincludegraphics{{06-forecasting_19_0}.png}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 \sphinxAtStartPar
 The model clearly captures the trend dynamics and is quite quick in capturing the sudden changes. The peaks are sometimes too smooth and there are some non\sphinxhyphen{}positive values that need to be replaced. This happens to less than 15 observations, but these predictions can be as low as \sphinxhyphen{}135 trips and, to the best of our knowledge, there is no way to enforce these limitations to the estimator.
 
 \begin{sphinxuseclass}{cell}
-\begin{sphinxuseclass}{tag_hide-input}
+\begin{sphinxuseclass}{tag_hide-input}\begin{sphinxVerbatimOutput}
+
 \begin{sphinxuseclass}{cell_output}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
              0         1      2
@@ -2027,7 +2134,8 @@ metrics    MAE      RMSE  RMSLE
 scores  76.110 10678.567  0.560
 \end{sphinxVerbatim}
 
-\end{sphinxuseclass}
+\end{sphinxuseclass}\end{sphinxVerbatimOutput}
+
 \end{sphinxuseclass}
 \end{sphinxuseclass}
 
