@@ -1,7 +1,4 @@
-DROP MATERIALIZED VIEW IF EXISTS bikemi_rentals.bikemi_rentals_before_2019 CASCADE;
-
-CREATE MATERIALIZED VIEW IF NOT EXISTS bikemi_rentals.bikemi_rentals_before_2019 AS
-(
+CREATE VIEW bikemi_rentals.rntls_bfr_2019 AS
 SELECT b.bici,
        b.tipo_bici,
        b.cliente_anonimizzato,
@@ -12,7 +9,9 @@ SELECT b.bici,
        b.numero_stazione_restituzione,
        b.nome_stazione_restituzione,
        b.durata_noleggio
-FROM bikemi_source_data b
-WHERE EXTRACT(year FROM b.data_restituzione) < 2019::numeric
+FROM bikemi_data b
+WHERE EXTRACT(
+              year
+              FROM b.data_restituzione
+          ) < 2019::numeric
   AND b.durata_noleggio > '00:01:00'::interval
-    );

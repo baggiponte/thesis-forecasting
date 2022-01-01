@@ -1,4 +1,4 @@
-CREATE MATERIALIZED VIEW IF NOT EXISTS bikemi_rentals.daily_rentals_before_2019 AS
+CREATE MATERIALIZED VIEW IF NOT EXISTS bikemi_rentals.dly_rntls_bfr_2019 AS
 (
 WITH cross_table AS (
     SELECT d.date AS data_partenza,
@@ -6,7 +6,7 @@ WITH cross_table AS (
            s.numero_stazione
     FROM (
              SELECT *
-             FROM bikemi_rentals.bikemi_stations
+             FROM bikemi_rentals.bikemi_stalls
              WHERE anno < 2019
          ) s
              CROSS JOIN (
@@ -24,11 +24,11 @@ SELECT c.data_partenza,
        c.numero_stazione,
        COUNT(b.*)::smallint AS noleggi_giornalieri
 FROM cross_table c
-         LEFT JOIN bikemi_rentals.bikemi_rentals_before_2019 b ON b.numero_stazione_prelievo = c.numero_stazione
+         LEFT JOIN bikemi_rentals.rntls_bfr_2019 b ON b.numero_stazione_prelievo = c.numero_stazione
     AND DATE_TRUNC('day', b.data_prelievo)::date = c.data_partenza
 GROUP BY c.data_partenza,
          c.stazione_partenza,
          c.numero_stazione
 ORDER BY stazione_partenza,
          data_partenza
-    );
+    )

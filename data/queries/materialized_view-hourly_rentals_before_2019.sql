@@ -1,4 +1,4 @@
-CREATE MATERIALIZED VIEW IF NOT EXISTS bikemi_rentals.hourly_rentals_before_2019 AS
+CREATE MATERIALIZED VIEW IF NOT EXISTS bikemi_rentals.hrly_rntls_bfr_2019 AS
 (
 WITH cross_table AS (
     SELECT d.date_time AS data_partenza,
@@ -28,7 +28,7 @@ SELECT c.data_partenza,
        c.numero_stazione,
        COUNT(b.*)::smallint AS noleggi_per_ora
 FROM cross_table c
-         LEFT JOIN bikemi_rentals.bikemi_rentals_before_2019 b ON b.numero_stazione_prelievo = c.numero_stazione
+         LEFT JOIN bikemi_rentals.rntls_bfr_2019 b ON b.numero_stazione_prelievo = c.numero_stazione
     AND DATE_TRUNC('hour', b.data_prelievo)::timestamp = c.data_partenza
 GROUP BY c.data_partenza,
          c.stazione_partenza,
