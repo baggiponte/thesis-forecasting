@@ -1,7 +1,5 @@
 # A Comparison of Forecasting Methods for Bike Sharing Services
 
-[![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
-
 [![CodeFactor](https://www.codefactor.io/repository/github/baggiponte/thesis-forecasting/badge?s=15440e769166c9c9571f2d7b8d3c7fcdcf5c9ecb)](https://www.codefactor.io/repository/github/baggiponte/thesis-forecasting)
 
 This is the repository for my graduate thesis on time series forecasting, comparing the accuracy of canonical statistical models (such as ARIMA) with more recent approaches: Auto-ARIMA, Prophet by Meta (Facebook) and machine learning models (with ensemble techniques).
